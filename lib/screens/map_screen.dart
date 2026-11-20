@@ -6,6 +6,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../app_shell.dart';
 import '../theme/dq_theme.dart';
 import '../widgets/common.dart';
+import '../widgets/festival_kaart.dart';
 
 double _deg(double d) => d * math.pi / 180;
 
@@ -35,10 +36,10 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   static const _filters = [
-    ('STAGES', LucideIcons.zap),
-    ('FOOD', LucideIcons.utensils),
-    ('WATER', LucideIcons.droplets),
-    ('WC', LucideIcons.toilet),
+    ('STAGES', 'Stages'),
+    ('FOOD', 'Eten'),
+    ('WATER', 'Waterpunt'),
+    ('WC', 'Wc'),
   ];
 
   @override
@@ -72,7 +73,7 @@ class _MapScreenState extends State<MapScreen> {
                         ),
                         child: Row(
                           children: [
-                            Icon(icon, size: 14, color: _filter == name ? DQ.dark : DQ.muted),
+                            DqIcon(icon, size: 14, color: _filter == name ? DQ.dark : DQ.muted),
                             const SizedBox(width: 5),
                             Text(
                               name,
@@ -92,7 +93,7 @@ class _MapScreenState extends State<MapScreen> {
               transformationController: _kaartZoom,
               minScale: 1,
               maxScale: 4,
-              child: _FestivalMap(
+              child: FestivalKaart(
                 filter: _filter,
                 selected: _selected,
                 onSelect: (stage) => setState(() => _selected = stage),
@@ -179,9 +180,9 @@ class _FestivalMap extends StatelessWidget {
                   () => onSelect('BLACK STAGE'),
                 ),
               ),
-              Positioned(right: w * 0.25, top: 118, child: _Service(DQ.cyan, LucideIcons.droplets, fade('WATER'))),
-              Positioned(left: w * 0.23, top: 208, child: _Service(DQ.yellow, LucideIcons.utensils, fade('FOOD'))),
-              Positioned(right: w * 0.33, bottom: 72, child: _Service(DQ.lime, LucideIcons.toilet, fade('WC'))),
+              Positioned(right: w * 0.25, top: 118, child: _Service(DQ.cyan, 'Waterpunt', fade('WATER'))),
+              Positioned(left: w * 0.23, top: 208, child: _Service(DQ.yellow, 'Eten', fade('FOOD'))),
+              Positioned(right: w * 0.33, bottom: 72, child: _Service(DQ.lime, 'Wc', fade('WC'))),
               Positioned(left: w * 0.54, top: 220, child: const _CrewDot('MA', DQ.lime)),
               Positioned(left: w * 0.27, top: 140, child: const _CrewDot('EM', DQ.cyan)),
               Positioned(
@@ -225,7 +226,7 @@ class _FestivalMap extends StatelessWidget {
                   width: 42,
                   height: 42,
                   color: DQ.paper,
-                  child: const Icon(LucideIcons.locateFixed, color: DQ.dark),
+                  child: const DqIcon('Target', color: DQ.dark),
                 ),
               ),
             ],
@@ -353,7 +354,7 @@ class _Service extends StatelessWidget {
   const _Service(this.color, this.icon, this.opacity);
 
   final Color color;
-  final IconData icon;
+  final Object icon;
   final double opacity;
 
   @override
@@ -364,7 +365,7 @@ class _Service extends StatelessWidget {
       width: 31,
       height: 31,
       color: color,
-      child: Icon(icon, size: 16, color: DQ.dark),
+      child: DqIcon(icon, size: 16, color: DQ.dark),
     ),
   );
 }
@@ -420,7 +421,7 @@ class _MapSheet extends StatelessWidget {
                 const SizedBox(height: 2),
                 Row(
                   children: [
-                    const Icon(LucideIcons.zap, size: 13, color: DQ.red),
+                    const DqIcon('Stages', size: 13, color: DQ.red),
                     const SizedBox(width: 3),
                     Text(
                       'BUSY · 8 MIN WALK',
@@ -442,7 +443,7 @@ class _MapSheet extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(LucideIcons.navigation, size: 20, color: Colors.white),
+                    const DqIcon('Navigatie', size: 20, color: Colors.white),
                     const SizedBox(height: 2),
                     Text('GO', style: inter(9, color: Colors.white)),
                   ],

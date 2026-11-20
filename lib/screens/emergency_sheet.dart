@@ -69,13 +69,13 @@ class _EmergencySheetState extends State<EmergencySheet> {
     );
   }
 
-  Widget _symbol(IconData icon) => Transform.rotate(
+  Widget _symbol(Object icon) => Transform.rotate(
     angle: -4 * math.pi / 180,
     child: Container(
       width: 65,
       height: 65,
       color: DQ.dark,
-      child: Icon(icon, size: 30, color: Colors.white),
+      child: DqIcon(icon, size: 30, color: Colors.white),
     ),
   );
 
@@ -83,7 +83,7 @@ class _EmergencySheetState extends State<EmergencySheet> {
     crossAxisAlignment: CrossAxisAlignment.stretch,
     mainAxisSize: MainAxisSize.min,
     children: [
-      Align(alignment: Alignment.centerLeft, child: _symbol(LucideIcons.triangleAlert)),
+      Align(alignment: Alignment.centerLeft, child: _symbol('Alert')),
       const SizedBox(height: 18),
       Text('EMERGENCY SIGNAL', style: inter(8, spacing: 2, color: Colors.white)),
       const SizedBox(height: 8),
@@ -98,14 +98,14 @@ class _EmergencySheetState extends State<EmergencySheet> {
       ),
       const SizedBox(height: 18),
       _Option(
-        icon: LucideIcons.cross,
+        icon: 'EHBO',
         title: 'MEDICAL',
         sub: 'FIRST AID TEAM',
         dark: false,
         onTap: () => setState(() => _sent = true),
       ),
       _Option(
-        icon: LucideIcons.shieldAlert,
+        icon: 'Security',
         title: 'SECURITY',
         sub: 'SAFETY TEAM',
         dark: true,
@@ -167,7 +167,7 @@ class _EmergencySheetState extends State<EmergencySheet> {
 class _Option extends StatelessWidget {
   const _Option({required this.icon, required this.title, required this.sub, required this.dark, required this.onTap});
 
-  final IconData icon;
+  final Object icon;
   final String title;
   final String sub;
   final bool dark;
@@ -187,7 +187,7 @@ class _Option extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(icon, color: fg),
+            DqIcon(icon, color: fg),
             const SizedBox(width: 13),
             Expanded(
               child: Column(
@@ -202,7 +202,7 @@ class _Option extends StatelessWidget {
                 ],
               ),
             ),
-            Icon(LucideIcons.arrowRight, color: fg),
+            DqIcon('Pijl_rechts', color: fg),
           ],
         ),
       ),

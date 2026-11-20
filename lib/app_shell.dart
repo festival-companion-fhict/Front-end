@@ -56,6 +56,11 @@ class _AppShellState extends State<AppShell> {
   }
 
   void _go(DqPage page) => setState(() => _page = page);
+  Future<void> _backToStart() async {
+    setState(() => _started = false);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_startedKey, false);
+  }
 
   /// Welke tab in de menubalk actief is (artiest en ticket horen bij SCHEMA).
   DqPage get _navPage => _page == DqPage.ticket || _page == DqPage.artist ? DqPage.lineup : _page;
@@ -94,7 +99,7 @@ class _AppShellState extends State<AppShell> {
                       ? const SizedBox.shrink()
                       : Column(
                           children: [
-                            DqHeader(go: _go, openProfile: () => setState(() => _profile = true)),
+                            DqHeader(go: _go, openProfile: () => setState(() => _profile = true), openStart: _backToStart),
                             const LiveStrip(),
                           ],
                         ),

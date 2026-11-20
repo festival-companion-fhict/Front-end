@@ -43,7 +43,7 @@ class NewsScreen extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          const Icon(LucideIcons.triangleAlert, size: 18, color: Colors.white),
+                          const DqIcon('Alert', size: 18, color: Colors.white),
                           const SizedBox(width: 7),
                           Text('BELANGRIJK · 18:47', style: inter(7, spacing: 1.2, color: Colors.white)),
                         ],
@@ -72,7 +72,7 @@ class NewsScreen extends StatelessWidget {
                             children: [
                               Text('TOON OP KAART', style: inter(8, color: Colors.white)),
                               const SizedBox(width: 24),
-                              const Icon(LucideIcons.arrowRight, color: Colors.white),
+                              const DqIcon('Pijl_rechts', color: Colors.white),
                             ],
                           ),
                         ),
@@ -157,7 +157,7 @@ class NewsScreen extends StatelessWidget {
                   const SizedBox(width: 12),
                   const Padding(
                     padding: EdgeInsets.only(top: 20),
-                    child: Icon(LucideIcons.chevronRight, size: 16, color: Color(0xFF555555)),
+                    child: DqIcon(LucideIcons.chevronRight, size: 16, color: Color(0xFF555555)),
                   ),
                 ],
               ),

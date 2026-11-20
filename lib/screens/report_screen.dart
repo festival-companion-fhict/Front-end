@@ -48,7 +48,7 @@ class _ReportScreenState extends State<ReportScreen> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(LucideIcons.info, size: 20, color: DQ.yellow),
+                const DqIcon('Info', size: 20, color: DQ.yellow),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(
@@ -117,7 +117,7 @@ class _ReportScreenState extends State<ReportScreen> {
               ),
               child: Row(
                 children: [
-                  const Icon(LucideIcons.mapPin, size: 20, color: DQ.red),
+                  const DqIcon('Duo_kaart', size: 20, color: DQ.red),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Column(
@@ -145,7 +145,7 @@ class _ReportScreenState extends State<ReportScreen> {
                       shape: BoxShape.circle,
                       border: Border.all(color: _location ? DQ.lime : DQ.line2),
                     ),
-                    child: _location ? const Icon(LucideIcons.check, size: 14, color: DQ.dark) : null,
+                    child: _location ? const DqIcon(LucideIcons.check, size: 14, color: DQ.dark) : null,
                   ),
                 ],
               ),
@@ -163,11 +163,11 @@ class _ReportScreenState extends State<ReportScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Row(
                 children: [
-                  const Icon(LucideIcons.send, size: 18, color: Colors.white),
+                  const DqIcon(LucideIcons.send, size: 18, color: Colors.white),
                   const SizedBox(width: 9),
                   Text('VERSTUUR ANONIEM', style: inter(9, color: Colors.white)),
                   const Spacer(),
-                  const Icon(LucideIcons.arrowRight, size: 18, color: Colors.white),
+                  const DqIcon('Pijl_rechts', size: 18, color: Colors.white),
                 ],
               ),
             ),
@@ -191,7 +191,7 @@ class _ReportScreenState extends State<ReportScreen> {
                 width: 74,
                 height: 74,
                 color: DQ.lime,
-                child: const Icon(LucideIcons.check, size: 34, color: DQ.dark),
+                child: const DqIcon(LucideIcons.check, size: 34, color: DQ.dark),
               ),
             ),
           ),

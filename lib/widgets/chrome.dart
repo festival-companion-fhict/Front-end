@@ -57,10 +57,11 @@ class Brand extends StatelessWidget {
 
 /// Bovenbalk: LIVE-knop, logo en profielknop.
 class DqHeader extends StatelessWidget {
-  const DqHeader({super.key, required this.go, required this.openProfile});
+  const DqHeader({super.key, required this.go, required this.openProfile, required this.openStart});
 
   final Go go;
   final VoidCallback openProfile;
+  final VoidCallback openStart;
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +74,20 @@ class DqHeader extends StatelessWidget {
       ),
       child: Row(
         children: [
+          // Knop terug naar het startscherm
+          Tap(
+            onTap: openStart,
+            child: Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: const Color(0xFF151515),
+                border: Border.all(color: const Color(0xFF3B3B3B)),
+              ),
+              child: const Picto('Pijl_links', size: 20),
+            ),
+          ),
+          const SizedBox(width: 8),
           Container(
             width: 44,
             height: 44,
@@ -91,7 +106,7 @@ class DqHeader extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           Expanded(child: Brand(onTap: () => go(DqPage.home))),
-          const SizedBox(width: 12),
+          const SizedBox(width: 64),
           ProfileButton(onTap: openProfile),
         ],
       ),
@@ -111,7 +126,7 @@ class ProfileButton extends StatelessWidget {
       width: 44,
       height: 44,
       color: DQ.lime,
-      child: const Icon(LucideIcons.userRound, size: 21, color: DQ.dark),
+      child: const Picto('Gebruiker', size: 21, color: DQ.dark),
     ),
   );
 }
@@ -214,7 +229,7 @@ class _LiveStripState extends State<LiveStrip> {
           const Spacer(),
           divider(),
           const SizedBox(width: 10),
-          const Icon(LucideIcons.cloudSun, size: 13, color: DQ.dark),
+          const DqIcon('Bewolkt', size: 13, color: DQ.dark),
           const SizedBox(width: 3),
           Text('24°C', style: inter(7, color: DQ.dark)),
         ],
@@ -231,11 +246,12 @@ class DqNav extends StatelessWidget {
   final Go go;
 
   static const _items = [
-    (DqPage.map, 'MAP', LucideIcons.map),
-    (DqPage.lineup, 'SCHEMA', LucideIcons.calendarDays),
-    (DqPage.report, 'MELDEN', LucideIcons.messageSquareWarning),
-    (DqPage.news, 'NIEUWS', LucideIcons.newspaper),
-    (DqPage.crew, 'CREW', LucideIcons.users),
+    (DqPage.home, 'HOME', ''),
+    (DqPage.map, 'MAP', 'Kaart'),
+    (DqPage.lineup, 'SCHEMA', 'calendar'),
+    (DqPage.report, 'MELDEN', 'Melden'),
+    (DqPage.news, 'NIEUWS', 'Info'),
+    (DqPage.crew, 'CREW', 'Crew'),
   ];
 
   @override
@@ -261,7 +277,9 @@ class DqNav extends StatelessWidget {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(icon, size: 20, color: active == page ? DQ.red : const Color(0xFF5D5D5D)),
+                        page == DqPage.home
+                            ? DqIcon(LucideIcons.house, size: 20, color: active == page ? DQ.red : const Color(0xFF5D5D5D))
+                            : Picto(icon, size: 20, color: active == page ? DQ.red : const Color(0xFF5D5D5D)),
                         const SizedBox(height: 4),
                         Text(
                           label,
@@ -298,7 +316,7 @@ class SosButton extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(LucideIcons.triangleAlert, size: 18, color: Colors.white),
+          const DqIcon('Alert', size: 18, color: Colors.white),
           const SizedBox(width: 6),
           Text('SOS', style: inter(9, color: Colors.white)),
         ],

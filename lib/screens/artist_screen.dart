@@ -62,7 +62,7 @@ class _ArtistScreenState extends State<ArtistScreen> {
                   left: 15,
                   top: 16,
                   child: OutlineSquare(
-                    icon: LucideIcons.arrowLeft,
+                    icon: 'Pijl_links',
                     borderColor: const Color(0x70FFFFFF),
                     background: const Color(0x990B0B0B),
                     iconColor: Colors.white,
@@ -82,7 +82,7 @@ class _ArtistScreenState extends State<ArtistScreen> {
                         color: const Color(0x990B0B0B),
                         border: Border.all(color: const Color(0x70FFFFFF)),
                       ),
-                      child: Icon(_favorite ? Icons.favorite : LucideIcons.heart, color: DQ.red, size: 22),
+                      child: DqIcon(_favorite ? 'Vol_hart' : 'Hart', color: DQ.red, size: 22),
                     ),
                   ),
                 ),
@@ -153,7 +153,7 @@ class _ArtistScreenState extends State<ArtistScreen> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Icon(LucideIcons.navigation, size: 18, color: Colors.white),
+                                const DqIcon('Navigatie', size: 18, color: Colors.white),
                                 const SizedBox(height: 3),
                                 Text('ROUTE', style: inter(9, color: Colors.white)),
                               ],
@@ -205,11 +205,11 @@ class _ArtistScreenState extends State<ArtistScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 14),
                     child: Row(
                       children: [
-                        Icon(LucideIcons.bell, color: _reminder ? DQ.dark : Colors.white),
+                        DqIcon(LucideIcons.bell, color: _reminder ? DQ.dark : Colors.white),
                         const SizedBox(width: 10),
                         Text('REMIND ME 15 MIN BEFORE', style: inter(10, color: _reminder ? DQ.dark : Colors.white)),
                         const Spacer(),
-                        if (_reminder) const Icon(LucideIcons.check, color: DQ.dark),
+                        if (_reminder) const DqIcon(LucideIcons.check, color: DQ.dark),
                       ],
                     ),
                   ),

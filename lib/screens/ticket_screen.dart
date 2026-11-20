@@ -36,7 +36,7 @@ class TicketScreen extends StatelessWidget {
               child: Row(
                 children: [
                   OutlineSquare(
-                    icon: LucideIcons.arrowLeft,
+                    icon: 'Pijl_links',
                     borderColor: const Color(0x70FFFFFF),
                     background: const Color(0x990B0B0B),
                     iconColor: Colors.white,
@@ -78,7 +78,7 @@ class TicketScreen extends StatelessWidget {
                             'STATUS',
                             Row(
                               children: [
-                                const Icon(LucideIcons.check, size: 14, color: DQ.lime),
+                                const DqIcon(LucideIcons.check, size: 14, color: DQ.lime),
                                 const SizedBox(width: 5),
                                 Text('ACTIVE', style: bc(16, color: DQ.lime)),
                               ],
@@ -91,7 +91,7 @@ class TicketScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Row(
                         children: [
-                          const Icon(LucideIcons.info, size: 17, color: DQ.muted),
+                          const DqIcon('Info', size: 17, color: DQ.muted),
                           const SizedBox(width: 7),
                           Expanded(
                             child: Text(

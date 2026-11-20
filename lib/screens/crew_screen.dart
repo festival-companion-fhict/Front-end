@@ -87,7 +87,7 @@ class CrewScreen extends StatelessWidget {
                   width: 43,
                   height: 43,
                   color: DQ.red,
-                  child: const Icon(LucideIcons.mapPin, size: 20, color: Colors.white),
+                  child: const DqIcon('Duo_kaart', size: 20, color: Colors.white),
                 ),
                 const SizedBox(width: 11),
                 Expanded(
@@ -134,7 +134,7 @@ class CrewScreen extends StatelessWidget {
                         const SizedBox(height: 2),
                         Row(
                           children: [
-                            const Icon(LucideIcons.mapPin, size: 11, color: DQ.muted),
+                            const DqIcon('Duo_kaart', size: 11, color: DQ.muted),
                             const SizedBox(width: 3),
                             Text(
                               m.location,
@@ -150,7 +150,7 @@ class CrewScreen extends StatelessWidget {
                     style: inter(7, weight: FontWeight.w800, color: DQ.lime),
                   ),
                   const SizedBox(width: 11),
-                  const Icon(LucideIcons.chevronRight, size: 16, color: Color(0xFF555555)),
+                  const DqIcon(LucideIcons.chevronRight, size: 16, color: Color(0xFF555555)),
                 ],
               ),
             ),

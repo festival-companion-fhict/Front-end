@@ -28,7 +28,7 @@ class OutlineSquare extends StatelessWidget {
     this.iconSize = 21,
   });
 
-  final IconData icon;
+  final Object icon;
   final VoidCallback? onTap;
   final double size;
   final Color borderColor;
@@ -46,7 +46,7 @@ class OutlineSquare extends StatelessWidget {
         color: background,
         border: Border.all(color: borderColor),
       ),
-      child: Icon(icon, size: iconSize, color: iconColor),
+      child: DqIcon(icon, size: iconSize, color: iconColor),
     ),
   );
 }
@@ -278,3 +278,41 @@ class _DashPainter extends CustomPainter {
 
 /// Hellende vorm (zoals het paarse "SZP"-blok).
 Matrix4 skew(double degrees) => Matrix4.skewX(degrees * math.pi / 180);
+
+/// Eigen pictogram uit assets/pictograms/. De zwarte PNG krijgt de kleur die je meegeeft.
+class Picto extends StatelessWidget {
+  const Picto(this.name, {super.key, this.size = 24, this.color = Colors.white});
+
+  final String name;
+  final double size;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) => Center(
+        widthFactor: 1,
+        heightFactor: 1,
+        child: Image.asset(
+          'assets/pictograms/$name.png',
+          width: size,
+          height: size,
+          color: color,
+        ),
+      );
+}
+
+/// Laat een eigen pictogram zien (als je een naam geeft, bijv. 'Kaart')
+/// of een standaard-icoon (als je LucideIcons.xxx geeft).
+class DqIcon extends StatelessWidget {
+  const DqIcon(this.icon, {super.key, this.size = 24, this.color = Colors.white});
+
+  final Object icon;
+  final double size;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    final icon = this.icon;
+    if (icon is String) return Picto(icon, size: size, color: color);
+    return Icon(icon as IconData, size: size, color: color);
+  }
+}

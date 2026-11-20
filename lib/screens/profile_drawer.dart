@@ -80,7 +80,7 @@ class ProfileDrawer extends StatelessWidget {
                               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                               child: Row(
                                 children: [
-                                  const Icon(LucideIcons.qrCode, size: 20, color: Colors.white),
+                                  const DqIcon(LucideIcons.qrCode, size: 20, color: Colors.white),
                                   const SizedBox(width: 10),
                                   Expanded(
                                     child: Column(
@@ -94,7 +94,7 @@ class ProfileDrawer extends StatelessWidget {
                                       ],
                                     ),
                                   ),
-                                  const Icon(LucideIcons.arrowRight, size: 20, color: Colors.white),
+                                  const DqIcon('Pijl_rechts', size: 20, color: Colors.white),
                                 ],
                               ),
                             ),
@@ -115,7 +115,7 @@ class ProfileDrawer extends StatelessWidget {
                                       style: inter(10, weight: FontWeight.w500, color: Colors.white),
                                     ),
                                   ),
-                                  const Icon(LucideIcons.chevronRight, size: 16, color: Color(0xFF666666)),
+                                  const DqIcon(LucideIcons.chevronRight, size: 16, color: Color(0xFF666666)),
                                 ],
                               ),
                             ),

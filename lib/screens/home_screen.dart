@@ -34,7 +34,7 @@ class HomeScreen extends StatelessWidget {
                       Expanded(
                         child: _Metric(
                           color: DQ.aqua,
-                          icon: LucideIcons.users,
+                          icon: 'Crew',
                           label: 'DRUKTE',
                           value: 'ZEER DRUK',
                           sub: '92% capaciteit',
@@ -66,7 +66,7 @@ class HomeScreen extends StatelessWidget {
                             children: [
                               Text('OP KAART', style: inter(7, color: DQ.acid)),
                               const SizedBox(width: 4),
-                              const Icon(LucideIcons.arrowRight, size: 13, color: DQ.acid),
+                              const DqIcon('Pijl_rechts', size: 13, color: DQ.acid),
                             ],
                           ),
                         ),
@@ -76,17 +76,17 @@ class HomeScreen extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: _Nearby(DQ.aqua, LucideIcons.droplets, 'WATER', '1 min · rustig', () => go(DqPage.map)),
+                        child: _Nearby(DQ.aqua, 'Waterpunt', 'WATER', '1 min · rustig', () => go(DqPage.map)),
                       ),
                       const SizedBox(width: 7),
                       Expanded(
-                        child: _Nearby(DQ.acid, LucideIcons.toilet, 'TOILET', '2 min · druk', () => go(DqPage.map)),
+                        child: _Nearby(DQ.acid, 'Wc', 'TOILET', '2 min · druk', () => go(DqPage.map)),
                       ),
                       const SizedBox(width: 7),
                       Expanded(
                         child: _Nearby(
                           const Color(0xFFF3F0F6),
-                          LucideIcons.cross,
+                          'EHBO',
                           'EHBO',
                           '3 min · open',
                           () => go(DqPage.map),
@@ -137,7 +137,7 @@ class _Presence extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          const Icon(LucideIcons.locateFixed, size: 15, color: _ink2),
+                          const DqIcon('Target', size: 15, color: _ink2),
                           const SizedBox(width: 5),
                           Text('JE BENT NU BIJ', style: inter(8, color: _ink2, spacing: 1.5)),
                         ],
@@ -162,7 +162,7 @@ class _Presence extends StatelessWidget {
                       children: [
                         Text('WIJZIG STAGE', style: inter(7, color: _ink2)),
                         const SizedBox(width: 7),
-                        const Icon(LucideIcons.map, size: 15, color: _ink2),
+                        const DqIcon('Kaart', size: 15, color: _ink2),
                       ],
                     ),
                   ),
@@ -301,7 +301,7 @@ class _Metric extends StatelessWidget {
   const _Metric({required this.color, required this.icon, required this.label, required this.value, required this.sub});
 
   final Color color;
-  final IconData icon;
+  final Object icon;
   final String label;
   final String value;
   final String sub;
@@ -317,7 +317,7 @@ class _Metric extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, size: 22, color: _ink2),
+            DqIcon(icon, size: 22, color: _ink2),
             const Spacer(),
             Text(label, style: inter(7, color: _ink2, spacing: 1.2)),
           ],
@@ -388,7 +388,7 @@ class _UpNext extends StatelessWidget {
           ),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 12),
-            child: Icon(LucideIcons.arrowRight, size: 17, color: Colors.white),
+            child: DqIcon('Pijl_rechts', size: 17, color: Colors.white),
           ),
         ],
       ),
@@ -400,7 +400,7 @@ class _Nearby extends StatelessWidget {
   const _Nearby(this.color, this.icon, this.title, this.sub, this.onTap);
 
   final Color color;
-  final IconData icon;
+  final Object icon;
   final String title;
   final String sub;
   final VoidCallback onTap;
@@ -415,7 +415,7 @@ class _Nearby extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 20, color: const Color(0xFF14111A)),
+          DqIcon(icon, size: 20, color: const Color(0xFF14111A)),
           const Spacer(),
           Text(title, style: bc(17, color: const Color(0xFF14111A), height: 1)),
           Text(
@@ -448,7 +448,7 @@ class _StageAlert extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const Icon(LucideIcons.triangleAlert, size: 14, color: DQ.orange),
+                  const DqIcon('Alert', size: 14, color: DQ.orange),
                   const SizedBox(width: 5),
                   Text('LIVE UPDATE · 18:38', style: inter(7, color: DQ.orange, spacing: 1)),
                 ],
@@ -464,7 +464,7 @@ class _StageAlert extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 10),
-        const Icon(LucideIcons.chevronRight, size: 16),
+        const DqIcon(LucideIcons.chevronRight, size: 16),
       ],
     ),
   );

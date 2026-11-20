@@ -225,7 +225,7 @@ class _ActRow extends StatelessWidget {
                 color: Color(0xFF161616),
                 border: Border(left: BorderSide(color: DQ.line)),
               ),
-              child: Icon(saved ? Icons.favorite : LucideIcons.heart, size: 20, color: DQ.red),
+              child: DqIcon(saved ? 'Vol_hart' : 'Hart', size: 20, color: DQ.red),
             ),
           ),
         ],

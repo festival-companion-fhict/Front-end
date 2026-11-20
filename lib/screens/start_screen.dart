@@ -82,7 +82,7 @@ class StartScreen extends StatelessWidget {
                         Container(width: 1, color: const Color(0xFF555555)),
                         const Expanded(
                           child: _StatusCell(
-                            leading: Icon(LucideIcons.cloudSun, size: 18, color: DQ.yellow),
+                            leading: DqIcon('Bewolkt', size: 18, color: DQ.yellow),
                             title: '24°C',
                             sub: 'Droog tot 23:00',
                           ),
@@ -105,7 +105,7 @@ class StartScreen extends StatelessWidget {
                       children: [
                         Text('ENTER THE FESTIVAL', style: inter(10, color: Colors.white)),
                         const Spacer(),
-                        const Icon(LucideIcons.arrowRight, color: Colors.white),
+                        const DqIcon('Pijl_rechts', color: Colors.white),
                       ],
                     ),
                   ),
