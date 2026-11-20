@@ -21,7 +21,9 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   String _filter = 'STAGES';
-  String _selected = 'RED STAGE';
+  final String _selected = 'RED STAGE';
+
+  
 
   static const _filters = [
     ('STAGES', LucideIcons.zap),
@@ -76,7 +78,13 @@ class _MapScreenState extends State<MapScreen> {
             ),
           ),
           const SizedBox(height: 10),
-          _FestivalMap(filter: _filter, selected: _selected, onSelect: (s) => setState(() => _selected = s)),
+              ClipRect(
+            child: InteractiveViewer(
+              minScale: 1,
+              maxScale: 4,
+              child: Image.asset('assets/images/Festival kaart naam.png'),
+            ),
+          ),
           _MapSheet(selected: _selected, onGo: () => widget.go(DqPage.lineup)),
         ],
       ),
