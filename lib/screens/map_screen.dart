@@ -21,9 +21,18 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   String _filter = 'STAGES';
-  final String _selected = 'RED STAGE';
+  String _selected = 'RED STAGE';
 
-  
+  // Hoe ver de kaart is ingezoomd als je het scherm opent.
+  final _kaartZoom = TransformationController(
+    Matrix4.diagonal3Values(2.0, 2.0, 1.0)..setTranslationRaw(-180.0, -160.0, 0.0),
+  );
+
+  @override
+  void dispose() {
+    _kaartZoom.dispose();
+    super.dispose();
+  }
 
   static const _filters = [
     ('STAGES', LucideIcons.zap),
@@ -78,11 +87,16 @@ class _MapScreenState extends State<MapScreen> {
             ),
           ),
           const SizedBox(height: 10),
-              ClipRect(
+             ClipRect(
             child: InteractiveViewer(
+              transformationController: _kaartZoom,
               minScale: 1,
               maxScale: 4,
-              child: Image.asset('assets/images/Festival kaart naam.png'),
+              child: _FestivalMap(
+                filter: _filter,
+                selected: _selected,
+                onSelect: (stage) => setState(() => _selected = stage),
+              ),
             ),
           ),
           _MapSheet(selected: _selected, onGo: () => widget.go(DqPage.lineup)),
