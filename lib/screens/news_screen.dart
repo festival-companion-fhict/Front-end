@@ -72,7 +72,7 @@ class NewsScreen extends StatelessWidget {
                             children: [
                               Text('TOON OP KAART', style: inter(8, color: Colors.white)),
                               const SizedBox(width: 24),
-                              const DqIcon('Pijl_rechts', color: Colors.white),
+                              const DqIcon(LucideIcons.arrowRight, color: Colors.white),
                             ],
                           ),
                         ),
