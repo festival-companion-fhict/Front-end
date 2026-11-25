@@ -21,7 +21,7 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
-  String _filter = 'STAGES';
+  String _filter = '';
   String _selected = 'RED STAGE';
 
   // Hoe ver de kaart is ingezoomd als je het scherm opent.
@@ -64,8 +64,7 @@ class _MapScreenState extends State<MapScreen> {
                   Padding(
                     padding: const EdgeInsets.only(right: 6),
                     child: Tap(
-                      onTap: () => setState(() => _filter = name),
-                      child: Container(
+                      onTap: () => setState(() => _filter = _filter == name ? '' : name),                      child: Container(
                         height: 34,
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         decoration: BoxDecoration(

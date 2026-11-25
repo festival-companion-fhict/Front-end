@@ -34,7 +34,7 @@ class KaartStage {
 class KaartPunt {
   const KaartPunt(this.soort, this.plek, this.titel, this.info, this.lopen);
 
-  final String soort; // 'FOOD', 'WATER', 'WC' of 'EHBO'
+  final String soort; // 'ETEN', 'WATER', 'WC' of 'EHBO'
   final Offset plek; // midden van het icoontje (x, y)
   final String titel;
   final String info;
@@ -69,9 +69,12 @@ const kaartStages = <KaartStage>[
 
 // ── ETEN, WATER, WC, EHBO ── (pas hier de plekken en teksten aan)
 const kaartPunten = <KaartPunt>[
-  KaartPunt('FOOD', Offset(850, 466), 'FOOD COURT NOORD', 'Burgers, friet, vega bowls. Open tot 01:00.', '3 MIN'),
-  KaartPunt('FOOD', Offset(760, 630), 'FOOD COURT GOLD', 'Pizza, noodles en snacks. Open tot 01:00.', '4 MIN'),
-  KaartPunt('FOOD', Offset(855, 690), 'FOOD TRUCKS', 'Tacos, wraps en desserts. Open tot 00:00.', '3 MIN'),
+  KaartPunt('ETEN', Offset(850, 466), 'FOOD COURT NOORD', 'Burgers, friet, vega bowls. Open tot 01:00.', '3 MIN'),
+  KaartPunt('ETEN', Offset(760, 630), 'FOOD COURT GOLD', 'Pizza, noodles en snacks. Open tot 01:00.', '4 MIN'),
+  KaartPunt('ETEN', Offset(855, 690), 'FOOD TRUCKS', 'Tacos, wraps en desserts. Open tot 00:00.', '3 MIN'),
+  KaartPunt('DRINKEN', Offset(735, 425), 'BAR BLUE', 'Bier, frisdrank en mixdrankjes. Betalen met munten.', '6 MIN'),
+  KaartPunt('DRINKEN', Offset(1160, 560), 'BAR RED', 'Bier, frisdrank en mixdrankjes. Betalen met munten.', '1 MIN'),
+  KaartPunt('DRINKEN', Offset(690, 760), 'BAR THEATRE', 'Bier, frisdrank en mixdrankjes. Betalen met munten.', '5 MIN'),
   KaartPunt('WATER', Offset(892, 485), 'WATERPUNT RED', 'Gratis water. Neem je eigen flesje mee.', '2 MIN'),
   KaartPunt('WATER', Offset(718, 600), 'WATERPUNT GOLD', 'Gratis water. Neem je eigen flesje mee.', '4 MIN'),
   KaartPunt('WATER', Offset(1060, 395), 'WATERPUNT PURPLE', 'Gratis water. Neem je eigen flesje mee.', '3 MIN'),
@@ -83,8 +86,9 @@ const kaartPunten = <KaartPunt>[
 ];
 
 /// Kleur en pictogram per soort punt.
-const _puntStijl = {
-  'FOOD': (DQ.yellow, 'Eten', 'ETEN'),
+const puntStijl = {
+  'ETEN': (DQ.yellow, 'Eten', 'ETEN'),  
+  'DRINKEN': (DQ.orange, 'Drinken', 'BAR'),
   'WATER': (DQ.cyan, 'Waterpunt', 'WATERPUNT'),
   'WC': (DQ.lime, 'Wc', 'TOILET'),
   'EHBO': (Colors.white, 'EHBO', 'EHBO'),
@@ -125,7 +129,7 @@ class FestivalKaart extends StatelessWidget {
                   child: Tap(
                     onTap: () {
                       onSelect?.call(s.naam);
-                      _toonStage(context, s);
+                      toonStageInfo(context, s);
                     },
                     child: DecoratedBox(
                       decoration: BoxDecoration(
@@ -139,22 +143,20 @@ class FestivalKaart extends StatelessWidget {
                 ),
 
               // Eten, water, wc, EHBO
-              for (final p in kaartPunten)
-                Positioned(
+              for (final p in kaartPunten.where((p) => filter == '' || filter == p.soort || (p.soort == 'EHBO' && filter != 'STAGES')))                Positioned(
                   left: p.plek.dx * sx - 6,
                   top: p.plek.dy * sy - 6,
                   child: Opacity(
-                    opacity: filter == 'STAGES' || filter == p.soort || p.soort == 'EHBO' ? 1 : 0.25,
-                    child: Tap(
-                      onTap: () => _toonPunt(context, p),
+                    opacity: 1,                    child: Tap(
+                      onTap: () => toonPuntInfo(context, p),
                       child: Container(
                         width: 12,
                         height: 12,
                         decoration: BoxDecoration(
-                          color: _puntStijl[p.soort]!.$1,
+                          color: puntStijl[p.soort]!.$1,
                           border: Border.all(color: DQ.dark, width: 0.8),
                         ),
-                        child: Picto(_puntStijl[p.soort]!.$2, size: 8, color: DQ.dark),
+                        child: Picto(puntStijl[p.soort]!.$2, size: 8, color: DQ.dark),
                       ),
                     ),
                   ),
@@ -212,7 +214,7 @@ class FestivalKaart extends StatelessWidget {
 //  INFO-SCHERMEN die omhoog schuiven
 // ─────────────────────────────────────────────────────────────
 
-void _toonStage(BuildContext context, KaartStage s) {
+void toonStageInfo(BuildContext context, KaartStage s) {
   _toonInfo(
     context,
     kleur: s.kleur,
@@ -229,8 +231,8 @@ void _toonStage(BuildContext context, KaartStage s) {
   );
 }
 
-void _toonPunt(BuildContext context, KaartPunt p) {
-  final stijl = _puntStijl[p.soort]!;
+void toonPuntInfo(BuildContext context, KaartPunt p) {
+  final stijl = puntStijl[p.soort]!;
   _toonInfo(
     context,
     kleur: stijl.$1,
