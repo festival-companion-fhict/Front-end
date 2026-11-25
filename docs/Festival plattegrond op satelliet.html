@@ -14,6 +14,7 @@ input[type=range]{width:100%}
 .btns button:hover{background:#333}
 .lbl{background:none;border:none;box-shadow:none;color:#fff;font-weight:700;font-size:12px;text-shadow:0 0 3px #000,0 0 3px #000}
 .leaflet-tooltip.lbl:before{display:none}
+select{width:100%;background:#000;color:#eee;border:1px solid #444;padding:5px;border-radius:5px}
 .note{margin-top:10px;font-size:11px;color:#999;border-top:1px solid #333;padding-top:8px}
 textarea{width:100%;height:130px;background:#000;color:#9f9;border:1px solid #333;font:11px Consolas,monospace;box-sizing:border-box}
 </style></head><body>
@@ -31,10 +32,17 @@ textarea{width:100%;height:130px;background:#000;color:#9f9;border:1px solid #33
 <div class="row"><div><span>Oost (+) / west (-)</span><b id="v_ex"></b></div><input id="ex" type="range" min="-300" max="300" step="2"></div>
 <div class="row"><div><span>Noord (+) / zuid (-)</span><b id="v_ny"></b></div><input id="ny" type="range" min="-300" max="300" step="2"></div>
 <div class="btns"><button id="reset">Terug naar start</button></div>
+<h2>Locaties aanklikken</h2>
+<div class="row"><div><span>Type</span></div><select id="ltype"></select></div>
+<div class="row"><div><span>Naam</span></div><input id="lnaam" type="text" placeholder="bijv. WC Noord" style="width:100%;box-sizing:border-box;background:#000;color:#eee;border:1px solid #444;padding:5px;border-radius:5px"></div>
+<label><input type="checkbox" id="klik"> Klikmodus: klik op de kaart om toe te voegen</label>
+<div id="lcount" style="color:#aaa;font-size:12px"></div>
+<textarea id="lout" readonly></textarea>
+<div class="btns"><button id="lcopy">Kopieer SQL</button><button id="lundo">Laatste weg</button><button id="lclear">Alles wissen</button></div>
 <h2>Zones voor de database</h2>
 <textarea id="out" readonly></textarea>
 <div class="btns"><button id="copy">Kopieer</button></div>
-<div class="note">Leg de cyaan vijvers op de witte vijvers en de lijnen op de Bremerbergtocht en de Spijkweg. De zones schuiven mee. De plattegrond is schematisch, dus het past nooit overal precies. Je afstelling wordt in deze browser onthouden.</div>
+<div class="note">Zonder klikmodus: klik op de kaart om de lat/lon van dat punt te zien. Met klikmodus: kies type en naam, klik op de plek, en onderaan verschijnt de SQL om de locaties in de database te zetten. Je lijst wordt in deze browser onthouden.<br><br>Leg de cyaan vijvers op de witte vijvers en de lijnen op de Bremerbergtocht en de Spijkweg. De zones schuiven mee. De plattegrond is schematisch, dus het past nooit overal precies. Je afstelling wordt in deze browser onthouden.</div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
@@ -78,4 +86,31 @@ document.getElementById('copy').onclick=()=>{const t=document.getElementById('ou
 const tg=(id,l)=>document.getElementById(id).onchange=e=>e.target.checked?l.addTo(map):map.removeLayer(l);
 tg('cbPlan',plan);tg('cbZones',zl);
 refresh();
+
+// ---------- Locaties aanklikken ----------
+const TYPES={FOOD:'#f5a623',BAR:'#b36bff',WATER:'#00c8ff',WC:'#9be15d',MEDICAL:'#ff3b3b',SECURITY:'#ff8c00',INFO:'#ffffff',
+ ENTRANCE:'#7CFC00',TOKENS:'#ffd700',LOCKERS:'#bbbbbb',RECYCLE:'#2ecc71',MEETINGPOINT:'#ff69b4',CHARGING:'#4da6ff'};
+const sel=document.getElementById('ltype');
+Object.keys(TYPES).forEach(t=>{const o=document.createElement('option');o.value=o.textContent=t;sel.appendChild(o);});
+let locs=[];try{locs=JSON.parse(localStorage.getItem('plattegrond-locaties')||'[]')}catch(e){}
+const ll2=L.layerGroup().addTo(map);
+const esc=v=>String(v).replace(/'/g,"''");
+function drawLocs(){ll2.clearLayers();
+ locs.forEach((l,i)=>L.circleMarker([l.lat,l.lon],{radius:7,color:'#000',weight:1.5,fillColor:TYPES[l.type],fillOpacity:1})
+  .bindTooltip(`${i+1}. ${l.naam} (${l.type})`).addTo(ll2));
+ document.getElementById('lcount').textContent=locs.length+' locatie(s) aangeklikt';
+ document.getElementById('lout').value=locs.length?'INSERT INTO dbo.locaties (naam, type, lat, lon) VALUES\n'+
+  locs.map(l=>`('${esc(l.naam)}', '${l.type}', ${l.lat.toFixed(6)}, ${l.lon.toFixed(6)})`).join(',\n')+';':'';
+ try{localStorage.setItem('plattegrond-locaties',JSON.stringify(locs))}catch(e){}}
+map.on('click',e=>{const lat=e.latlng.lat,lon=e.latlng.lng;
+ if(document.getElementById('klik').checked){
+  const naam=document.getElementById('lnaam').value.trim()||sel.value;
+  locs.push({naam,type:sel.value,lat,lon});drawLocs();
+ }else{
+  L.popup().setLatLng(e.latlng).setContent(`<b>lat</b> ${lat.toFixed(6)}<br><b>lon</b> ${lon.toFixed(6)}`).openOn(map);
+ }});
+document.getElementById('lundo').onclick=()=>{locs.pop();drawLocs();};
+document.getElementById('lclear').onclick=()=>{if(locs.length&&confirm('Alle aangeklikte locaties wissen?')){locs=[];drawLocs();}};
+document.getElementById('lcopy').onclick=()=>{const t=document.getElementById('lout');t.select();try{navigator.clipboard.writeText(t.value)}catch(e){document.execCommand('copy')}};
+drawLocs();
 </script></body></html>
