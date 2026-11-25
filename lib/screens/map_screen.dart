@@ -40,6 +40,7 @@ class _MapScreenState extends State<MapScreen> {
     ('FOOD', 'Eten'),
     ('WATER', 'Waterpunt'),
     ('WC', 'Wc'),
+    ('DRUKTE', 'Menigde'),
   ];
 
   @override
