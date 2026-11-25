@@ -4,15 +4,37 @@ import 'package:flutter/material.dart';
 
 import '../theme/dq_theme.dart';
 
-/// Een klikbaar vlak zonder Material-ripple (past bij de strakke stijl).
-class Tap extends StatelessWidget {
+/// Een klikbaar vlak. Als je erop drukt, wordt hij even iets lichter.
+class Tap extends StatefulWidget {
   const Tap({super.key, required this.child, this.onTap});
 
   final Widget child;
   final VoidCallback? onTap;
 
   @override
-  Widget build(BuildContext context) => GestureDetector(behavior: HitTestBehavior.opaque, onTap: onTap, child: child);
+  State<Tap> createState() => _TapState();
+}
+
+class _TapState extends State<Tap> {
+  bool _ingedrukt = false;
+
+  void _zet(bool waarde) {
+    if (widget.onTap != null) setState(() => _ingedrukt = waarde);
+  }
+
+  @override
+  Widget build(BuildContext context) => GestureDetector(
+    behavior: HitTestBehavior.opaque,
+    onTap: widget.onTap,
+    onTapDown: (_) => _zet(true),
+    onTapUp: (_) => _zet(false),
+    onTapCancel: () => _zet(false),
+    child: AnimatedOpacity(
+      duration: const Duration(milliseconds: 90),
+      opacity: _ingedrukt ? 0.55 : 1,
+      child: widget.child,
+    ),
+  );
 }
 
 /// Vierkante knop met dunne rand (zoeken, plus, bel, terug...).

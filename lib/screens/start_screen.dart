@@ -36,7 +36,7 @@ class StartScreen extends StatelessWidget {
             gradient: LinearGradient(colors: [Color(0x3DFF2134), Colors.transparent], stops: [0, 0.65]),
           ),
         ),
-        Positioned(left: 17, top: 22 + pad.top, width: 155, child: const Brand(showSub: true, center: false)),
+        Positioned(left: 17, top: 22 + pad.top, width: 240, child: const Brand(showSub: true, center: false)),
         Align(
           alignment: Alignment.bottomLeft,
           child: SingleChildScrollView(
