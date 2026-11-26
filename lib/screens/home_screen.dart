@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../app_shell.dart';
+import '../data/festival_data.dart';
 import '../theme/dq_theme.dart';
 import '../widgets/common.dart';
+import 'map_screen.dart';
 
 const _ink2 = Color(0xFF15111A);
 
@@ -22,38 +24,58 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            Tap(
+              onTap: () {
+                gekozenAct = zoekAct('POWER HOUR');
+                go(DqPage.artist);
+              },
+              child: const _LiveCard(),
+            ),
             _Presence(go: go),
-            const _LiveCard(),
             Padding(
               padding: const EdgeInsets.fromLTRB(14, 18, 14, 25),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Row(
+                  Row(
                     children: [
                       Expanded(
-                        child: _Metric(
-                          color: DQ.aqua,
-                          icon: 'Crew',
-                          label: 'DRUKTE',
-                          value: 'ZEER DRUK',
-                          sub: '92% capaciteit',
+                        child: Tap(
+                          onTap: () {
+                            kaartStartFilter = 'DRUKTE';
+                            go(DqPage.map);
+                          },
+                          child: const _Metric(
+                            color: DQ.aqua,
+                            icon: 'Crew',
+                            label: 'DRUKTE',
+                            value: 'ZEER DRUK',
+                            sub: '92% capaciteit',
+                          ),
                         ),
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       Expanded(
-                        child: _Metric(
-                          color: DQ.fuchsia,
-                          icon: LucideIcons.volume2,
-                          label: 'GELUID',
-                          value: '102 DB',
-                          sub: 'Oordoppen aangeraden',
+                        child: Tap(
+                          onTap: () => _toonOordoppen(context),
+                          child: const _Metric(
+                            color: DQ.fuchsia,
+                            icon: LucideIcons.volume2,
+                            label: 'GELUID',
+                            value: '102 DB',
+                            sub: 'Oordoppen aangeraden',
+                          ),
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 8),
-                  _UpNext(onTap: () => go(DqPage.artist)),
+                  _UpNext(
+                    onTap: () {
+                      gekozenAct = zoekAct('SUB ZERO PROJECT', stage: 'RED');
+                      go(DqPage.artist);
+                    },
+                  ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(2, 25, 2, 10),
                     child: Row(
@@ -111,7 +133,7 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  const _StageAlert(),
+                  Tap(onTap: () => go(DqPage.news), child: const _StageAlert()),
                 ],
               ),
             ),
@@ -122,75 +144,99 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
+/// Smalle lime balk: waar je nu bent + knop om te wijzigen.
 class _Presence extends StatelessWidget {
   const _Presence({required this.go});
 
   final Go go;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context) => Tap(
+    onTap: () => go(DqPage.map),
+    child: Container(
+      height: 64,
       color: DQ.acid,
-      constraints: const BoxConstraints(minHeight: 176),
-      child: Stack(
-        clipBehavior: Clip.hardEdge,
-        alignment: Alignment.bottomLeft,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
         children: [
-          const Positioned(
-            right: -80,
-            top: -90,
-            child: Ring(size: 180, width: 34, color: Color(0xE65A19FF)),
-          ),
-          Positioned(
-            right: 9,
-            bottom: -45,
-            child: Text('01', style: bc(140, color: const Color(0x285A19FF))),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 20),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
+          const DqIcon('Target', size: 20, color: _ink2),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          const DqIcon('Target', size: 15, color: _ink2),
-                          const SizedBox(width: 5),
-                          Text(
-                            'JE BENT NU BIJ',
-                            style: inter(8, color: _ink2, spacing: 1.5),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 7),
-                      Text(
-                        'RED\nSTAGE',
-                        style: bc(58, color: _ink2, height: 0.8, spacing: -2),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Locatie live · nauwkeurig tot 12 meter',
-                        style: inter(7, color: _ink2, weight: FontWeight.w800),
-                      ),
-                    ],
+                Text(
+                  'JE BENT NU BIJ',
+                  style: inter(7, color: _ink2, spacing: 1.2),
+                ),
+                Text('RED STAGE', style: bc(24, color: _ink2, height: 1)),
+              ],
+            ),
+          ),
+          Container(
+            height: 40,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            color: _ink2,
+            child: Row(
+              children: [
+                Text('WIJZIG', style: inter(8, color: Colors.white)),
+                const SizedBox(width: 6),
+                const DqIcon('Kaart', size: 15, color: DQ.acid),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+/// Tip over oordoppen (als je op de GELUID-kaart tikt).
+void _toonOordoppen(BuildContext context) {
+  showModalBottomSheet<void>(
+    context: context,
+    backgroundColor: DQ.dark,
+    shape: const RoundedRectangleBorder(),
+    builder: (context) => SafeArea(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(height: 6, color: DQ.fuchsia),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 18, 20, 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  'GELUID · 102 DB',
+                  style: inter(9, color: DQ.fuchsia, spacing: 2),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'BESCHERM JE OREN',
+                  style: bc(40, height: 0.9, color: Colors.white),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  'Boven 100 dB kan je gehoor al na korte tijd beschadigen. '
+                  'Gratis oordoppen haal je bij elke EHBO-post en bij de bars.',
+                  style: inter(
+                    11,
+                    weight: FontWeight.w500,
+                    height: 1.5,
+                    color: const Color(0xFFAAAAAA),
                   ),
                 ),
+                const SizedBox(height: 16),
                 Tap(
-                  onTap: () => go(DqPage.map),
+                  onTap: () => Navigator.of(context).pop(),
                   child: Container(
-                    height: 38,
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    decoration: BoxDecoration(border: Border.all(color: _ink2)),
-                    child: Row(
-                      children: [
-                        Text('WIJZIG STAGE', style: inter(7, color: _ink2)),
-                        const SizedBox(width: 7),
-                        const DqIcon('Kaart', size: 15, color: _ink2),
-                      ],
-                    ),
+                    height: 50,
+                    color: DQ.fuchsia,
+                    alignment: Alignment.center,
+                    child: Text('OKÉ', style: inter(10, color: Colors.white)),
                   ),
                 ),
               ],
@@ -198,8 +244,8 @@ class _Presence extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
 }
 
 class _LiveCard extends StatelessWidget {

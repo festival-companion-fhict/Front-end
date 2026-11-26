@@ -102,7 +102,7 @@ class _AppShellState extends State<AppShell> {
       DqPage.map => MapScreen(go: _go),
       DqPage.report => const ReportScreen(),
       DqPage.news => NewsScreen(go: _go),
-      DqPage.crew => const CrewScreen(),
+      DqPage.crew => CrewScreen(go: _go),
       DqPage.ticket => TicketScreen(
         go: _go,
         openProfile: () => setState(() => _profile = true),

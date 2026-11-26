@@ -142,6 +142,12 @@ const crew = <CrewMember>[
     darkText: false,
     kaartPlek: 'BLUE STAGE',
   ),
+  CrewMember(
+    'WD',
+    'WALID',
+    'HIDDEN',
+   Colors.white
+  ),
 ];
 
 class NewsItem {

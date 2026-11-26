@@ -7,7 +7,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../theme/dq_theme.dart';
 import '../widgets/common.dart';
 
-/// Scherm 6: SOS – "WHAT DO YOU NEED?".
+/// Scherm 6: SOS – "WAAR HEB JE HULP BIJ?".
 class EmergencySheet extends StatefulWidget {
   const EmergencySheet({super.key, required this.close});
 
@@ -102,15 +102,50 @@ class _EmergencySheetState extends State<EmergencySheet> {
     crossAxisAlignment: CrossAxisAlignment.stretch,
     mainAxisSize: MainAxisSize.min,
     children: [
-      Align(alignment: Alignment.centerLeft, child: _symbol('Alert')),
-      const SizedBox(height: 18),
-      Text(
-        'EMERGENCY SIGNAL',
-        style: inter(8, spacing: 2, color: Colors.white),
+      // Infovak: bij levensgevaar eerst zelf 112 bellen
+      // (ruimte erboven, zodat het kruisje er niet overheen valt)
+      const SizedBox(height: 52),
+      Container(
+        padding: const EdgeInsets.all(14),
+        decoration: const BoxDecoration(
+          color: DQ.dark,
+          border: Border(left: BorderSide(color: DQ.yellow, width: 4)),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const DqIcon('Info', size: 22, color: DQ.yellow),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Levensgevaarlijk? ',
+                      style: inter(12, color: DQ.yellow),
+                    ),
+                    const TextSpan(
+                      text:
+                          'Bel eerst zelf 112. Gebruik daarna SOS, zodat het team op het terrein weet waar je bent.',
+                    ),
+                  ],
+                ),
+                style: inter(
+                  12,
+                  weight: FontWeight.w500,
+                  height: 1.45,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
+      const SizedBox(height: 20),
+      Text('NOODSIGNAAL', style: inter(8, spacing: 2, color: Colors.white)),
       const SizedBox(height: 8),
       Text(
-        'WHAT DO\nYOU NEED?',
+        'WAAR HEB JE\nHULP BIJ?',
         style: bc(
           58,
           italic: true,
@@ -123,7 +158,7 @@ class _EmergencySheetState extends State<EmergencySheet> {
       ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 300),
         child: Text(
-          'Your current location will be sent directly to the response team.',
+          'Je locatie wordt direct naar het hulpteam gestuurd.',
           style: inter(
             11,
             weight: FontWeight.w500,
@@ -135,29 +170,17 @@ class _EmergencySheetState extends State<EmergencySheet> {
       const SizedBox(height: 18),
       _Option(
         icon: 'EHBO',
-        title: 'MEDICAL',
-        sub: 'FIRST AID TEAM',
+        title: 'MEDISCH',
+        sub: 'EHBO-TEAM',
         dark: false,
         onTap: () => setState(() => _sent = true),
       ),
       _Option(
         icon: 'Security',
-        title: 'SECURITY',
-        sub: 'SAFETY TEAM',
+        title: 'BEVEILIGING',
+        sub: 'VEILIGHEIDSTEAM',
         dark: true,
         onTap: () => setState(() => _sent = true),
-      ),
-      const SizedBox(height: 16),
-      Center(
-        child: Text(
-          'LIFE-THREATENING? ALWAYS CALL 112',
-          style: inter(
-            7,
-            weight: FontWeight.w800,
-            spacing: 1,
-            color: Colors.white,
-          ),
-        ),
       ),
     ],
   );
@@ -168,10 +191,13 @@ class _EmergencySheetState extends State<EmergencySheet> {
     children: [
       Align(alignment: Alignment.centerLeft, child: _symbol(LucideIcons.check)),
       const SizedBox(height: 18),
-      Text('SIGNAL RECEIVED', style: inter(8, spacing: 2, color: Colors.white)),
+      Text(
+        'SIGNAAL ONTVANGEN',
+        style: inter(8, spacing: 2, color: Colors.white),
+      ),
       const SizedBox(height: 8),
       Text(
-        'HELP IS\nMOVING',
+        'HULP IS\nONDERWEG',
         style: bc(
           58,
           italic: true,
@@ -182,7 +208,7 @@ class _EmergencySheetState extends State<EmergencySheet> {
       ),
       const SizedBox(height: 14),
       Text(
-        'Stay where you are if it is safe. Your live location has been shared.',
+        'Blijf waar je bent als dat veilig is. Je live locatie is gedeeld.',
         style: inter(
           11,
           weight: FontWeight.w500,
@@ -198,7 +224,7 @@ class _EmergencySheetState extends State<EmergencySheet> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'ESTIMATED ARRIVAL',
+              'VERWACHTE AANKOMST',
               style: inter(
                 7,
                 weight: FontWeight.w500,
@@ -217,7 +243,7 @@ class _EmergencySheetState extends State<EmergencySheet> {
           height: 50,
           color: DQ.paper,
           alignment: Alignment.center,
-          child: Text('UNDERSTOOD', style: inter(10, color: DQ.dark)),
+          child: Text('BEGREPEN', style: inter(10, color: DQ.dark)),
         ),
       ),
     ],

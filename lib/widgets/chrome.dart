@@ -273,7 +273,7 @@ class DqNav extends StatelessWidget {
     (DqPage.lineup, 'SCHEMA', 'calendar'),
     (DqPage.report, 'MELDEN', 'Melden'),
     (DqPage.news, 'NIEUWS', 'Info'),
-    (DqPage.crew, 'CREW', 'Crew'),
+    (DqPage.crew, 'SQUAD', 'Crew'),
   ];
 
   @override

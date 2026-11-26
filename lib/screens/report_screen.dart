@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/dq_theme.dart';
@@ -17,6 +20,28 @@ class _ReportScreenState extends State<ReportScreen> {
   bool _location = true;
   bool _sent = false;
   final _text = TextEditingController();
+  Uint8List? _foto; // de gekozen foto (of null als er geen foto is)
+
+  // De soorten meldingen: (naam, pictogram)
+  static const _categorieen = <(String, Object)>[
+    ('AFVAL', LucideIcons.trash2),
+    ('TOILET', 'Wc'),
+    ('KAPOT', LucideIcons.wrench),
+    ('LEKKAGE', 'Waterpunt'),
+    ('VERLOREN', LucideIcons.packageSearch),
+    ('OVERIG', 'Melden'),
+  ];
+
+  /// Foto kiezen uit je galerij (op de computer: een bestand kiezen).
+  Future<void> _kiesFoto() async {
+    final bestand = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 1200,
+    );
+    if (bestand == null) return; // niets gekozen
+    final bytes = await bestand.readAsBytes();
+    setState(() => _foto = bytes);
+  }
 
   @override
   void dispose() {
@@ -24,9 +49,64 @@ class _ReportScreenState extends State<ReportScreen> {
     super.dispose();
   }
 
-  Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(top: 18, bottom: 9),
-    child: Text(text, style: inter(8, spacing: 1.3, color: DQ.muted)),
+  // Snelle zinnen per soort melding: tikken in plaats van typen
+  static const _snelleZinnen = {
+    'AFVAL': ['Prullenbak vol', 'Afval op de grond', 'Glas op de grond'],
+    'TOILET': ['Geen wc-papier', 'Verstopt', 'Vies', 'Deur kapot'],
+    'KAPOT': ['Lamp kapot', 'Hek kapot', 'Kraan kapot'],
+    'LEKKAGE': ['Lekt', 'Plas op de grond', 'Geen water'],
+    'VERLOREN': ['Telefoon', 'Portemonnee', 'Sleutels', 'Tas'],
+    'OVERIG': ['Te druk', 'Gladde vloer', 'Te donker'],
+  };
+
+  /// Kopje met een nummer ervoor, bijv. [1] WAT WIL JE MELDEN?
+  Widget _stap(int nummer, String text) => Padding(
+    padding: const EdgeInsets.only(top: 20, bottom: 10),
+    child: Row(
+      children: [
+        Container(
+          width: 24,
+          height: 24,
+          color: DQ.lime,
+          alignment: Alignment.center,
+          child: Text('$nummer', style: inter(10, color: DQ.dark)),
+        ),
+        const SizedBox(width: 10),
+        Text(text, style: inter(9, spacing: 1.3, color: DQ.muted)),
+      ],
+    ),
+  );
+
+  /// Zet een snelle zin in het tekstvak (achter wat er al staat).
+  void _voegZinToe(String zin) {
+    final huidig = _text.text.trim();
+    _text.text = huidig.isEmpty ? zin : '$huidig. $zin';
+    setState(() {});
+  }
+
+  /// De knoppen met snelle zinnen voor de gekozen soort.
+  Widget _zinKnoppen() => Wrap(
+    spacing: 6,
+    runSpacing: 6,
+    children: [
+      for (final zin in _snelleZinnen[_category] ?? const <String>[])
+        Tap(
+          onTap: () => _voegZinToe(zin),
+          child: Container(
+            height: 40,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(border: Border.all(color: DQ.line2)),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const DqIcon(LucideIcons.plus, size: 12, color: DQ.lime),
+                const SizedBox(width: 6),
+                Text(zin, style: inter(10, color: Colors.white)),
+              ],
+            ),
+          ),
+        ),
+    ],
   );
 
   @override
@@ -65,46 +145,60 @@ class _ReportScreenState extends State<ReportScreen> {
             ),
           ),
           const SizedBox(height: 6),
-          _label('WAT WIL JE MELDEN?'),
-          Row(
-            children: [
-              for (final (i, c) in const [
-                'AFVAL',
-                'TOILET',
-                'KAPOT',
-                'OVERIG',
-              ].indexed) ...[
-                if (i > 0) const SizedBox(width: 5),
-                Expanded(
-                  child: Tap(
-                    onTap: () => setState(() => _category = c),
-                    child: Container(
-                      height: 48,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: _category == c
-                            ? DQ.lime
-                            : const Color(0xFF141414),
-                        border: Border.all(
-                          color: _category == c ? DQ.lime : DQ.line2,
+          _stap(1, 'WAT WIL JE MELDEN?'),
+          // 6 knoppen in 2 rijen van 3
+          for (final rij in [
+            _categorieen.sublist(0, 3),
+            _categorieen.sublist(3),
+          ]) ...[
+            Row(
+              children: [
+                for (final (i, (naam, picto)) in rij.indexed) ...[
+                  if (i > 0) const SizedBox(width: 6),
+                  Expanded(
+                    child: Tap(
+                      onTap: () => setState(() => _category = naam),
+                      child: Container(
+                        height: 64,
+                        decoration: BoxDecoration(
+                          color: _category == naam
+                              ? DQ.lime
+                              : const Color(0xFF141414),
+                          border: Border.all(
+                            color: _category == naam ? DQ.lime : DQ.line2,
+                          ),
                         ),
-                      ),
-                      child: Text(
-                        c,
-                        style: inter(
-                          7,
-                          color: _category == c ? DQ.dark : DQ.muted,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            DqIcon(
+                              picto,
+                              size: 18,
+                              color: _category == naam ? DQ.dark : DQ.muted,
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              naam,
+                              style: inter(
+                                7,
+                                color: _category == naam ? DQ.dark : DQ.muted,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
                   ),
-                ),
+                ],
               ],
-            ],
-          ),
-          _label('WAT IS ER AAN DE HAND?'),
+            ),
+            const SizedBox(height: 6),
+          ],
+          _stap(2, 'WAT IS ER AAN DE HAND?'),
+          _zinKnoppen(),
+          const SizedBox(height: 10),
           SizedBox(
-            height: 135,
+            height: 110,
             child: TextField(
               controller: _text,
               maxLines: null,
@@ -132,6 +226,9 @@ class _ReportScreenState extends State<ReportScreen> {
               ),
             ),
           ),
+          const SizedBox(height: 10),
+          _fotoVak(),
+          _stap(3, 'WAAR IS HET?'),
           Tap(
             onTap: () => setState(() => _location = !_location),
             child: Container(
@@ -218,9 +315,60 @@ class _ReportScreenState extends State<ReportScreen> {
     );
   }
 
+  /// Knop FOTO TOEVOEGEN, of de gekozen foto met een kruisje om te wissen.
+  Widget _fotoVak() {
+    final foto = _foto;
+    if (foto == null) {
+      return Tap(
+        onTap: _kiesFoto,
+        child: DashedBox(
+          color: DQ.line2,
+          child: SizedBox(
+            height: 56,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const DqIcon(LucideIcons.camera, size: 18, color: DQ.lime),
+                const SizedBox(width: 10),
+                Text('FOTO TOEVOEGEN', style: inter(9, color: Colors.white)),
+                const SizedBox(width: 6),
+                Text(
+                  '(optioneel)',
+                  style: inter(9, weight: FontWeight.w500, color: DQ.muted),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(border: Border.all(color: DQ.line2)),
+      child: Row(
+        children: [
+          Image.memory(foto, width: 64, height: 64, fit: BoxFit.cover),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text('FOTO TOEGEVOEGD', style: inter(9, color: DQ.lime)),
+          ),
+          OutlineSquare(
+            icon: LucideIcons.x,
+            size: 40,
+            iconColor: Colors.white,
+            onTap: () => setState(() => _foto = null),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _done() {
+    final nu = TimeOfDay.now();
+    final tijd =
+        '${nu.hour.toString().padLeft(2, '0')}:${nu.minute.toString().padLeft(2, '0')}';
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 55),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -241,15 +389,13 @@ class _ReportScreenState extends State<ReportScreen> {
             ),
           ),
           const SizedBox(height: 25),
-          Text(
-            'MELDING ONTVANGEN',
-            style: inter(8, color: DQ.lime, spacing: 2),
-          ),
+          Text('MELDING #DQ-1408', style: inter(8, color: DQ.lime, spacing: 2)),
           const SizedBox(height: 7),
           Text('THANKS,\nWARRIOR', style: bc(62, italic: true, height: 0.85)),
           const SizedBox(height: 14),
           Text(
-            'Het terreinteam heeft je melding ontvangen. Je locatie is anoniem meegestuurd.',
+            '$_category${_location ? ' · je locatie is anoniem meegestuurd' : ''}. '
+            'Het terreinteam pakt het op.',
             style: inter(
               11,
               weight: FontWeight.w500,
@@ -257,50 +403,84 @@ class _ReportScreenState extends State<ReportScreen> {
               height: 1.5,
             ),
           ),
-          const SizedBox(height: 22),
-          DashedBox(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'REFERENTIE',
-                    style: inter(
-                      7,
-                      weight: FontWeight.w500,
-                      spacing: 1,
-                      color: DQ.muted,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text('#DQ-1408', style: bc(25)),
-                  const SizedBox(height: 7),
-                  Text(
-                    'Verwachte reactie · 10 min',
-                    style: inter(
-                      7,
-                      weight: FontWeight.w500,
-                      spacing: 1,
-                      color: DQ.muted,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          const SizedBox(height: 26),
+          // Tijdlijn: wat gebeurt er met je melding?
+          _tijdlijnStap('ONTVANGEN', tijd, DQ.lime, eerste: true),
+          _tijdlijnStap('IN BEHANDELING', 'verwacht binnen 10 min', DQ.yellow),
+          _tijdlijnStap(
+            'AFGEHANDELD',
+            'je krijgt een melding',
+            const Color(0xFF555555),
+            laatste: true,
           ),
           const SizedBox(height: 22),
           Tap(
             onTap: () => setState(() {
               _sent = false;
               _text.clear();
+              _foto = null;
             }),
             child: Container(
-              height: 50,
+              height: 52,
               color: DQ.paper,
               alignment: Alignment.center,
               child: Text('NIEUWE MELDING', style: inter(9, color: DQ.dark)),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Eén stap van de tijdlijn: bolletje, lijntje, titel en kleine tekst.
+  Widget _tijdlijnStap(
+    String titel,
+    String tekst,
+    Color kleur, {
+    bool eerste = false,
+    bool laatste = false,
+  }) {
+    return SizedBox(
+      height: 64,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 24,
+            child: Column(
+              children: [
+                Container(
+                  width: 2,
+                  height: 6,
+                  color: eerste ? Colors.transparent : DQ.line2,
+                ),
+                Container(
+                  width: 14,
+                  height: 14,
+                  decoration: BoxDecoration(
+                    color: kleur,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    width: 2,
+                    color: laatste ? Colors.transparent : DQ.line2,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(titel, style: bc(22, height: 1.1, color: kleur)),
+              Text(
+                tekst,
+                style: inter(10, weight: FontWeight.w500, color: DQ.muted),
+              ),
+            ],
           ),
         ],
       ),

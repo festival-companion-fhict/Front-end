@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../app_shell.dart';
+import '../data/festival_data.dart';
+import '../data/instellingen.dart';
 import '../theme/dq_theme.dart';
 import '../widgets/common.dart';
+import '../widgets/festival_kaart.dart';
+import 'map_screen.dart';
+import 'news_detail_screen.dart';
 
-/// Scherm 5: artiestpagina (SUB ZERO PROJECT).
+/// Scherm 5: artiestpagina. Laat de act zien die in [gekozenAct] staat.
 class ArtistScreen extends StatefulWidget {
   const ArtistScreen({super.key, required this.go});
 
@@ -16,14 +21,16 @@ class ArtistScreen extends StatefulWidget {
 }
 
 class _ArtistScreenState extends State<ArtistScreen> {
-  bool _favorite = true;
   bool _reminder = true;
-  String _tab = 'ABOUT';
+  String _tab = 'INFO';
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.sizeOf(context).width;
     final nameSize = width <= 390 ? 56.0 : (width * 0.18).clamp(59.0, 84.0);
+    final act = gekozenAct; // de artiest waar je op tikte
+    final dagActs = lineup.where((a) => a.dag == act.dag).toList();
+    final nummer = (dagActs.indexOf(act) + 1).toString().padLeft(2, '0');
 
     return SingleChildScrollView(
       padding: const EdgeInsets.only(bottom: 50),
@@ -60,7 +67,7 @@ class _ArtistScreenState extends State<ArtistScreen> {
                   right: -15,
                   top: 40,
                   child: OutlineText(
-                    '04',
+                    nummer,
                     style: bc(180),
                     color: const Color(0x28FFFFFF),
                   ),
@@ -81,7 +88,11 @@ class _ArtistScreenState extends State<ArtistScreen> {
                   right: 15,
                   top: 16,
                   child: Tap(
-                    onTap: () => setState(() => _favorite = !_favorite),
+                    onTap: () async {
+                      // Zelfde hartje als in het SCHEMA (MIJN SCHEMA)
+                      await Instellingen.wisselBewaard(act.sleutel);
+                      setState(() {});
+                    },
                     child: Container(
                       width: 44,
                       height: 44,
@@ -90,7 +101,9 @@ class _ArtistScreenState extends State<ArtistScreen> {
                         border: Border.all(color: const Color(0x70FFFFFF)),
                       ),
                       child: DqIcon(
-                        _favorite ? 'Vol_hart' : 'Hart',
+                        Instellingen.bewaard.contains(act.sleutel)
+                            ? 'Vol_hart'
+                            : 'Hart',
                         color: DQ.red,
                         size: 22,
                       ),
@@ -105,7 +118,7 @@ class _ArtistScreenState extends State<ArtistScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'LIVE ACT',
+                        act.isLive ? 'LIVE NU' : 'LIVE ACT',
                         style: inter(
                           9,
                           color: DQ.lime,
@@ -115,7 +128,7 @@ class _ArtistScreenState extends State<ArtistScreen> {
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        'SUB ZERO\nPROJECT',
+                        act.artist,
                         style: bc(
                           nameSize,
                           italic: true,
@@ -135,10 +148,10 @@ class _ArtistScreenState extends State<ArtistScreen> {
             angle: -1 * 3.14159 / 180,
             child: Container(
               height: 34,
-              color: DQ.lime,
+              color: genreKleur(act.genre),
               alignment: Alignment.centerLeft,
               child: Text(
-                'PSYCHODELIC · HARDSTYLE · PSYCHODELIC · HARDSTYLE · PSYCHODELIC · HARDSTYLE ·',
+                '${act.genre} · ' * 8,
                 maxLines: 1,
                 softWrap: false,
                 overflow: TextOverflow.clip,
@@ -161,12 +174,26 @@ class _ArtistScreenState extends State<ArtistScreen> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        const Expanded(child: _MetaCell('WHEN', 'SAT · 16:00')),
-                        const Expanded(child: _MetaCell('WHERE', 'RED STAGE')),
+                        Expanded(
+                          child: _MetaCell(
+                            'WHEN',
+                            '${act.dag.substring(0, 3)} · ${act.time}',
+                          ),
+                        ),
+                        Expanded(child: _MetaCell('WHERE', act.kaartNaam)),
                         Tap(
-                          onTap: () => widget.go(DqPage.map),
+                          // Staat de stage niet op de kaart? Dan geen route.
+                          onTap: opKaart(act.kaartNaam)
+                              ? () {
+                                  kaartStartSelectie = act.kaartNaam;
+                                  kaartStartRoute = true;
+                                  widget.go(DqPage.map);
+                                }
+                              : null,
                           child: Container(
-                            color: DQ.red,
+                            color: opKaart(act.kaartNaam)
+                                ? DQ.red
+                                : const Color(0xFF2A2A2A),
                             padding: const EdgeInsets.symmetric(horizontal: 12),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -192,7 +219,7 @@ class _ArtistScreenState extends State<ArtistScreen> {
                 const SizedBox(height: 25),
                 Row(
                   children: [
-                    for (final tab in const ['ABOUT', 'MEDIA', 'SETS'])
+                    for (final tab in const ['INFO', 'NIEUWS', 'OPTREDENS'])
                       Padding(
                         padding: const EdgeInsets.only(right: 22),
                         child: Tap(
@@ -212,7 +239,7 @@ class _ArtistScreenState extends State<ArtistScreen> {
                             child: Text(
                               tab,
                               style: bc(
-                                14,
+                                17,
                                 color: _tab == tab
                                     ? Colors.white
                                     : const Color(0xFF555555),
@@ -224,21 +251,11 @@ class _ArtistScreenState extends State<ArtistScreen> {
                   ],
                 ),
                 const SizedBox(height: 15),
-                Text(
-                  switch (_tab) {
-                    'ABOUT' =>
-                      'Two minds. One brutal vision. Sub Zero Project tears through the boundaries of '
-                          'hardstyle with cinematic drops and relentless energy.',
-                    'MEDIA' => 'Foto\'s en video\'s van deze act komen hier.',
-                    _ => 'Eerdere sets en tracklists komen hier.',
-                  },
-                  style: inter(
-                    12,
-                    weight: FontWeight.w500,
-                    color: const Color(0xFFAAAAAA),
-                    height: 1.6,
-                  ),
-                ),
+                switch (_tab) {
+                  'INFO' => _info(act),
+                  'NIEUWS' => _nieuws(act),
+                  _ => _optredens(act),
+                },
                 const SizedBox(height: 20),
                 Tap(
                   onTap: () => setState(() => _reminder = !_reminder),
@@ -272,6 +289,85 @@ class _ArtistScreenState extends State<ArtistScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  /// Tabblad INFO: de omschrijving van de artiest.
+  Widget _info(Act act) => Text(
+    act.info.isNotEmpty
+        ? act.info
+        : '${act.artist} speelt ${act.genre.toLowerCase()} op ${act.kaartNaam}, '
+              'van ${act.time} tot ${act.end}. Meer info over deze act volgt binnenkort.',
+    style: inter(
+      12,
+      weight: FontWeight.w500,
+      color: const Color(0xFFAAAAAA),
+      height: 1.6,
+    ),
+  );
+
+  /// Tabblad NIEUWS: berichten over deze artiest.
+  Widget _nieuws(Act act) {
+    final berichten = news.where((n) => n.artiest == act.artist).toList();
+    if (berichten.isEmpty) {
+      return Text(
+        'Nog geen nieuws over ${act.artist}.',
+        style: inter(12, weight: FontWeight.w500, color: DQ.muted),
+      );
+    }
+    return Column(
+      children: [
+        for (final n in berichten)
+          Tap(
+            onTap: () => openNieuws(context, n),
+            child: Container(
+              width: double.infinity,
+              margin: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(border: Border.all(color: DQ.line)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${n.category} · ${n.time}',
+                    style: inter(8, spacing: 1, color: nieuwsKleur(n.category)),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(n.title.toUpperCase(), style: bc(18)),
+                ],
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  /// Tabblad OPTREDENS: alle keren dat deze artiest speelt.
+  Widget _optredens(Act act) {
+    final keren = lineup.where((a) => a.artist == act.artist).toList();
+    return Column(
+      children: [
+        for (final k in keren)
+          Container(
+            height: 52,
+            decoration: const BoxDecoration(
+              border: Border(bottom: BorderSide(color: DQ.line)),
+            ),
+            child: Row(
+              children: [
+                Container(width: 6, color: stageKleur(k.kaartNaam)),
+                const SizedBox(width: 12),
+                SizedBox(width: 70, child: Text(k.dag, style: bc(17))),
+                Text(
+                  '${k.time} – ${k.end}',
+                  style: inter(10, color: Colors.white),
+                ),
+                const Spacer(),
+                Text(k.kaartNaam, style: inter(9, color: DQ.muted)),
+              ],
+            ),
+          ),
+      ],
     );
   }
 }

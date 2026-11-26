@@ -4,25 +4,46 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../app_shell.dart';
 import '../data/festival_data.dart';
 import '../theme/dq_theme.dart';
+import '../data/instellingen.dart';
 import '../widgets/common.dart';
+import 'map_screen.dart';
+import 'news_detail_screen.dart';
 
 /// Scherm 8: LIVE NIEUWS.
-class NewsScreen extends StatelessWidget {
+class NewsScreen extends StatefulWidget {
   const NewsScreen({super.key, required this.go});
 
   final Go go;
 
   @override
+  State<NewsScreen> createState() => _NewsScreenState();
+}
+
+class _NewsScreenState extends State<NewsScreen> {
+  String _filter = 'ALLES'; // welke soort nieuws je ziet
+
+  @override
   Widget build(BuildContext context) {
+    final berichten = news
+        .where(
+          (n) =>
+              _filter == 'ALLES' ||
+              n.category == _filter ||
+              (_filter == 'ARTIESTEN' && n.artiest != ''),
+        )
+        .toList();
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(16, 22, 16, 80),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const PageHeading(
+          PageHeading(
             kicker: 'LAATST BIJGEWERKT · NU',
             title: 'LIVE NIEUWS',
-            action: OutlineSquare(icon: LucideIcons.bell),
+            action: OutlineSquare(
+              icon: LucideIcons.bell,
+              onTap: () => _toonMeldingen(context),
+            ),
           ),
           // Belangrijke melding
           Container(
@@ -77,7 +98,11 @@ class NewsScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 10),
                       Tap(
-                        onTap: () => go(DqPage.map),
+                        onTap: () {
+                          kaartStartFilter =
+                              'WATER'; // kaart opent met de waterpunten
+                          widget.go(DqPage.map);
+                        },
                         child: Container(
                           color: DQ.dark,
                           padding: const EdgeInsets.symmetric(
@@ -156,56 +181,205 @@ class NewsScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 22),
-          Container(height: 1, color: const Color(0xFF383838)),
-          for (final item in news)
-            Container(
-              constraints: const BoxConstraints(minHeight: 91),
-              padding: const EdgeInsets.symmetric(vertical: 14),
-              decoration: const BoxDecoration(
-                border: Border(bottom: BorderSide(color: Color(0xFF383838))),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(item.time, style: inter(8, color: DQ.red)),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          item.category,
-                          style: inter(7, spacing: 1, color: DQ.muted),
-                        ),
-                        const SizedBox(height: 3),
-                        Text(item.title, style: bc(19)),
-                        const SizedBox(height: 3),
-                        Text(
-                          item.text,
-                          style: inter(
-                            9,
-                            weight: FontWeight.w500,
-                            height: 1.4,
-                            color: DQ.muted,
+          // Filterknoppen
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                for (final f in ['ALLES', ...nieuwsSoorten, 'ARTIESTEN'])
+                  Padding(
+                    padding: const EdgeInsets.only(right: 7),
+                    child: Tap(
+                      onTap: () => setState(() => _filter = f),
+                      child: Container(
+                        height: 44,
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        decoration: BoxDecoration(
+                          color: _filter == f ? DQ.paper : Colors.transparent,
+                          border: Border.all(
+                            color: _filter == f ? DQ.paper : DQ.line2,
                           ),
                         ),
-                      ],
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (f != 'ALLES') ...[
+                              Container(
+                                width: 8,
+                                height: 8,
+                                color: nieuwsKleur(f),
+                              ),
+                              const SizedBox(width: 7),
+                            ],
+                            Text(
+                              f,
+                              style: inter(
+                                9,
+                                weight: FontWeight.w800,
+                                color: _filter == f ? DQ.dark : DQ.muted,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 20),
-                    child: DqIcon(
-                      LucideIcons.chevronRight,
-                      size: 16,
-                      color: Color(0xFF555555),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          Container(height: 1, color: const Color(0xFF383838)),
+          for (final item in berichten)
+            Tap(
+              onTap: () => openNieuws(context, item),
+              child: Container(
+                constraints: const BoxConstraints(minHeight: 91),
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                decoration: const BoxDecoration(
+                  border: Border(bottom: BorderSide(color: Color(0xFF383838))),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(item.time, style: inter(8, color: DQ.red)),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            item.category,
+                            style: inter(
+                              7,
+                              spacing: 1,
+                              color: nieuwsKleur(item.category),
+                            ),
+                          ),
+                          const SizedBox(height: 3),
+                          Text(item.title, style: bc(19)),
+                          const SizedBox(height: 3),
+                          Text(
+                            item.text,
+                            style: inter(
+                              9,
+                              weight: FontWeight.w500,
+                              height: 1.4,
+                              color: DQ.muted,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 12),
+                    const Padding(
+                      padding: EdgeInsets.only(top: 20),
+                      child: DqIcon(
+                        LucideIcons.chevronRight,
+                        size: 16,
+                        color: Color(0xFF777777),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
         ],
       ),
     );
   }
+}
+
+/// Bel-knop: kies welke pushberichten je wilt krijgen.
+void _toonMeldingen(BuildContext context) {
+  showModalBottomSheet<void>(
+    context: context,
+    backgroundColor: DQ.dark,
+    shape: const RoundedRectangleBorder(),
+    isScrollControlled: true, // mag hoger worden; scrollen als het niet past
+    builder: (context) => StatefulBuilder(
+      builder: (context, setSheet) => SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(height: 6, color: DQ.red),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 18, 20, 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      'PUSHBERICHTEN',
+                      style: inter(9, color: DQ.red, spacing: 2),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      'MELDINGEN',
+                      style: bc(40, height: 0.9, color: Colors.white),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Kies over welk nieuws je een melding op je telefoon wilt krijgen.',
+                      style: inter(
+                        11,
+                        weight: FontWeight.w500,
+                        height: 1.5,
+                        color: const Color(0xFFAAAAAA),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    for (final soort in [
+                      'BELANGRIJK',
+                      ...nieuwsSoorten,
+                      'ARTIESTEN',
+                    ])
+                      Container(
+                        height: 54,
+                        decoration: const BoxDecoration(
+                          border: Border(bottom: BorderSide(color: DQ.line)),
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 10,
+                              height: 10,
+                              color: nieuwsKleur(soort),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                soort,
+                                style: bc(18, color: Colors.white),
+                              ),
+                            ),
+                            Schakelaar(
+                              aan: Instellingen.aan(soort),
+                              onChanged: (waarde) async {
+                                await Instellingen.zet(soort, waarde);
+                                setSheet(() {});
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    const SizedBox(height: 16),
+                    Tap(
+                      onTap: () => Navigator.of(context).pop(),
+                      child: Container(
+                        height: 50,
+                        color: DQ.paper,
+                        alignment: Alignment.center,
+                        child: Text('KLAAR', style: inter(10, color: DQ.dark)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
 }

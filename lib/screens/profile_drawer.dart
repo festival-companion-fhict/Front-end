@@ -5,6 +5,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../app_shell.dart';
 import '../theme/dq_theme.dart';
+import '../data/instellingen.dart';
 import '../widgets/common.dart';
 
 /// Scherm 10: profielmenu dat van rechts inschuift.
@@ -13,14 +14,6 @@ class ProfileDrawer extends StatelessWidget {
 
   final VoidCallback close;
   final Go go;
-
-  static const _settings = [
-    'Taal · Nederlands',
-    'Meldingen · Aan',
-    'Locatie delen · Crew',
-    'Offline festivaldata',
-  ];
-
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.sizeOf(context).width;
@@ -140,34 +133,7 @@ class ProfileDrawer extends StatelessWidget {
                           ),
                           const SizedBox(height: 20),
                           Container(height: 1, color: const Color(0xFF3A3A3A)),
-                          for (final s in _settings)
-                            Container(
-                              height: 55,
-                              decoration: const BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(color: Color(0xFF3A3A3A)),
-                                ),
-                              ),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      s,
-                                      style: inter(
-                                        10,
-                                        weight: FontWeight.w500,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                  const DqIcon(
-                                    LucideIcons.chevronRight,
-                                    size: 16,
-                                    color: Color(0xFF666666),
-                                  ),
-                                ],
-                              ),
-                            ),
+                          const _Instellingen(),
                         ],
                       ),
                     ),
@@ -191,4 +157,57 @@ class ProfileDrawer extends StatelessWidget {
       ),
     );
   }
+}
+
+/// De instellingen met werkende aan/uit-schakelaars.
+class _Instellingen extends StatefulWidget {
+  const _Instellingen();
+
+  @override
+  State<_Instellingen> createState() => _InstellingenState();
+}
+
+class _InstellingenState extends State<_Instellingen> {
+  static const _schakelaars = [
+    'Meldingen',
+    'Locatie delen met squad',
+    'Offline festivaldata',
+  ];
+
+  Widget _regel(String tekst, Widget rechts) => Container(
+    height: 58,
+    decoration: const BoxDecoration(
+      border: Border(bottom: BorderSide(color: Color(0xFF3A3A3A))),
+    ),
+    child: Row(
+      children: [
+        Expanded(
+          child: Text(
+            tekst,
+            style: inter(10, weight: FontWeight.w500, color: Colors.white),
+          ),
+        ),
+        rechts,
+      ],
+    ),
+  );
+
+  @override
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      _regel('Taal', Text('NEDERLANDS', style: bc(15, color: DQ.muted))),
+      for (final naam in _schakelaars)
+        _regel(
+          naam,
+          Schakelaar(
+            aan: Instellingen.aan(naam),
+            onChanged: (waarde) async {
+              await Instellingen.zet(naam, waarde);
+              setState(() {});
+            },
+          ),
+        ),
+    ],
+  );
 }
