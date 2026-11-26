@@ -11,7 +11,9 @@ Gemaakt van Emi's Figma-ontwerp "defcon festival".
    flutter pub get
    ```
 4. Kies rechtsonder een apparaat (Chrome, een Android-emulator of je telefoon) en druk op **F5**.
-   Of typ in de terminal: `flutter run`
+   To test the stages API in Chrome, select **Flutter (Chrome - API enabled)** in the Run and Debug
+   configurations; it uses port `5000`, which is allowed by the API's CORS settings.
+   Or run `flutter run -d chrome --web-port=5000` in the terminal. Android/iOS can use **F5** as usual.
 
 ## Waar staat wat?
 

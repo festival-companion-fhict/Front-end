@@ -3,11 +3,15 @@ import '../theme/dq_theme.dart';
 import '../widgets/chrome.dart';
 import '../widgets/common.dart';
 
-/// Scherm 1: welkom / "ENTER THE FESTIVAL".
 class StartScreen extends StatelessWidget {
-  const StartScreen({super.key, required this.onStart});
+  const StartScreen({
+    super.key,
+    required this.onStart,
+    required this.onOpenPodia,
+  });
 
   final VoidCallback onStart;
+  final VoidCallback onOpenPodia;
 
   @override
   Widget build(BuildContext context) {
@@ -121,6 +125,30 @@ class StartScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 12),
+                Tap(
+                  onTap: onOpenPodia,
+                  child: Container(
+                    height: 54,
+                    margin: const EdgeInsets.only(bottom: 12),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: DQ.dark,
+                      border: Border.all(color: DQ.red),
+                    ),
+                    child: Row(
+                      children: [
+                        const DqIcon('Stages', color: DQ.red),
+                        const SizedBox(width: 10),
+                        Text(
+                          'BEKIJK STAGES',
+                          style: inter(10, color: Colors.white),
+                        ),
+                        const Spacer(),
+                        const DqIcon('Pijl_rechts', color: DQ.red),
+                      ],
+                    ),
+                  ),
+                ),
                 Tap(
                   onTap: onStart,
                   child: Container(

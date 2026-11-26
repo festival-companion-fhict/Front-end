@@ -10,6 +10,7 @@ import 'screens/map_screen.dart';
 import 'screens/news_screen.dart';
 import 'screens/profile_drawer.dart';
 import 'screens/report_screen.dart';
+import 'screens/screen_info_podia.dart';
 import 'screens/start_screen.dart';
 import 'screens/ticket_screen.dart';
 import 'theme/dq_theme.dart';
@@ -17,7 +18,7 @@ import 'widgets/chrome.dart';
 import 'widgets/common.dart';
 
 /// Alle pagina's van de app.
-enum DqPage { home, lineup, map, report, news, crew, ticket, artist }
+enum DqPage { home, lineup, map, report, news, crew, ticket, artist, podia }
 
 /// Functie om naar een andere pagina te gaan.
 typedef Go = void Function(DqPage page);
@@ -43,8 +44,9 @@ class _AppShellState extends State<AppShell> {
   void initState() {
     super.initState();
     SharedPreferences.getInstance().then((prefs) {
-      if (mounted)
+      if (mounted) {
         setState(() => _started = prefs.getBool(_startedKey) ?? false);
+      }
     });
   }
 
@@ -52,6 +54,15 @@ class _AppShellState extends State<AppShell> {
     setState(() {
       _started = true;
       _page = DqPage.home;
+    });
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_startedKey, true);
+  }
+
+  Future<void> _openPodiaFromStart() async {
+    setState(() {
+      _started = true;
+      _page = DqPage.podia;
     });
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_startedKey, true);
@@ -96,6 +107,7 @@ class _AppShellState extends State<AppShell> {
         go: _go,
         openProfile: () => setState(() => _profile = true),
       ),
+      DqPage.podia => const ScreenInfoPodia(),
     },
   );
 
@@ -112,7 +124,7 @@ class _AppShellState extends State<AppShell> {
           if (started == null)
             const SizedBox.expand()
           else if (!started)
-            StartScreen(onStart: _start)
+            StartScreen(onStart: _start, onOpenPodia: _openPodiaFromStart)
           else
             Column(
               children: [
