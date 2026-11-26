@@ -53,7 +53,12 @@ class _ReportScreenState extends State<ReportScreen> {
                 Expanded(
                   child: Text(
                     'Voor direct gevaar gebruik je altijd de rode SOS-knop. Deze melding gaat naar het terreinteam.',
-                    style: inter(10, weight: FontWeight.w500, color: const Color(0xFFBBBBBB), height: 1.5),
+                    style: inter(
+                      10,
+                      weight: FontWeight.w500,
+                      color: const Color(0xFFBBBBBB),
+                      height: 1.5,
+                    ),
                   ),
                 ),
               ],
@@ -63,7 +68,12 @@ class _ReportScreenState extends State<ReportScreen> {
           _label('WAT WIL JE MELDEN?'),
           Row(
             children: [
-              for (final (i, c) in const ['AFVAL', 'TOILET', 'KAPOT', 'OVERIG'].indexed) ...[
+              for (final (i, c) in const [
+                'AFVAL',
+                'TOILET',
+                'KAPOT',
+                'OVERIG',
+              ].indexed) ...[
                 if (i > 0) const SizedBox(width: 5),
                 Expanded(
                   child: Tap(
@@ -72,10 +82,20 @@ class _ReportScreenState extends State<ReportScreen> {
                       height: 48,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        color: _category == c ? DQ.lime : const Color(0xFF141414),
-                        border: Border.all(color: _category == c ? DQ.lime : DQ.line2),
+                        color: _category == c
+                            ? DQ.lime
+                            : const Color(0xFF141414),
+                        border: Border.all(
+                          color: _category == c ? DQ.lime : DQ.line2,
+                        ),
                       ),
-                      child: Text(c, style: inter(7, color: _category == c ? DQ.dark : DQ.muted)),
+                      child: Text(
+                        c,
+                        style: inter(
+                          7,
+                          color: _category == c ? DQ.dark : DQ.muted,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -95,7 +115,11 @@ class _ReportScreenState extends State<ReportScreen> {
                 filled: true,
                 fillColor: const Color(0xFF151515),
                 hintText: 'Bijvoorbeeld: de watertap naast RED Stage lekt...',
-                hintStyle: inter(12, weight: FontWeight.w500, color: const Color(0xFF656565)),
+                hintStyle: inter(
+                  12,
+                  weight: FontWeight.w500,
+                  color: const Color(0xFF656565),
+                ),
                 contentPadding: const EdgeInsets.all(14),
                 enabledBorder: const OutlineInputBorder(
                   borderRadius: BorderRadius.zero,
@@ -126,12 +150,20 @@ class _ReportScreenState extends State<ReportScreen> {
                       children: [
                         Text(
                           'LIVE LOCATIE TOEVOEGEN',
-                          style: inter(9, weight: FontWeight.w700, color: Colors.white),
+                          style: inter(
+                            9,
+                            weight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
                         ),
                         const SizedBox(height: 3),
                         Text(
                           'Bij RED Stage · nauwkeurig tot 8 meter',
-                          style: inter(7, weight: FontWeight.w500, color: DQ.muted),
+                          style: inter(
+                            7,
+                            weight: FontWeight.w500,
+                            color: DQ.muted,
+                          ),
                         ),
                       ],
                     ),
@@ -145,7 +177,13 @@ class _ReportScreenState extends State<ReportScreen> {
                       shape: BoxShape.circle,
                       border: Border.all(color: _location ? DQ.lime : DQ.line2),
                     ),
-                    child: _location ? const DqIcon(LucideIcons.check, size: 14, color: DQ.dark) : null,
+                    child: _location
+                        ? const DqIcon(
+                            LucideIcons.check,
+                            size: 14,
+                            color: DQ.dark,
+                          )
+                        : null,
                   ),
                 ],
               ),
@@ -165,7 +203,10 @@ class _ReportScreenState extends State<ReportScreen> {
                 children: [
                   const DqIcon(LucideIcons.send, size: 18, color: Colors.white),
                   const SizedBox(width: 9),
-                  Text('VERSTUUR ANONIEM', style: inter(9, color: Colors.white)),
+                  Text(
+                    'VERSTUUR ANONIEM',
+                    style: inter(9, color: Colors.white),
+                  ),
                   const Spacer(),
                   const DqIcon('Pijl_rechts', size: 18, color: Colors.white),
                 ],
@@ -191,18 +232,30 @@ class _ReportScreenState extends State<ReportScreen> {
                 width: 74,
                 height: 74,
                 color: DQ.lime,
-                child: const DqIcon(LucideIcons.check, size: 34, color: DQ.dark),
+                child: const DqIcon(
+                  LucideIcons.check,
+                  size: 34,
+                  color: DQ.dark,
+                ),
               ),
             ),
           ),
           const SizedBox(height: 25),
-          Text('MELDING ONTVANGEN', style: inter(8, color: DQ.lime, spacing: 2)),
+          Text(
+            'MELDING ONTVANGEN',
+            style: inter(8, color: DQ.lime, spacing: 2),
+          ),
           const SizedBox(height: 7),
           Text('THANKS,\nWARRIOR', style: bc(62, italic: true, height: 0.85)),
           const SizedBox(height: 14),
           Text(
             'Het terreinteam heeft je melding ontvangen. Je locatie is anoniem meegestuurd.',
-            style: inter(11, weight: FontWeight.w500, color: const Color(0xFF999999), height: 1.5),
+            style: inter(
+              11,
+              weight: FontWeight.w500,
+              color: const Color(0xFF999999),
+              height: 1.5,
+            ),
           ),
           const SizedBox(height: 22),
           DashedBox(
@@ -213,14 +266,24 @@ class _ReportScreenState extends State<ReportScreen> {
                 children: [
                   Text(
                     'REFERENTIE',
-                    style: inter(7, weight: FontWeight.w500, spacing: 1, color: DQ.muted),
+                    style: inter(
+                      7,
+                      weight: FontWeight.w500,
+                      spacing: 1,
+                      color: DQ.muted,
+                    ),
                   ),
                   const SizedBox(height: 4),
                   Text('#DQ-1408', style: bc(25)),
                   const SizedBox(height: 7),
                   Text(
                     'Verwachte reactie · 10 min',
-                    style: inter(7, weight: FontWeight.w500, spacing: 1, color: DQ.muted),
+                    style: inter(
+                      7,
+                      weight: FontWeight.w500,
+                      spacing: 1,
+                      color: DQ.muted,
+                    ),
                   ),
                 ],
               ),

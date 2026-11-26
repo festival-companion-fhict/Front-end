@@ -14,7 +14,12 @@ class ProfileDrawer extends StatelessWidget {
   final VoidCallback close;
   final Go go;
 
-  static const _settings = ['Taal · Nederlands', 'Meldingen · Aan', 'Locatie delen · Crew', 'Offline festivaldata'];
+  static const _settings = [
+    'Taal · Nederlands',
+    'Meldingen · Aan',
+    'Locatie delen · Crew',
+    'Offline festivaldata',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -41,11 +46,20 @@ class ProfileDrawer extends StatelessWidget {
               tween: Tween(begin: 1, end: 0),
               duration: const Duration(milliseconds: 250),
               curve: Curves.easeOut,
-              builder: (_, t, child) => FractionalTranslation(translation: Offset(t, 0), child: child),
+              builder: (_, t, child) => FractionalTranslation(
+                translation: Offset(t, 0),
+                child: child,
+              ),
               child: Container(
                 decoration: const BoxDecoration(
                   color: DQ.dark,
-                  boxShadow: [BoxShadow(color: Colors.black, blurRadius: 70, offset: Offset(-25, 0))],
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black,
+                      blurRadius: 70,
+                      offset: Offset(-25, 0),
+                    ),
+                  ],
                 ),
                 child: Stack(
                   children: [
@@ -65,9 +79,15 @@ class ProfileDrawer extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 17),
-                          Text('WEEKEND WARRIOR', style: inter(8, spacing: 1.5, color: DQ.red)),
+                          Text(
+                            'WEEKEND WARRIOR',
+                            style: inter(8, spacing: 1.5, color: DQ.red),
+                          ),
                           const SizedBox(height: 6),
-                          Text('NANCO\nHABRAKEN', style: bc(42, italic: true, height: 0.85)),
+                          Text(
+                            'NANCO\nHABRAKEN',
+                            style: bc(42, italic: true, height: 0.85),
+                          ),
                           const SizedBox(height: 24),
                           Tap(
                             onTap: () {
@@ -77,24 +97,43 @@ class ProfileDrawer extends StatelessWidget {
                             child: Container(
                               constraints: const BoxConstraints(minHeight: 65),
                               color: DQ.red,
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 10,
+                              ),
                               child: Row(
                                 children: [
-                                  const DqIcon(LucideIcons.qrCode, size: 20, color: Colors.white),
+                                  const DqIcon(
+                                    LucideIcons.qrCode,
+                                    size: 20,
+                                    color: Colors.white,
+                                  ),
                                   const SizedBox(width: 10),
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           'TOEGANG',
-                                          style: inter(7, weight: FontWeight.w500, color: Colors.white),
+                                          style: inter(
+                                            7,
+                                            weight: FontWeight.w500,
+                                            color: Colors.white,
+                                          ),
                                         ),
-                                        Text('OPEN MIJN TICKET', style: bc(18, color: Colors.white)),
+                                        Text(
+                                          'OPEN MIJN TICKET',
+                                          style: bc(18, color: Colors.white),
+                                        ),
                                       ],
                                     ),
                                   ),
-                                  const DqIcon('Pijl_rechts', size: 20, color: Colors.white),
+                                  const DqIcon(
+                                    'Pijl_rechts',
+                                    size: 20,
+                                    color: Colors.white,
+                                  ),
                                 ],
                               ),
                             ),
@@ -105,17 +144,27 @@ class ProfileDrawer extends StatelessWidget {
                             Container(
                               height: 55,
                               decoration: const BoxDecoration(
-                                border: Border(bottom: BorderSide(color: Color(0xFF3A3A3A))),
+                                border: Border(
+                                  bottom: BorderSide(color: Color(0xFF3A3A3A)),
+                                ),
                               ),
                               child: Row(
                                 children: [
                                   Expanded(
                                     child: Text(
                                       s,
-                                      style: inter(10, weight: FontWeight.w500, color: Colors.white),
+                                      style: inter(
+                                        10,
+                                        weight: FontWeight.w500,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
-                                  const DqIcon(LucideIcons.chevronRight, size: 16, color: Color(0xFF666666)),
+                                  const DqIcon(
+                                    LucideIcons.chevronRight,
+                                    size: 16,
+                                    color: Color(0xFF666666),
+                                  ),
                                 ],
                               ),
                             ),

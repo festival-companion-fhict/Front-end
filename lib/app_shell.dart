@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'screens/artist_screen.dart';
 import 'screens/crew_screen.dart';
 import 'screens/emergency_sheet.dart';
@@ -37,12 +37,14 @@ class _AppShellState extends State<AppShell> {
   bool? _started; // null = nog aan het laden
   bool _emergency = false;
   bool _profile = false;
+  bool _sosKlein = false; // wordt true als je naar beneden scrolt
 
   @override
   void initState() {
     super.initState();
     SharedPreferences.getInstance().then((prefs) {
-      if (mounted) setState(() => _started = prefs.getBool(_startedKey) ?? false);
+      if (mounted)
+        setState(() => _started = prefs.getBool(_startedKey) ?? false);
     });
   }
 
@@ -55,7 +57,21 @@ class _AppShellState extends State<AppShell> {
     await prefs.setBool(_startedKey, true);
   }
 
-  void _go(DqPage page) => setState(() => _page = page);
+  void _go(DqPage page) => setState(() {
+    _page = page;
+    _sosKlein = false;
+  });
+
+  /// SOS-knop klein maken als je naar beneden scrolt, weer groot als je omhoog scrolt.
+  bool _opScroll(UserScrollNotification n) {
+    if (n.metrics.axis != Axis.vertical) return false;
+    var klein = _sosKlein;
+    if (n.direction == ScrollDirection.reverse) klein = true;
+    if (n.direction == ScrollDirection.forward) klein = false;
+    if (klein != _sosKlein) setState(() => _sosKlein = klein);
+    return false;
+  }
+
   Future<void> _backToStart() async {
     setState(() => _started = false);
     final prefs = await SharedPreferences.getInstance();
@@ -63,18 +79,25 @@ class _AppShellState extends State<AppShell> {
   }
 
   /// Welke tab in de menubalk actief is (artiest en ticket horen bij SCHEMA).
-  DqPage get _navPage => _page == DqPage.ticket || _page == DqPage.artist ? DqPage.lineup : _page;
+  DqPage get _navPage =>
+      _page == DqPage.ticket || _page == DqPage.artist ? DqPage.lineup : _page;
 
-  Widget _content() => switch (_page) {
-    DqPage.home => HomeScreen(go: _go),
-    DqPage.lineup => LineupScreen(go: _go),
-    DqPage.artist => ArtistScreen(go: _go),
-    DqPage.map => MapScreen(go: _go),
-    DqPage.report => const ReportScreen(),
-    DqPage.news => NewsScreen(go: _go),
-    DqPage.crew => const CrewScreen(),
-    DqPage.ticket => TicketScreen(go: _go, openProfile: () => setState(() => _profile = true)),
-  };
+  Widget _content() => NotificationListener<UserScrollNotification>(
+    onNotification: _opScroll,
+    child: switch (_page) {
+      DqPage.home => HomeScreen(go: _go),
+      DqPage.lineup => LineupScreen(go: _go),
+      DqPage.artist => ArtistScreen(go: _go),
+      DqPage.map => MapScreen(go: _go),
+      DqPage.report => const ReportScreen(),
+      DqPage.news => NewsScreen(go: _go),
+      DqPage.crew => const CrewScreen(),
+      DqPage.ticket => TicketScreen(
+        go: _go,
+        openProfile: () => setState(() => _profile = true),
+      ),
+    },
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +122,12 @@ class _AppShellState extends State<AppShell> {
                       ? const SizedBox.shrink()
                       : Column(
                           children: [
-                            DqHeader(go: _go, openProfile: () => setState(() => _profile = true), openStart: _backToStart),
+                            DqHeader(
+                              go: _go,
+                              openProfile: () =>
+                                  setState(() => _profile = true),
+                              openStart: _backToStart,
+                            ),
                             const LiveStrip(),
                           ],
                         ),
@@ -111,12 +139,19 @@ class _AppShellState extends State<AppShell> {
                     transitionBuilder: (child, animation) => FadeTransition(
                       opacity: Tween(begin: 0.3, end: 1.0).animate(animation),
                       child: SlideTransition(
-                        position: Tween(begin: const Offset(0, 0.012), end: Offset.zero).animate(animation),
+                        position: Tween(
+                          begin: const Offset(0, 0.012),
+                          end: Offset.zero,
+                        ).animate(animation),
                         child: child,
                       ),
                     ),
-                    layoutBuilder: (current, previous) => current ?? const SizedBox.shrink(),
-                    child: KeyedSubtree(key: ValueKey(_page), child: _content()),
+                    layoutBuilder: (current, previous) =>
+                        current ?? const SizedBox.shrink(),
+                    child: KeyedSubtree(
+                      key: ValueKey(_page),
+                      child: _content(),
+                    ),
                   ),
                 ),
                 DqNav(active: _navPage, go: _go),
@@ -124,18 +159,30 @@ class _AppShellState extends State<AppShell> {
             ),
 
           // Geel-zwarte strepen rechtsboven.
-          const Positioned(top: 0, right: 0, child: HazardStripes(width: 115, height: 8)),
+          const Positioned(
+            top: 0,
+            right: 0,
+            child: HazardStripes(width: 115, height: 8),
+          ),
 
           // SOS-knop (niet op het startscherm).
           if (started ?? false)
             Positioned(
               right: 12,
               bottom: 81 + bottomInset,
-              child: SosButton(onTap: () => setState(() => _emergency = true)),
+              child: SosButton(
+                onTap: () => setState(() => _emergency = true),
+                klein: _sosKlein,
+              ),
             ),
 
-          if (_emergency) EmergencySheet(close: () => setState(() => _emergency = false)),
-          if (_profile) ProfileDrawer(close: () => setState(() => _profile = false), go: _go),
+          if (_emergency)
+            EmergencySheet(close: () => setState(() => _emergency = false)),
+          if (_profile)
+            ProfileDrawer(
+              close: () => setState(() => _profile = false),
+              go: _go,
+            ),
         ],
       ),
     );

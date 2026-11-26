@@ -40,7 +40,10 @@ class _ArtistScreenState extends State<ArtistScreen> {
                 const GreyImage('assets/images/defqon-fire.jpg', contrast: 1.3),
                 const DecoratedBox(
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [Color(0x55FF2134), Colors.transparent], stops: [0, 0.7]),
+                    gradient: LinearGradient(
+                      colors: [Color(0x55FF2134), Colors.transparent],
+                      stops: [0, 0.7],
+                    ),
                   ),
                 ),
                 const DecoratedBox(
@@ -56,7 +59,11 @@ class _ArtistScreenState extends State<ArtistScreen> {
                 Positioned(
                   right: -15,
                   top: 40,
-                  child: OutlineText('04', style: bc(180), color: const Color(0x28FFFFFF)),
+                  child: OutlineText(
+                    '04',
+                    style: bc(180),
+                    color: const Color(0x28FFFFFF),
+                  ),
                 ),
                 Positioned(
                   left: 15,
@@ -82,7 +89,11 @@ class _ArtistScreenState extends State<ArtistScreen> {
                         color: const Color(0x990B0B0B),
                         border: Border.all(color: const Color(0x70FFFFFF)),
                       ),
-                      child: DqIcon(_favorite ? 'Vol_hart' : 'Hart', color: DQ.red, size: 22),
+                      child: DqIcon(
+                        _favorite ? 'Vol_hart' : 'Hart',
+                        color: DQ.red,
+                        size: 22,
+                      ),
                     ),
                   ),
                 ),
@@ -95,7 +106,12 @@ class _ArtistScreenState extends State<ArtistScreen> {
                     children: [
                       Text(
                         'LIVE ACT',
-                        style: inter(9, color: DQ.lime, weight: FontWeight.w800, spacing: 2),
+                        style: inter(
+                          9,
+                          color: DQ.lime,
+                          weight: FontWeight.w800,
+                          spacing: 2,
+                        ),
                       ),
                       const SizedBox(height: 5),
                       Text(
@@ -137,7 +153,9 @@ class _ArtistScreenState extends State<ArtistScreen> {
               children: [
                 Container(
                   decoration: const BoxDecoration(
-                    border: Border.symmetric(horizontal: BorderSide(color: Color(0xFF393939))),
+                    border: Border.symmetric(
+                      horizontal: BorderSide(color: Color(0xFF393939)),
+                    ),
                   ),
                   child: IntrinsicHeight(
                     child: Row(
@@ -153,9 +171,16 @@ class _ArtistScreenState extends State<ArtistScreen> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const DqIcon('Navigatie', size: 18, color: Colors.white),
+                                const DqIcon(
+                                  'Navigatie',
+                                  size: 18,
+                                  color: Colors.white,
+                                ),
                                 const SizedBox(height: 3),
-                                Text('ROUTE', style: inter(9, color: Colors.white)),
+                                Text(
+                                  'ROUTE',
+                                  style: inter(9, color: Colors.white),
+                                ),
                               ],
                             ),
                           ),
@@ -176,12 +201,22 @@ class _ArtistScreenState extends State<ArtistScreen> {
                             padding: const EdgeInsets.only(bottom: 5),
                             decoration: BoxDecoration(
                               border: Border(
-                                bottom: BorderSide(color: _tab == tab ? DQ.red : Colors.transparent, width: 2),
+                                bottom: BorderSide(
+                                  color: _tab == tab
+                                      ? DQ.red
+                                      : Colors.transparent,
+                                  width: 2,
+                                ),
                               ),
                             ),
                             child: Text(
                               tab,
-                              style: bc(14, color: _tab == tab ? Colors.white : const Color(0xFF555555)),
+                              style: bc(
+                                14,
+                                color: _tab == tab
+                                    ? Colors.white
+                                    : const Color(0xFF555555),
+                              ),
                             ),
                           ),
                         ),
@@ -189,13 +224,21 @@ class _ArtistScreenState extends State<ArtistScreen> {
                   ],
                 ),
                 const SizedBox(height: 15),
-                Text(switch (_tab) {
-                  'ABOUT' =>
-                    'Two minds. One brutal vision. Sub Zero Project tears through the boundaries of '
-                        'hardstyle with cinematic drops and relentless energy.',
-                  'MEDIA' => 'Foto\'s en video\'s van deze act komen hier.',
-                  _ => 'Eerdere sets en tracklists komen hier.',
-                }, style: inter(12, weight: FontWeight.w500, color: const Color(0xFFAAAAAA), height: 1.6)),
+                Text(
+                  switch (_tab) {
+                    'ABOUT' =>
+                      'Two minds. One brutal vision. Sub Zero Project tears through the boundaries of '
+                          'hardstyle with cinematic drops and relentless energy.',
+                    'MEDIA' => 'Foto\'s en video\'s van deze act komen hier.',
+                    _ => 'Eerdere sets en tracklists komen hier.',
+                  },
+                  style: inter(
+                    12,
+                    weight: FontWeight.w500,
+                    color: const Color(0xFFAAAAAA),
+                    height: 1.6,
+                  ),
+                ),
                 const SizedBox(height: 20),
                 Tap(
                   onTap: () => setState(() => _reminder = !_reminder),
@@ -205,11 +248,21 @@ class _ArtistScreenState extends State<ArtistScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 14),
                     child: Row(
                       children: [
-                        DqIcon(LucideIcons.bell, color: _reminder ? DQ.dark : Colors.white),
+                        DqIcon(
+                          LucideIcons.bell,
+                          color: _reminder ? DQ.dark : Colors.white,
+                        ),
                         const SizedBox(width: 10),
-                        Text('REMIND ME 15 MIN BEFORE', style: inter(10, color: _reminder ? DQ.dark : Colors.white)),
+                        Text(
+                          'REMIND ME 15 MIN BEFORE',
+                          style: inter(
+                            10,
+                            color: _reminder ? DQ.dark : Colors.white,
+                          ),
+                        ),
                         const Spacer(),
-                        if (_reminder) const DqIcon(LucideIcons.check, color: DQ.dark),
+                        if (_reminder)
+                          const DqIcon(LucideIcons.check, color: DQ.dark),
                       ],
                     ),
                   ),
@@ -240,7 +293,12 @@ class _MetaCell extends StatelessWidget {
       children: [
         Text(
           label,
-          style: inter(7, weight: FontWeight.w500, spacing: 1.2, color: DQ.muted),
+          style: inter(
+            7,
+            weight: FontWeight.w500,
+            spacing: 1.2,
+            color: DQ.muted,
+          ),
         ),
         const SizedBox(height: 4),
         Text(value, style: bc(17)),

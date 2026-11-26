@@ -110,29 +110,9 @@ class DqHeader extends StatelessWidget {
               child: const Picto('Pijl_links', size: 20),
             ),
           ),
-          const SizedBox(width: 8),
-          Container(
-            width: 44,
-            height: 44,
-            decoration: BoxDecoration(
-              color: const Color(0xFF151515),
-              border: Border.all(color: const Color(0xFF3B3B3B)),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const PulseDot(),
-                const SizedBox(height: 3),
-                Text(
-                  'LIVE',
-                  style: inter(7, spacing: 0.5, color: Colors.white),
-                ),
-              ],
-            ),
-          ),
           const SizedBox(width: 12),
           Expanded(child: Brand(onTap: () => go(DqPage.home))),
-          const SizedBox(width: 64),
+          const SizedBox(width: 12),
           ProfileButton(onTap: openProfile),
         ],
       ),
@@ -255,7 +235,10 @@ class _LiveStripState extends State<LiveStrip> {
             ),
           ),
           const SizedBox(width: 6),
-          Text('LIVE UPDATE', style: inter(7, color: DQ.red, spacing: 1)),
+          Text(
+            'LIVE UPDATE',
+            style: inter(7, color: const Color(0xFFD0001A), spacing: 1),
+          ),
           const SizedBox(width: 10),
           Text(
             '${two(_now.hour)}:${two(_now.minute)}',
@@ -359,33 +342,33 @@ class DqNav extends StatelessWidget {
 }
 
 /// De rode SOS-knop rechtsonder.
+/// Groot als je stilstaat of omhoog scrolt, klein vierkant als je naar beneden scrolt.
 class SosButton extends StatelessWidget {
-  const SosButton({super.key, required this.onTap});
+  const SosButton({super.key, required this.onTap, this.klein = false});
 
   final VoidCallback onTap;
+  final bool klein;
 
   @override
   Widget build(BuildContext context) => Tap(
     onTap: onTap,
-    child: Container(
-      height: 52,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
+    child: AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeOut,
+      height: klein ? 46 : 52,
+      width: klein ? 46 : 112,
+      decoration: const BoxDecoration(
         color: DQ.red,
-        border: Border.all(
-          color: Colors.white,
-          width: 2,
-        ), // witte rand: valt altijd op
-        boxShadow: const [
-          BoxShadow(color: Color(0xAA000000), offset: Offset(5, 5)),
-        ],
+        boxShadow: [BoxShadow(color: Color(0xAA000000), offset: Offset(5, 5))],
       ),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const DqIcon('Alert', size: 20, color: Colors.white),
-          const SizedBox(width: 8),
-          Text('SOS', style: bc(24, color: Colors.white)),
+          if (!klein) ...[
+            const SizedBox(width: 8),
+            Text('SOS', style: bc(24, color: Colors.white)),
+          ],
         ],
       ),
     ),

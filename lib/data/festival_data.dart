@@ -27,7 +27,13 @@ const lineup = <Act>[
 ];
 
 class CrewMember {
-  const CrewMember(this.initials, this.name, this.location, this.color, {this.darkText = true});
+  const CrewMember(
+    this.initials,
+    this.name,
+    this.location,
+    this.color, {
+    this.darkText = true,
+  });
 
   final String initials;
   final String name;
@@ -59,6 +65,16 @@ const news = <NewsItem>[
     'Extra pendelbussen vannacht',
     'Vanaf 23:30 rijdt iedere tien minuten een bus naar station Dronten.',
   ),
-  NewsItem('17:55', 'PROGRAMMA', 'Stagewissel: D-Sturb', 'D-Sturb speelt om 19:00 op BLUE in plaats van BLACK.'),
-  NewsItem('16:20', 'WEER', 'Droog en warm tot vanavond', 'Verwachte temperatuur om 20:00 is 21°C. UV-index neemt af.'),
+  NewsItem(
+    '17:55',
+    'PROGRAMMA',
+    'Stagewissel: D-Sturb',
+    'D-Sturb speelt om 19:00 op BLUE in plaats van BLACK.',
+  ),
+  NewsItem(
+    '16:20',
+    'WEER',
+    'Droog en warm tot vanavond',
+    'Verwachte temperatuur om 20:00 is 21°C. UV-index neemt af.',
+  ),
 ];

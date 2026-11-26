@@ -59,7 +59,13 @@ TextStyle bc(
 /// Kleine tekst.
 /// Dik (labels, knoppen) = Bebas Neue, minimaal 14.
 /// Dun (uitleg, zinnen) = Inter, minimaal 12.
-TextStyle inter(double size, {Color? color, FontWeight weight = FontWeight.w900, double spacing = 0, double? height}) {
+TextStyle inter(
+  double size, {
+  Color? color,
+  FontWeight weight = FontWeight.w900,
+  double spacing = 0,
+  double? height,
+}) {
   final label = weight.index >= FontWeight.w700.index;
   // Klein rood is slecht leesbaar op zwart: maak het lichter.
   final kleur = color == DQ.red && size < 14 ? DQ.redText : color;
@@ -91,7 +97,11 @@ ThemeData buildTheme() {
     scaffoldBackgroundColor: DQ.ink,
     splashFactory: NoSplash.splashFactory,
     highlightColor: Colors.transparent,
-    colorScheme: const ColorScheme.dark(primary: DQ.lime, secondary: DQ.red, surface: DQ.ink),
+    colorScheme: const ColorScheme.dark(
+      primary: DQ.lime,
+      secondary: DQ.red,
+      surface: DQ.ink,
+    ),
     textSelectionTheme: const TextSelectionThemeData(cursorColor: DQ.lime),
   );
   return base.copyWith(

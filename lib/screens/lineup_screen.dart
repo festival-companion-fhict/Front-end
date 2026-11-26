@@ -23,7 +23,9 @@ class _LineupScreenState extends State<LineupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final acts = lineup.where((a) => _stage == 'ALL' || a.stage == _stage).toList();
+    final acts = lineup
+        .where((a) => _stage == 'ALL' || a.stage == _stage)
+        .toList();
 
     return SingleChildScrollView(
       padding: const EdgeInsets.only(bottom: 60),
@@ -42,10 +44,16 @@ class _LineupScreenState extends State<LineupScreen> {
                 ),
                 // Dagen
                 Container(
-                  decoration: BoxDecoration(border: Border.all(color: DQ.line2)),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: DQ.line2),
+                  ),
                   child: Row(
                     children: [
-                      for (final (i, day) in const ['FRI 28', 'SAT 29', 'SUN 30'].indexed)
+                      for (final (i, day) in const [
+                        'FRI 28',
+                        'SAT 29',
+                        'SUN 30',
+                      ].indexed)
                         Expanded(
                           child: Tap(
                             onTap: () => setState(() => _day = day),
@@ -53,7 +61,11 @@ class _LineupScreenState extends State<LineupScreen> {
                               height: 61,
                               decoration: BoxDecoration(
                                 color: _day == day ? DQ.paper : DQ.dark,
-                                border: i < 2 ? const Border(right: BorderSide(color: DQ.line2)) : null,
+                                border: i < 2
+                                    ? const Border(
+                                        right: BorderSide(color: DQ.line2),
+                                      )
+                                    : null,
                               ),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -67,7 +79,13 @@ class _LineupScreenState extends State<LineupScreen> {
                                       color: _day == day ? DQ.dark : DQ.muted,
                                     ),
                                   ),
-                                  Text(day, style: bc(20, color: _day == day ? DQ.dark : DQ.muted)),
+                                  Text(
+                                    day,
+                                    style: bc(
+                                      20,
+                                      color: _day == day ? DQ.dark : DQ.muted,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -82,7 +100,13 @@ class _LineupScreenState extends State<LineupScreen> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      for (final stage in const ['ALL', 'RED', 'BLUE', 'BLACK', 'UV'])
+                      for (final stage in const [
+                        'ALL',
+                        'RED',
+                        'BLUE',
+                        'BLACK',
+                        'UV',
+                      ])
                         Padding(
                           padding: const EdgeInsets.only(right: 7),
                           child: Tap(
@@ -90,15 +114,25 @@ class _LineupScreenState extends State<LineupScreen> {
                             child: Container(
                               constraints: const BoxConstraints(minWidth: 51),
                               height: 44,
-                              padding: const EdgeInsets.symmetric(horizontal: 8),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                              ),
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                color: _stage == stage ? DQ.red : Colors.transparent,
-                                border: Border.all(color: _stage == stage ? DQ.red : DQ.line2),
+                                color: _stage == stage
+                                    ? DQ.red
+                                    : Colors.transparent,
+                                border: Border.all(
+                                  color: _stage == stage ? DQ.red : DQ.line2,
+                                ),
                               ),
                               child: Text(
                                 stage,
-                                style: inter(9, weight: FontWeight.w800, color: _stage == stage ? DQ.dark : DQ.muted),
+                                style: inter(
+                                  9,
+                                  weight: FontWeight.w800,
+                                  color: _stage == stage ? DQ.dark : DQ.muted,
+                                ),
                               ),
                             ),
                           ),
@@ -148,7 +182,9 @@ class _ActRow extends StatelessWidget {
     return Container(
       height: 76,
       decoration: BoxDecoration(
-        border: live ? Border.all(color: DQ.yellow) : const Border(bottom: BorderSide(color: DQ.line)),
+        border: live
+            ? Border.all(color: DQ.yellow)
+            : const Border(bottom: BorderSide(color: DQ.line)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -165,7 +201,10 @@ class _ActRow extends StatelessWidget {
                     Positioned(
                       right: 6,
                       bottom: -18,
-                      child: Text(number.toString().padLeft(2, '0'), style: bc(58, color: const Color(0x08FFFFFF))),
+                      child: Text(
+                        number.toString().padLeft(2, '0'),
+                        style: bc(58, color: const Color(0x08FFFFFF)),
+                      ),
                     ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -180,23 +219,35 @@ class _ActRow extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(act.time, style: bc(18, color: Colors.white)),
+                              Text(
+                                act.time,
+                                style: bc(18, color: Colors.white),
+                              ),
                               Text(
                                 act.end,
-                                style: inter(8, weight: FontWeight.w500, color: const Color(0xFF666666)),
+                                style: inter(
+                                  8,
+                                  weight: FontWeight.w500,
+                                  color: const Color(0xFF666666),
+                                ),
                               ),
                             ],
                           ),
                         ),
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 10,
+                            ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  live ? 'LIVE NU · 10 MIN VERTRAAGD' : '${act.stage} STAGE',
+                                  live
+                                      ? 'LIVE NU · 10 MIN VERTRAAGD'
+                                      : '${act.stage} STAGE',
                                   style: inter(
                                     8,
                                     weight: FontWeight.w800,
@@ -205,7 +256,14 @@ class _ActRow extends StatelessWidget {
                                   ),
                                 ),
                                 const SizedBox(height: 3),
-                                Text(act.artist, style: bc(21, height: 0.95, color: Colors.white)),
+                                Text(
+                                  act.artist,
+                                  style: bc(
+                                    21,
+                                    height: 0.95,
+                                    color: Colors.white,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -225,7 +283,11 @@ class _ActRow extends StatelessWidget {
                 color: Color(0xFF161616),
                 border: Border(left: BorderSide(color: DQ.line)),
               ),
-              child: DqIcon(saved ? 'Vol_hart' : 'Hart', size: 20, color: DQ.red),
+              child: DqIcon(
+                saved ? 'Vol_hart' : 'Hart',
+                size: 20,
+                color: DQ.red,
+              ),
             ),
           ),
         ],

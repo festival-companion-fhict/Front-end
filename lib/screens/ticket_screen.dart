@@ -43,7 +43,9 @@ class TicketScreen extends StatelessWidget {
                     onTap: () => go(DqPage.home),
                   ),
                   Expanded(
-                    child: Center(child: Text('WEEKEND PASS', style: bc(18, spacing: 1))),
+                    child: Center(
+                      child: Text('WEEKEND PASS', style: bc(18, spacing: 1)),
+                    ),
                   ),
                   ProfileButton(onTap: openProfile),
                 ],
@@ -60,16 +62,32 @@ class TicketScreen extends StatelessWidget {
                       child: Center(child: _Poster()),
                     ),
                     Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                      decoration: BoxDecoration(border: Border.all(color: const Color(0xFF3A3A3A))),
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 15,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: const Color(0xFF3A3A3A)),
+                      ),
                       child: Column(
                         children: [
                           const IntrinsicHeight(
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                Expanded(child: _Detail('VALID', Text('27—30 JUNE'), rightBorder: true)),
-                                Expanded(child: _Detail('ENTRANCE', Text('NORTH GATE'))),
+                                Expanded(
+                                  child: _Detail(
+                                    'VALID',
+                                    Text('27—30 JUNE'),
+                                    rightBorder: true,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: _Detail(
+                                    'ENTRANCE',
+                                    Text('NORTH GATE'),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -78,7 +96,11 @@ class TicketScreen extends StatelessWidget {
                             'STATUS',
                             Row(
                               children: [
-                                const DqIcon(LucideIcons.check, size: 14, color: DQ.lime),
+                                const DqIcon(
+                                  LucideIcons.check,
+                                  size: 14,
+                                  color: DQ.lime,
+                                ),
                                 const SizedBox(width: 5),
                                 Text('ACTIVE', style: bc(16, color: DQ.lime)),
                               ],
@@ -96,7 +118,12 @@ class TicketScreen extends StatelessWidget {
                           Expanded(
                             child: Text(
                               'Turn up your screen brightness and keep the QR fully visible.',
-                              style: inter(9, weight: FontWeight.w500, height: 1.4, color: DQ.muted),
+                              style: inter(
+                                9,
+                                weight: FontWeight.w500,
+                                height: 1.4,
+                                color: DQ.muted,
+                              ),
                             ),
                           ),
                         ],
@@ -128,7 +155,11 @@ class _Poster extends StatelessWidget {
           color: DQ.lime,
           child: Stack(
             children: [
-              const Positioned(right: -85, top: 58, child: Ring(size: 160, width: 30, color: Color(0x1F111111))),
+              const Positioned(
+                right: -85,
+                top: 58,
+                child: Ring(size: 160, width: 30, color: Color(0x1F111111)),
+              ),
               const Positioned(left: -12, top: 253, child: _Cut()),
               const Positioned(right: -12, top: 253, child: _Cut()),
               Column(
@@ -141,7 +172,13 @@ class _Poster extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            const Expanded(child: Brand(color: DQ.dark, showSub: true, center: false)),
+                            const Expanded(
+                              child: Brand(
+                                color: DQ.dark,
+                                showSub: true,
+                                center: false,
+                              ),
+                            ),
                             Text('2025', style: bc(14, color: DQ.dark)),
                           ],
                         ),
@@ -150,14 +187,26 @@ class _Poster extends StatelessWidget {
                           alignment: Alignment.centerLeft,
                           child: Container(
                             color: DQ.dark,
-                            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
-                            child: Text('4-DAY', style: inter(8, color: Colors.white)),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 7,
+                              vertical: 4,
+                            ),
+                            child: Text(
+                              '4-DAY',
+                              style: inter(8, color: Colors.white),
+                            ),
                           ),
                         ),
                         const SizedBox(height: 9),
                         Text(
                           'WEEKEND\nWARRIOR',
-                          style: bc(48, italic: true, height: 0.85, spacing: -2, color: DQ.dark),
+                          style: bc(
+                            48,
+                            italic: true,
+                            height: 0.85,
+                            spacing: -2,
+                            color: DQ.dark,
+                          ),
                         ),
                         const SizedBox(height: 22),
                         const Center(child: _QrCode()),
@@ -173,9 +222,17 @@ class _Poster extends StatelessWidget {
                               children: [
                                 Text(
                                   'WARRIOR',
-                                  style: inter(7, weight: FontWeight.w800, spacing: 1, color: DQ.dark),
+                                  style: inter(
+                                    7,
+                                    weight: FontWeight.w800,
+                                    spacing: 1,
+                                    color: DQ.dark,
+                                  ),
                                 ),
-                                Text('NANCO HABRAKEN', style: bc(23, color: DQ.dark)),
+                                Text(
+                                  'NANCO HABRAKEN',
+                                  style: bc(23, color: DQ.dark),
+                                ),
                                 const Text(
                                   '#D1-029194-84',
                                   style: TextStyle(
@@ -241,7 +298,10 @@ class _QrCode extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       padding: EdgeInsets.zero,
       children: [
-        for (var i = 0; i < 81; i++) ColoredBox(color: (i * 7 + (i ~/ 9) * 3) % 5 < 2 ? DQ.dark : Colors.white),
+        for (var i = 0; i < 81; i++)
+          ColoredBox(
+            color: (i * 7 + (i ~/ 9) * 3) % 5 < 2 ? DQ.dark : Colors.white,
+          ),
       ],
     ),
   );
@@ -259,7 +319,9 @@ class _Detail extends StatelessWidget {
     width: double.infinity,
     padding: const EdgeInsets.all(13),
     decoration: BoxDecoration(
-      border: rightBorder ? const Border(right: BorderSide(color: Color(0xFF3A3A3A))) : null,
+      border: rightBorder
+          ? const Border(right: BorderSide(color: Color(0xFF3A3A3A)))
+          : null,
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,

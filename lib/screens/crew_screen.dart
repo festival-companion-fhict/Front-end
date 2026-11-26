@@ -31,7 +31,11 @@ class CrewScreen extends StatelessWidget {
             child: Stack(
               clipBehavior: Clip.hardEdge,
               children: [
-                const Positioned(right: 65, top: -40, child: Ring(size: 90, width: 18, color: Color(0x1F111111))),
+                const Positioned(
+                  right: 65,
+                  top: -40,
+                  child: Ring(size: 90, width: 18, color: Color(0x1F111111)),
+                ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -43,10 +47,23 @@ class CrewScreen extends StatelessWidget {
                           children: [
                             Text(
                               'CREW CODE',
-                              style: inter(7, weight: FontWeight.w800, spacing: 1.3, color: DQ.dark),
+                              style: inter(
+                                7,
+                                weight: FontWeight.w800,
+                                spacing: 1.3,
+                                color: DQ.dark,
+                              ),
                             ),
                             const Spacer(),
-                            Text(crewCode, style: bc(28, spacing: 2, color: DQ.dark, height: 1)),
+                            Text(
+                              crewCode,
+                              style: bc(
+                                28,
+                                spacing: 2,
+                                color: DQ.dark,
+                                height: 1,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -55,11 +72,16 @@ class CrewScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(13),
                       child: Tap(
                         onTap: () {
-                          Clipboard.setData(const ClipboardData(text: crewCode));
+                          Clipboard.setData(
+                            const ClipboardData(text: crewCode),
+                          );
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               backgroundColor: DQ.dark,
-                              content: Text('Crew code gekopieerd!', style: inter(11, color: Colors.white)),
+                              content: Text(
+                                'Crew code gekopieerd!',
+                                style: inter(11, color: Colors.white),
+                              ),
                             ),
                           );
                         },
@@ -67,7 +89,10 @@ class CrewScreen extends StatelessWidget {
                           color: DQ.dark,
                           padding: const EdgeInsets.symmetric(horizontal: 17),
                           alignment: Alignment.center,
-                          child: Text('SHARE', style: inter(9, color: Colors.white)),
+                          child: Text(
+                            'SHARE',
+                            style: inter(9, color: Colors.white),
+                          ),
                         ),
                       ),
                     ),
@@ -87,20 +112,31 @@ class CrewScreen extends StatelessWidget {
                   width: 43,
                   height: 43,
                   color: DQ.red,
-                  child: const DqIcon('Duo_kaart', size: 20, color: Colors.white),
+                  child: const DqIcon(
+                    'Duo_kaart',
+                    size: 20,
+                    color: Colors.white,
+                  ),
                 ),
                 const SizedBox(width: 11),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('NEXT MEET-UP', style: inter(7, spacing: 1.2, color: DQ.red)),
+                      Text(
+                        'NEXT MEET-UP',
+                        style: inter(7, spacing: 1.2, color: DQ.red),
+                      ),
                       const SizedBox(height: 2),
                       Text('18:45 · RED STAGE', style: bc(20)),
                       const SizedBox(height: 2),
                       Text(
                         'POWER HOUR · 4 WARRIORS GOING',
-                        style: inter(8, weight: FontWeight.w800, color: DQ.muted),
+                        style: inter(
+                          8,
+                          weight: FontWeight.w800,
+                          color: DQ.muted,
+                        ),
                       ),
                     ],
                   ),
@@ -123,7 +159,13 @@ class CrewScreen extends StatelessWidget {
                     height: 42,
                     color: m.color,
                     alignment: Alignment.center,
-                    child: Text(m.initials, style: inter(10, color: m.darkText ? DQ.dark : Colors.white)),
+                    child: Text(
+                      m.initials,
+                      style: inter(
+                        10,
+                        color: m.darkText ? DQ.dark : Colors.white,
+                      ),
+                    ),
                   ),
                   const SizedBox(width: 11),
                   Expanded(
@@ -134,11 +176,19 @@ class CrewScreen extends StatelessWidget {
                         const SizedBox(height: 2),
                         Row(
                           children: [
-                            const DqIcon('Duo_kaart', size: 11, color: DQ.muted),
+                            const DqIcon(
+                              'Duo_kaart',
+                              size: 11,
+                              color: DQ.muted,
+                            ),
                             const SizedBox(width: 3),
                             Text(
                               m.location,
-                              style: inter(8, weight: FontWeight.w800, color: DQ.muted),
+                              style: inter(
+                                8,
+                                weight: FontWeight.w800,
+                                color: DQ.muted,
+                              ),
                             ),
                           ],
                         ),
@@ -150,7 +200,11 @@ class CrewScreen extends StatelessWidget {
                     style: inter(7, weight: FontWeight.w800, color: DQ.lime),
                   ),
                   const SizedBox(width: 11),
-                  const DqIcon(LucideIcons.chevronRight, size: 16, color: Color(0xFF555555)),
+                  const DqIcon(
+                    LucideIcons.chevronRight,
+                    size: 16,
+                    color: Color(0xFF555555),
+                  ),
                 ],
               ),
             ),

@@ -66,7 +66,11 @@ class HomeScreen extends StatelessWidget {
                             children: [
                               Text('OP KAART', style: inter(7, color: DQ.acid)),
                               const SizedBox(width: 4),
-                              const DqIcon('Pijl_rechts', size: 13, color: DQ.acid),
+                              const DqIcon(
+                                'Pijl_rechts',
+                                size: 13,
+                                color: DQ.acid,
+                              ),
                             ],
                           ),
                         ),
@@ -76,11 +80,23 @@ class HomeScreen extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: _Nearby(DQ.aqua, 'Waterpunt', 'WATER', '1 min · rustig', () => go(DqPage.map)),
+                        child: _Nearby(
+                          DQ.aqua,
+                          'Waterpunt',
+                          'WATER',
+                          '1 min · rustig',
+                          () => go(DqPage.map),
+                        ),
                       ),
                       const SizedBox(width: 7),
                       Expanded(
-                        child: _Nearby(DQ.acid, 'Wc', 'TOILET', '2 min · druk', () => go(DqPage.map)),
+                        child: _Nearby(
+                          DQ.acid,
+                          'Wc',
+                          'TOILET',
+                          '2 min · druk',
+                          () => go(DqPage.map),
+                        ),
                       ),
                       const SizedBox(width: 7),
                       Expanded(
@@ -120,7 +136,11 @@ class _Presence extends StatelessWidget {
         clipBehavior: Clip.hardEdge,
         alignment: Alignment.bottomLeft,
         children: [
-          const Positioned(right: -80, top: -90, child: Ring(size: 180, width: 34, color: Color(0xE65A19FF))),
+          const Positioned(
+            right: -80,
+            top: -90,
+            child: Ring(size: 180, width: 34, color: Color(0xE65A19FF)),
+          ),
           Positioned(
             right: 9,
             bottom: -45,
@@ -139,11 +159,17 @@ class _Presence extends StatelessWidget {
                         children: [
                           const DqIcon('Target', size: 15, color: _ink2),
                           const SizedBox(width: 5),
-                          Text('JE BENT NU BIJ', style: inter(8, color: _ink2, spacing: 1.5)),
+                          Text(
+                            'JE BENT NU BIJ',
+                            style: inter(8, color: _ink2, spacing: 1.5),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 7),
-                      Text('RED\nSTAGE', style: bc(58, color: _ink2, height: 0.8, spacing: -2)),
+                      Text(
+                        'RED\nSTAGE',
+                        style: bc(58, color: _ink2, height: 0.8, spacing: -2),
+                      ),
                       const SizedBox(height: 4),
                       Text(
                         'Locatie live · nauwkeurig tot 12 meter',
@@ -190,7 +216,10 @@ class _LiveCard extends StatelessWidget {
           const GreyImage('assets/images/stage-purple.jpg', contrast: 1.12),
           const DecoratedBox(
             decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [Color(0x805A19FF), Colors.transparent], stops: [0, 0.7]),
+              gradient: LinearGradient(
+                colors: [Color(0x805A19FF), Colors.transparent],
+                stops: [0, 0.7],
+              ),
             ),
           ),
           const DecoratedBox(
@@ -211,12 +240,18 @@ class _LiveCard extends StatelessWidget {
               children: [
                 Container(
                   color: DQ.fuchsia,
-                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 7),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 9,
+                    vertical: 7,
+                  ),
                   child: Row(
                     children: [
                       const PulseRing(),
                       const SizedBox(width: 7),
-                      Text('LIVE NOW', style: inter(8, spacing: 1, color: Colors.white)),
+                      Text(
+                        'LIVE NOW',
+                        style: inter(8, spacing: 1, color: Colors.white),
+                      ),
                     ],
                   ),
                 ),
@@ -236,7 +271,10 @@ class _LiveCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('RED STAGE · 18:00—19:10', style: inter(8, color: DQ.acid, spacing: 1.3)),
+                      Text(
+                        'RED STAGE · 18:00—19:10',
+                        style: inter(8, color: DQ.acid, spacing: 1.3),
+                      ),
                       const SizedBox(height: 5),
                       Text(
                         'POWER\nHOUR',
@@ -244,14 +282,22 @@ class _LiveCard extends StatelessWidget {
                           58,
                           height: 0.8,
                           spacing: -2,
-                          shadows: const [Shadow(color: DQ.impact, offset: Offset(3, 3))],
+                          shadows: const [
+                            Shadow(color: DQ.impact, offset: Offset(3, 3)),
+                          ],
                         ),
                       ),
                       const SizedBox(height: 8),
                       Container(
                         color: DQ.orange,
-                        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 5),
-                        child: Text('10 MIN VERTRAAGD', style: inter(7, spacing: 1, color: Colors.white)),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 7,
+                          vertical: 5,
+                        ),
+                        child: Text(
+                          '10 MIN VERTRAAGD',
+                          style: inter(7, spacing: 1, color: Colors.white),
+                        ),
                       ),
                     ],
                   ),
@@ -261,7 +307,10 @@ class _LiveCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text('28', style: bc(76, height: 0.9, color: DQ.acid)),
-                    Text('MIN LEFT', style: inter(9, color: DQ.acid, spacing: 1)),
+                    Text(
+                      'MIN LEFT',
+                      style: inter(9, color: DQ.acid, spacing: 1),
+                    ),
                   ],
                 ),
               ],
@@ -277,13 +326,19 @@ class _LiveCard extends StatelessWidget {
                   height: 5,
                   color: const Color(0x30FFFFFF),
                   alignment: Alignment.centerLeft,
-                  child: FractionallySizedBox(widthFactor: 0.61, child: Container(color: DQ.acid)),
+                  child: FractionallySizedBox(
+                    widthFactor: 0.61,
+                    child: Container(color: DQ.acid),
+                  ),
                 ),
                 const SizedBox(height: 3),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('42 MIN', style: inter(7, color: const Color(0xFFAAAAAA))),
+                    Text(
+                      '42 MIN',
+                      style: inter(7, color: const Color(0xFFAAAAAA)),
+                    ),
                   ],
                 ),
               ],
@@ -312,7 +367,13 @@ class PulseRing extends StatelessWidget {
 }
 
 class _Metric extends StatelessWidget {
-  const _Metric({required this.color, required this.icon, required this.label, required this.value, required this.sub});
+  const _Metric({
+    required this.color,
+    required this.icon,
+    required this.label,
+    required this.value,
+    required this.sub,
+  });
 
   final Color color;
   final Object icon;
@@ -374,13 +435,20 @@ class _UpNext extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('UP NEXT · 19:10', style: inter(7, color: DQ.acid, spacing: 1.1)),
+                  Text(
+                    'UP NEXT · 19:10',
+                    style: inter(7, color: DQ.acid, spacing: 1.1),
+                  ),
                   const SizedBox(height: 5),
                   Text('SUB ZERO PROJECT', style: bc(21, color: Colors.white)),
                   const SizedBox(height: 2),
                   Text(
                     'Begint over 28 minuten',
-                    style: inter(7, weight: FontWeight.w500, color: const Color(0xFF7F7988)),
+                    style: inter(
+                      7,
+                      weight: FontWeight.w500,
+                      color: const Color(0xFF7F7988),
+                    ),
                   ),
                 ],
               ),
@@ -419,7 +487,7 @@ class _Nearby extends StatelessWidget {
   final String sub;
   final VoidCallback onTap;
 
- /// Zone-bordje, zoals de bordjes op het festivalterrein.
+  /// Zone-bordje, zoals de bordjes op het festivalterrein.
   @override
   Widget build(BuildContext context) => Tap(
     onTap: onTap,
@@ -437,18 +505,31 @@ class _Nearby extends StatelessWidget {
               // Schuine pijl (45 graden gedraaid)
               Transform.rotate(
                 angle: -0.785,
-                child: const DqIcon('Pijl_rechts', size: 22, color: Color(0xFF14111A)),
+                child: const DqIcon(
+                  'Pijl_rechts',
+                  size: 22,
+                  color: Color(0xFF14111A),
+                ),
               ),
             ],
           ),
           const Spacer(),
           Text(title, style: bc(26, color: const Color(0xFF14111A), height: 1)),
-          Text(sub.toUpperCase(), style: inter(6, color: const Color(0xFF14111A), weight: FontWeight.w800)),
+          Text(
+            sub.toUpperCase(),
+            style: inter(
+              6,
+              color: const Color(0xFF14111A),
+              weight: FontWeight.w800,
+            ),
+          ),
         ],
       ),
     ),
   );
-}class _StageAlert extends StatelessWidget {
+}
+
+class _StageAlert extends StatelessWidget {
   const _StageAlert();
 
   @override
@@ -470,7 +551,10 @@ class _Nearby extends StatelessWidget {
                 children: [
                   const DqIcon('Alert', size: 14, color: DQ.orange),
                   const SizedBox(width: 5),
-                  Text('LIVE UPDATE · 18:38', style: inter(7, color: DQ.orange, spacing: 1)),
+                  Text(
+                    'LIVE UPDATE · 18:38',
+                    style: inter(7, color: DQ.orange, spacing: 1),
+                  ),
                 ],
               ),
               const SizedBox(height: 6),
@@ -478,7 +562,12 @@ class _Nearby extends StatelessWidget {
               const SizedBox(height: 2),
               Text(
                 'Gebruik na de show bij voorkeur de uitgang aan de rechterkant.',
-                style: inter(7, weight: FontWeight.w500, color: const Color(0xFF8F8795), height: 1.4),
+                style: inter(
+                  7,
+                  weight: FontWeight.w500,
+                  color: const Color(0xFF8F8795),
+                  height: 1.4,
+                ),
               ),
             ],
           ),

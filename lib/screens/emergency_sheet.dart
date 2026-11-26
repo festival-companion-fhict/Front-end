@@ -34,18 +34,37 @@ class _EmergencySheetState extends State<EmergencySheet> {
               tween: Tween(begin: 1, end: 0),
               duration: const Duration(milliseconds: 250),
               curve: Curves.easeOut,
-              builder: (_, t, child) => FractionalTranslation(translation: Offset(0, t), child: child),
+              builder: (_, t, child) => FractionalTranslation(
+                translation: Offset(0, t),
+                child: child,
+              ),
               child: Container(
                 constraints: const BoxConstraints(maxWidth: 520),
                 decoration: const BoxDecoration(
                   color: DQ.red,
-                  boxShadow: [BoxShadow(color: Color(0x40FF2134), blurRadius: 100, offset: Offset(0, -30))],
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color(0x40FF2134),
+                      blurRadius: 100,
+                      offset: Offset(0, -30),
+                    ),
+                  ],
                 ),
                 child: Stack(
                   children: [
-                    const Positioned(left: 0, right: 0, top: 0, child: HazardStripes(height: 8)),
+                    const Positioned(
+                      left: 0,
+                      right: 0,
+                      top: 0,
+                      child: HazardStripes(height: 8),
+                    ),
                     Padding(
-                      padding: EdgeInsets.fromLTRB(20, 30, 20, math.max(22, bottom + 12)),
+                      padding: EdgeInsets.fromLTRB(
+                        20,
+                        30,
+                        20,
+                        math.max(22, bottom + 12),
+                      ),
                       child: _sent ? _sentContent() : _askContent(),
                     ),
                     Positioned(
@@ -85,15 +104,32 @@ class _EmergencySheetState extends State<EmergencySheet> {
     children: [
       Align(alignment: Alignment.centerLeft, child: _symbol('Alert')),
       const SizedBox(height: 18),
-      Text('EMERGENCY SIGNAL', style: inter(8, spacing: 2, color: Colors.white)),
+      Text(
+        'EMERGENCY SIGNAL',
+        style: inter(8, spacing: 2, color: Colors.white),
+      ),
       const SizedBox(height: 8),
-      Text('WHAT DO\nYOU NEED?', style: bc(58, italic: true, height: 0.82, spacing: -2, color: Colors.white)),
+      Text(
+        'WHAT DO\nYOU NEED?',
+        style: bc(
+          58,
+          italic: true,
+          height: 0.82,
+          spacing: -2,
+          color: Colors.white,
+        ),
+      ),
       const SizedBox(height: 14),
       ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 300),
         child: Text(
           'Your current location will be sent directly to the response team.',
-          style: inter(11, weight: FontWeight.w500, height: 1.5, color: Colors.white),
+          style: inter(
+            11,
+            weight: FontWeight.w500,
+            height: 1.5,
+            color: Colors.white,
+          ),
         ),
       ),
       const SizedBox(height: 18),
@@ -115,7 +151,12 @@ class _EmergencySheetState extends State<EmergencySheet> {
       Center(
         child: Text(
           'LIFE-THREATENING? ALWAYS CALL 112',
-          style: inter(7, weight: FontWeight.w800, spacing: 1, color: Colors.white),
+          style: inter(
+            7,
+            weight: FontWeight.w800,
+            spacing: 1,
+            color: Colors.white,
+          ),
         ),
       ),
     ],
@@ -129,11 +170,25 @@ class _EmergencySheetState extends State<EmergencySheet> {
       const SizedBox(height: 18),
       Text('SIGNAL RECEIVED', style: inter(8, spacing: 2, color: Colors.white)),
       const SizedBox(height: 8),
-      Text('HELP IS\nMOVING', style: bc(58, italic: true, height: 0.82, spacing: -2, color: Colors.white)),
+      Text(
+        'HELP IS\nMOVING',
+        style: bc(
+          58,
+          italic: true,
+          height: 0.82,
+          spacing: -2,
+          color: Colors.white,
+        ),
+      ),
       const SizedBox(height: 14),
       Text(
         'Stay where you are if it is safe. Your live location has been shared.',
-        style: inter(11, weight: FontWeight.w500, height: 1.5, color: Colors.white),
+        style: inter(
+          11,
+          weight: FontWeight.w500,
+          height: 1.5,
+          color: Colors.white,
+        ),
       ),
       const SizedBox(height: 18),
       Container(
@@ -144,7 +199,12 @@ class _EmergencySheetState extends State<EmergencySheet> {
           children: [
             Text(
               'ESTIMATED ARRIVAL',
-              style: inter(7, weight: FontWeight.w500, spacing: 1.3, color: Colors.white),
+              style: inter(
+                7,
+                weight: FontWeight.w500,
+                spacing: 1.3,
+                color: Colors.white,
+              ),
             ),
             Text('3—5 MIN', style: bc(27, color: DQ.lime)),
           ],
@@ -165,7 +225,13 @@ class _EmergencySheetState extends State<EmergencySheet> {
 }
 
 class _Option extends StatelessWidget {
-  const _Option({required this.icon, required this.title, required this.sub, required this.dark, required this.onTap});
+  const _Option({
+    required this.icon,
+    required this.title,
+    required this.sub,
+    required this.dark,
+    required this.onTap,
+  });
 
   final Object icon;
   final String title;
@@ -197,7 +263,12 @@ class _Option extends StatelessWidget {
                   Text(title, style: bc(22, color: fg)),
                   Text(
                     sub,
-                    style: inter(7, weight: FontWeight.w500, spacing: 1, color: fg),
+                    style: inter(
+                      7,
+                      weight: FontWeight.w500,
+                      spacing: 1,
+                      color: fg,
+                    ),
                   ),
                 ],
               ),

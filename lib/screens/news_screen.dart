@@ -34,7 +34,10 @@ class NewsScreen extends StatelessWidget {
                 Positioned(
                   right: -8,
                   bottom: -80,
-                  child: Text('!', style: bc(180, color: const Color(0x11000000))),
+                  child: Text(
+                    '!',
+                    style: bc(180, color: const Color(0x11000000)),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(16),
@@ -45,20 +48,31 @@ class NewsScreen extends StatelessWidget {
                         children: [
                           const DqIcon('Alert', size: 18, color: Colors.white),
                           const SizedBox(width: 7),
-                          Text('BELANGRIJK · 18:47', style: inter(7, spacing: 1.2, color: Colors.white)),
+                          Text(
+                            'BELANGRIJK · 18:47',
+                            style: inter(7, spacing: 1.2, color: Colors.white),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 16),
                       ConstrainedBox(
                         constraints: const BoxConstraints(maxWidth: 280),
-                        child: Text('EXTRA WATERPUNTEN OPEN', style: bc(29, height: 0.95, color: Colors.white)),
+                        child: Text(
+                          'EXTRA WATERPUNTEN OPEN',
+                          style: bc(29, height: 0.95, color: Colors.white),
+                        ),
                       ),
                       const SizedBox(height: 10),
                       ConstrainedBox(
                         constraints: const BoxConstraints(maxWidth: 340),
                         child: Text(
                           'Door de warmte zijn extra tappunten geopend naast RED en BLUE. Drink voldoende.',
-                          style: inter(10, weight: FontWeight.w500, height: 1.5, color: Colors.white),
+                          style: inter(
+                            10,
+                            weight: FontWeight.w500,
+                            height: 1.5,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -66,13 +80,22 @@ class NewsScreen extends StatelessWidget {
                         onTap: () => go(DqPage.map),
                         child: Container(
                           color: DQ.dark,
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 10,
+                          ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text('TOON OP KAART', style: inter(8, color: Colors.white)),
+                              Text(
+                                'TOON OP KAART',
+                                style: inter(8, color: Colors.white),
+                              ),
                               const SizedBox(width: 24),
-                              const DqIcon(LucideIcons.arrowRight, color: Colors.white),
+                              const DqIcon(
+                                LucideIcons.arrowRight,
+                                color: Colors.white,
+                              ),
                             ],
                           ),
                         ),
@@ -101,7 +124,9 @@ class NewsScreen extends StatelessWidget {
                   decoration: const BoxDecoration(
                     color: DQ.lime,
                     shape: BoxShape.circle,
-                    boxShadow: [BoxShadow(color: Color(0x18BDFC16), spreadRadius: 6)],
+                    boxShadow: [
+                      BoxShadow(color: Color(0x18BDFC16), spreadRadius: 6),
+                    ],
                   ),
                 ),
                 const SizedBox(width: 4),
@@ -111,7 +136,12 @@ class NewsScreen extends StatelessWidget {
                     children: [
                       Text(
                         'LIVE · RED STAGE',
-                        style: inter(7, weight: FontWeight.w500, spacing: 1, color: DQ.lime),
+                        style: inter(
+                          7,
+                          weight: FontWeight.w500,
+                          spacing: 1,
+                          color: DQ.lime,
+                        ),
                       ),
                       const SizedBox(height: 3),
                       Text('POWER HOUR IS 10 MIN VERTRAAGD', style: bc(15)),
@@ -143,13 +173,21 @@ class NewsScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(item.category, style: inter(7, spacing: 1, color: DQ.muted)),
+                        Text(
+                          item.category,
+                          style: inter(7, spacing: 1, color: DQ.muted),
+                        ),
                         const SizedBox(height: 3),
                         Text(item.title, style: bc(19)),
                         const SizedBox(height: 3),
                         Text(
                           item.text,
-                          style: inter(9, weight: FontWeight.w500, height: 1.4, color: DQ.muted),
+                          style: inter(
+                            9,
+                            weight: FontWeight.w500,
+                            height: 1.4,
+                            color: DQ.muted,
+                          ),
                         ),
                       ],
                     ),
@@ -157,7 +195,11 @@ class NewsScreen extends StatelessWidget {
                   const SizedBox(width: 12),
                   const Padding(
                     padding: EdgeInsets.only(top: 20),
-                    child: DqIcon(LucideIcons.chevronRight, size: 16, color: Color(0xFF555555)),
+                    child: DqIcon(
+                      LucideIcons.chevronRight,
+                      size: 16,
+                      color: Color(0xFF555555),
+                    ),
                   ),
                 ],
               ),

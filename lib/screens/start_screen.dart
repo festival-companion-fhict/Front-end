@@ -14,7 +14,13 @@ class StartScreen extends StatelessWidget {
     final pad = MediaQuery.paddingOf(context);
     final width = MediaQuery.sizeOf(context).width;
     final titleSize = (width * 0.18).clamp(58.0, 90.0);
-    final title = bc(titleSize, italic: true, height: 0.82, spacing: -3, shadows: const [Shadow(offset: Offset(4, 4))]);
+    final title = bc(
+      titleSize,
+      italic: true,
+      height: 0.82,
+      spacing: -3,
+      shadows: const [Shadow(offset: Offset(4, 4))],
+    );
 
     return Stack(
       fit: StackFit.expand,
@@ -33,10 +39,18 @@ class StartScreen extends StatelessWidget {
         ),
         const DecoratedBox(
           decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [Color(0x3DFF2134), Colors.transparent], stops: [0, 0.65]),
+            gradient: LinearGradient(
+              colors: [Color(0x3DFF2134), Colors.transparent],
+              stops: [0, 0.65],
+            ),
           ),
         ),
-        Positioned(left: 17, top: 22 + pad.top, width: 240, child: const Brand(showSub: true, center: false)),
+        Positioned(
+          left: 17,
+          top: 22 + pad.top,
+          width: 240,
+          child: const Brand(showSub: true, center: false),
+        ),
         Align(
           alignment: Alignment.bottomLeft,
           child: SingleChildScrollView(
@@ -45,7 +59,10 @@ class StartScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('DEFQON.1 · BIDDINGHUIZEN', style: inter(8, color: DQ.lime, spacing: 1.8)),
+                Text(
+                  'DEFQON.1 · BIDDINGHUIZEN',
+                  style: inter(8, color: DQ.lime, spacing: 1.8),
+                ),
                 const SizedBox(height: 9),
                 Text('YOUR LIVE', style: title),
                 OutlineText('FESTIVAL', style: title.copyWith(shadows: [])),
@@ -55,12 +72,19 @@ class StartScreen extends StatelessWidget {
                   constraints: const BoxConstraints(maxWidth: 390),
                   child: Text(
                     'Alles wat je vandaag nodig hebt. Live schema, drukte, routes, waarschuwingen en je crew.',
-                    style: inter(11, weight: FontWeight.w500, color: const Color(0xFFAAAAAA), height: 1.5),
+                    style: inter(
+                      11,
+                      weight: FontWeight.w500,
+                      color: const Color(0xFFAAAAAA),
+                      height: 1.5,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 18),
                 Container(
-                  decoration: BoxDecoration(border: Border.all(color: const Color(0xFF555555))),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: const Color(0xFF555555)),
+                  ),
                   child: IntrinsicHeight(
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -71,7 +95,10 @@ class StartScreen extends StatelessWidget {
                               margin: const EdgeInsets.only(top: 4),
                               width: 8,
                               height: 8,
-                              decoration: const BoxDecoration(color: DQ.lime, shape: BoxShape.circle),
+                              decoration: const BoxDecoration(
+                                color: DQ.lime,
+                                shape: BoxShape.circle,
+                              ),
                             ),
                             title: 'TERREIN OPEN',
                             sub: 'Updates zijn live',
@@ -80,7 +107,11 @@ class StartScreen extends StatelessWidget {
                         Container(width: 1, color: const Color(0xFF555555)),
                         const Expanded(
                           child: _StatusCell(
-                            leading: DqIcon('Bewolkt', size: 18, color: DQ.yellow),
+                            leading: DqIcon(
+                              'Bewolkt',
+                              size: 18,
+                              color: DQ.yellow,
+                            ),
                             title: '24°C',
                             sub: 'Droog tot 23:00',
                           ),
@@ -97,11 +128,19 @@ class StartScreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     decoration: const BoxDecoration(
                       color: DQ.red,
-                      boxShadow: [BoxShadow(color: Color(0xFF68101A), offset: Offset(8, 8))],
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color(0xFF68101A),
+                          offset: Offset(8, 8),
+                        ),
+                      ],
                     ),
                     child: Row(
                       children: [
-                        Text('ENTER THE FESTIVAL', style: inter(10, color: Colors.white)),
+                        Text(
+                          'ENTER THE FESTIVAL',
+                          style: inter(10, color: Colors.white),
+                        ),
                         const Spacer(),
                         const DqIcon('Pijl_rechts', color: Colors.white),
                       ],
@@ -118,7 +157,11 @@ class StartScreen extends StatelessWidget {
 }
 
 class _StatusCell extends StatelessWidget {
-  const _StatusCell({required this.leading, required this.title, required this.sub});
+  const _StatusCell({
+    required this.leading,
+    required this.title,
+    required this.sub,
+  });
 
   final Widget leading;
   final String title;
