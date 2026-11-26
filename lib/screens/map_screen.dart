@@ -10,6 +10,15 @@ import '../widgets/festival_kaart.dart';
 
 double _deg(double d) => d * math.pi / 180;
 
+/// Met welke categorie de kaart opent (bijv. 'DRUKTE' vanaf HOME).
+String kaartStartFilter = '';
+
+/// Welke plek gekozen is als de kaart opent (bijv. 'RED STAGE' vanaf een artiest).
+String kaartStartSelectie = '';
+
+/// Moet de looproute meteen aan staan als de kaart opent?
+bool kaartStartRoute = false;
+
 /// Scherm 3: GROUND MAP – plattegrond van het terrein.
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key, required this.go});
@@ -121,6 +130,8 @@ class _MapScreenState extends State<MapScreen> {
   }
 }
 
+// Oude kaart: wordt (nog) niet gebruikt. Bespreken met Nanco.
+// ignore: unused_element
 class _FestivalMap extends StatelessWidget {
   const _FestivalMap({
     required this.filter,

@@ -246,6 +246,23 @@ const kaartPunten = <KaartPunt>[
   ),
 ];
 
+/// De kleur van een stage, bijv. stageKleur('RED STAGE') → rood.
+Color stageKleur(String naam) {
+  for (final s in kaartStages) {
+    if (s.naam == naam) return s.kleur;
+  }
+  // Stages die (nog) niet op de kaart staan
+  return switch (naam) {
+    'STAMPKROEG' => DQ.orange,
+    'WHITE STAGE' => Colors.white,
+    'INDIGO STAGE' => const Color(0xFF4B3BFF),
+    'BROWN STAGE' => const Color(0xFF9A6A3A),
+    _ => DQ.muted,
+  };
+}
+
+/// Staat deze stage op de kaart? (Zo niet, dan kan ROUTE niet.)
+bool opKaart(String naam) => kaartStages.any((s) => s.naam == naam);
 /// Kleur en pictogram per soort punt.
 const puntStijl = {
   'ETEN': (DQ.yellow, 'Eten', 'ETEN'),

@@ -7,7 +7,8 @@ import 'theme/dq_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Instellingen.laad(); // bewaarde aan/uit-keuzes ophalen  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+  await Instellingen.laad(); // bewaarde aan/uit-keuzes ophalen  
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(const DefqonApp());
 }

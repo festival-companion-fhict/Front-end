@@ -3,8 +3,10 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../app_shell.dart';
 import '../data/festival_data.dart';
+import '../data/instellingen.dart';
 import '../theme/dq_theme.dart';
 import '../widgets/common.dart';
+import '../widgets/festival_kaart.dart';
 
 /// Scherm 4: LINE-UP met dagen, stage-filter en favorieten.
 class LineupScreen extends StatefulWidget {
@@ -17,18 +19,46 @@ class LineupScreen extends StatefulWidget {
 }
 
 class _LineupScreenState extends State<LineupScreen> {
-  String _day = 'SAT 29';
-  String _stage = 'ALL';
-  final Set<String> _saved = {'SUB ZERO PROJECT', 'POWER HOUR'};
+  String _day = 'SAT 28';
+  String _stage = 'ALLE STAGES';
+  String _genre = 'ALLE GENRES';
+  bool _mijnSchema = false; // false = hele schema, true = alleen ♡
+  bool _zoekOpen = false; // is de zoekbalk open?
+  final _zoek = TextEditingController();
+
+  @override
+  void dispose() {
+    _zoek.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final acts = lineup
-        .where((a) => _stage == 'ALL' || a.stage == _stage)
+    final dagen = festivalDagen;
+    if (!dagen.contains(_day)) _day = dagen.first;
+    final zoek = _zoek.text.trim().toUpperCase();
+
+    // Eerst alles van deze dag (of alles wat je bewaard hebt)
+    final basis = _mijnSchema
+        ? lineup.where((a) => Instellingen.bewaard.contains(a.sleutel))
+        : lineup.where((a) => a.dag == _day);
+    final acts = basis
+        .where((a) => _stage == 'ALLE STAGES' || a.kaartNaam == _stage)
+        .where((a) => _genre == 'ALLE GENRES' || a.genre == _genre)
+        .where(
+          (a) =>
+              zoek.isEmpty ||
+              a.artist.contains(zoek) ||
+              a.stage.contains(zoek) ||
+              a.genre.contains(zoek),
+        )
         .toList();
 
+    // Genre-tegels alleen tonen als je nog niets gekozen of gezocht hebt
+    final toonTegels = !_mijnSchema && _genre == 'ALLE GENRES' && zoek.isEmpty;
+
     return SingleChildScrollView(
-      padding: const EdgeInsets.only(bottom: 60),
+      padding: const EdgeInsets.only(bottom: 80),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -37,109 +67,74 @@ class _LineupScreenState extends State<LineupScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const PageHeading(
+                PageHeading(
                   kicker: 'CHOOSE YOUR BATTLES',
                   title: 'LINE-UP',
-                  action: OutlineSquare(icon: LucideIcons.search),
+                  action: OutlineSquare(
+                    icon: _zoekOpen ? LucideIcons.x : LucideIcons.search,
+                    onTap: () => setState(() {
+                      _zoekOpen = !_zoekOpen;
+                      if (!_zoekOpen) _zoek.clear();
+                    }),
+                  ),
                 ),
-                // Dagen
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: DQ.line2),
-                  ),
-                  child: Row(
-                    children: [
-                      for (final (i, day) in const [
-                        'FRI 28',
-                        'SAT 29',
-                        'SUN 30',
-                      ].indexed)
-                        Expanded(
-                          child: Tap(
-                            onTap: () => setState(() => _day = day),
-                            child: Container(
-                              height: 61,
-                              decoration: BoxDecoration(
-                                color: _day == day ? DQ.paper : DQ.dark,
-                                border: i < 2
-                                    ? const Border(
-                                        right: BorderSide(color: DQ.line2),
-                                      )
-                                    : null,
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'JUNE',
-                                    style: inter(
-                                      7,
-                                      weight: FontWeight.w500,
-                                      spacing: 1,
-                                      color: _day == day ? DQ.dark : DQ.muted,
-                                    ),
-                                  ),
-                                  Text(
-                                    day,
-                                    style: bc(
-                                      20,
-                                      color: _day == day ? DQ.dark : DQ.muted,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
+                // Zoekbalk (alleen als je op het vergrootglas hebt getikt)
+                if (_zoekOpen) ...[_zoekBalk(), const SizedBox(height: 13)],
+                // SCHEMA of MIJN SCHEMA
+                Row(
+                  children: [
+                    _modusKnop('SCHEMA', !_mijnSchema, () {
+                      setState(() => _mijnSchema = false);
+                    }),
+                    const SizedBox(width: 7),
+                    _modusKnop(
+                      'MIJN SCHEMA · ${Instellingen.bewaard.length}',
+                      _mijnSchema,
+                      () => setState(() => _mijnSchema = true),
+                      hartje: true,
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 13),
-                // Stage-filter
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      for (final stage in const [
-                        'ALL',
-                        'RED',
-                        'BLUE',
-                        'BLACK',
-                        'UV',
-                      ])
-                        Padding(
-                          padding: const EdgeInsets.only(right: 7),
-                          child: Tap(
-                            onTap: () => setState(() => _stage = stage),
-                            child: Container(
-                              constraints: const BoxConstraints(minWidth: 51),
-                              height: 44,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                              ),
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: _stage == stage
-                                    ? DQ.red
-                                    : Colors.transparent,
-                                border: Border.all(
-                                  color: _stage == stage ? DQ.red : DQ.line2,
-                                ),
-                              ),
-                              child: Text(
-                                stage,
-                                style: inter(
-                                  9,
-                                  weight: FontWeight.w800,
-                                  color: _stage == stage ? DQ.dark : DQ.muted,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
+                // Dagen (niet bij MIJN SCHEMA: daar zie je alle dagen)
+                if (!_mijnSchema) ...[
+                  _dagen(dagen),
+                  const SizedBox(height: 13),
+                ],
+                // Twee keuzelijsten: STAGE en GENRE
+                Row(
+                  children: [
+                    Expanded(
+                      child: _keuzeVak('STAGE', _stage, () async {
+                        final keuze = await _kiesUitLijst('KIES EEN STAGE', [
+                          'ALLE STAGES',
+                          ..._stagesVanDeDag(),
+                        ], _stage);
+                        if (keuze != null) setState(() => _stage = keuze);
+                      }),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: _keuzeVak('GENRE', _genre, () async {
+                        final keuze = await _kiesUitLijst('KIES JE SOUND', [
+                          'ALLE GENRES',
+                          ...alleGenres,
+                        ], _genre);
+                        if (keuze != null) setState(() => _genre = keuze);
+                      }),
+                    ),
+                  ],
                 ),
+                // Genre-tegels
+                if (toonTegels) ...[
+                  const SizedBox(height: 18),
+                  Text(
+                    'KIES JE SOUND',
+                    style: inter(8, spacing: 1.5, color: DQ.muted),
+                  ),
+                  const SizedBox(height: 8),
+                  _genreTegels(basis.toList()),
+                ],
               ],
             ),
           ),
@@ -148,14 +143,308 @@ class _LineupScreenState extends State<LineupScreen> {
             _ActRow(
               act: act,
               number: i + 1,
-              saved: _saved.contains(act.artist),
-              onOpen: () => widget.go(DqPage.artist),
-              onSave: () => setState(() {
-                if (!_saved.remove(act.artist)) _saved.add(act.artist);
-              }),
+              toonDag: _mijnSchema,
+              saved: Instellingen.bewaard.contains(act.sleutel),
+              onOpen: () {
+                gekozenAct = act;
+                widget.go(DqPage.artist);
+              },
+              onSave: () async {
+                await Instellingen.wisselBewaard(act.sleutel);
+                setState(() {});
+              },
+            ),
+          if (acts.isEmpty)
+            Padding(
+              padding: const EdgeInsets.all(24),
+              child: Text(
+                _mijnSchema && Instellingen.bewaard.isEmpty
+                    ? 'Nog niets bewaard. Tik op het hartje bij een act om hem aan MIJN SCHEMA toe te voegen.'
+                    : 'Geen acts gevonden. Kies een andere dag, stage of genre.',
+                style: inter(11, weight: FontWeight.w500, color: DQ.muted),
+              ),
             ),
         ],
       ),
+    );
+  }
+
+  /// Alle stages die op de gekozen dag spelen, op alfabet.
+  List<String> _stagesVanDeDag() {
+    final stages = lineup
+        .where((a) => _mijnSchema || a.dag == _day)
+        .map((a) => a.kaartNaam)
+        .toSet()
+        .toList();
+    return stages..sort();
+  }
+
+  Widget _zoekBalk() {
+    return Container(
+      height: 46,
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        color: const Color(0xFF121212),
+        border: Border.all(color: DQ.paper),
+      ),
+      child: Row(
+        children: [
+          const Icon(LucideIcons.search, size: 16, color: DQ.muted),
+          const SizedBox(width: 8),
+          Expanded(
+            child: TextField(
+              controller: _zoek,
+              autofocus: true,
+              onChanged: (_) => setState(() {}),
+              style: inter(11, weight: FontWeight.w600, color: Colors.white),
+              cursorColor: DQ.lime,
+              decoration: InputDecoration(
+                isDense: true,
+                border: InputBorder.none,
+                hintText: 'Zoek artiest, stage of genre…',
+                hintStyle: inter(
+                  11,
+                  weight: FontWeight.w500,
+                  color: const Color(0xFF656565),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// SCHEMA / MIJN SCHEMA-knop.
+  Widget _modusKnop(
+    String tekst,
+    bool gekozen,
+    VoidCallback onTap, {
+    bool hartje = false,
+  }) {
+    final kleur = gekozen ? Colors.white : DQ.muted;
+    return Expanded(
+      child: Tap(
+        onTap: onTap,
+        child: Container(
+          height: 44,
+          decoration: BoxDecoration(
+            color: gekozen ? DQ.red : Colors.transparent,
+            border: Border.all(color: gekozen ? DQ.red : DQ.line2),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (hartje) ...[
+                DqIcon('Vol_hart', size: 14, color: gekozen ? kleur : DQ.red),
+                const SizedBox(width: 6),
+              ],
+              Text(tekst, style: inter(9, color: kleur)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _dagen(List<String> dagen) {
+    return Container(
+      decoration: BoxDecoration(border: Border.all(color: DQ.line2)),
+      child: Row(
+        children: [
+          for (final (i, day) in dagen.indexed)
+            Expanded(
+              child: Tap(
+                onTap: () => setState(() {
+                  _day = day;
+                  _stage = 'ALLE STAGES';
+                }),
+                child: Container(
+                  height: 58,
+                  decoration: BoxDecoration(
+                    color: _day == day ? DQ.paper : DQ.dark,
+                    border: i < dagen.length - 1
+                        ? const Border(right: BorderSide(color: DQ.line2))
+                        : null,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'JUNI',
+                        style: inter(
+                          7,
+                          weight: FontWeight.w500,
+                          spacing: 1,
+                          color: _day == day ? DQ.dark : DQ.muted,
+                        ),
+                      ),
+                      Text(
+                        day,
+                        style: bc(19, color: _day == day ? DQ.dark : DQ.muted),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  /// Vak met een kopje en de huidige keuze, bijv. GENRE / HARDSTYLE ▾.
+  Widget _keuzeVak(String kop, String waarde, VoidCallback onTap) {
+    final actief = !waarde.startsWith('ALLE');
+    return Tap(
+      onTap: onTap,
+      child: Container(
+        height: 54,
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        decoration: BoxDecoration(
+          border: Border.all(color: actief ? DQ.paper : DQ.line2),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(kop, style: inter(7, spacing: 1.2, color: DQ.muted)),
+                  const SizedBox(height: 2),
+                  Text(
+                    waarde,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: bc(17, color: Colors.white),
+                  ),
+                ],
+              ),
+            ),
+            const DqIcon(LucideIcons.chevronDown, size: 18, color: DQ.muted),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Opent een lijstje onderin het scherm. Geeft je keuze terug.
+  Future<String?> _kiesUitLijst(
+    String titel,
+    List<String> opties,
+    String huidig,
+  ) {
+    return showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: DQ.dark,
+      shape: const RoundedRectangleBorder(),
+      isScrollControlled: true,
+      builder: (sheet) => SafeArea(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.sizeOf(sheet).height * 0.75,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(height: 6, color: DQ.lime),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+                child: Text(titel, style: bc(32, color: Colors.white)),
+              ),
+              Flexible(
+                child: ListView(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                  children: [
+                    for (final optie in opties)
+                      Tap(
+                        onTap: () => Navigator.of(sheet).pop(optie),
+                        child: Container(
+                          height: 54,
+                          decoration: const BoxDecoration(
+                            border: Border(bottom: BorderSide(color: DQ.line)),
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 10,
+                                height: 10,
+                                color: optie.startsWith('ALLE')
+                                    ? Colors.transparent
+                                    : (opties.first == 'ALLE GENRES'
+                                          ? genreKleur(optie)
+                                          : stageKleur(optie)),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Text(
+                                  optie,
+                                  style: bc(
+                                    19,
+                                    color: optie == huidig
+                                        ? DQ.lime
+                                        : Colors.white,
+                                  ),
+                                ),
+                              ),
+                              if (optie == huidig)
+                                const DqIcon(
+                                  LucideIcons.check,
+                                  size: 18,
+                                  color: DQ.lime,
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Gekleurde vakken per genre, met hoeveel acts er die dag zijn.
+  Widget _genreTegels(List<Act> vanDeDag) {
+    // Twee tegels naast elkaar: (schermbreedte - randen - tussenruimte) / 2
+    final breedte = (MediaQuery.sizeOf(context).width - 32 - 6) / 2;
+    return Wrap(
+      spacing: 6,
+      runSpacing: 6,
+      children: [
+        for (final g in alleGenres)
+          Tap(
+            onTap: () => setState(() => _genre = g),
+            child: Container(
+              width: breedte,
+              height: 64,
+              padding: const EdgeInsets.all(10),
+              color: genreKleur(g),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    g,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: bc(19, height: 1, color: DQ.dark),
+                  ),
+                  Text(
+                    '${vanDeDag.where((a) => a.genre == g).length} ACTS',
+                    style: inter(8, color: DQ.dark),
+                  ),
+                ],
+              ),
+            ),
+          ),
+      ],
     );
   }
 }
@@ -165,6 +454,7 @@ class _ActRow extends StatelessWidget {
     required this.act,
     required this.number,
     required this.saved,
+    this.toonDag = false,
     required this.onOpen,
     required this.onSave,
   });
@@ -172,6 +462,7 @@ class _ActRow extends StatelessWidget {
   final Act act;
   final int number;
   final bool saved;
+  final bool toonDag; // bij MIJN SCHEMA ook de dag laten zien
   final VoidCallback onOpen;
   final VoidCallback onSave;
 
@@ -189,7 +480,7 @@ class _ActRow extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Container(width: 6, color: act.accent),
+          Container(width: 6, color: stageKleur(act.kaartNaam)),
           Expanded(
             child: Tap(
               onTap: onOpen,
@@ -247,7 +538,9 @@ class _ActRow extends StatelessWidget {
                                 Text(
                                   live
                                       ? 'LIVE NU · 10 MIN VERTRAAGD'
-                                      : '${act.stage} STAGE',
+                                      : '${toonDag ? '${act.dag} · ' : ''}${act.kaartNaam} · ${act.genre}',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                   style: inter(
                                     8,
                                     weight: FontWeight.w800,
@@ -258,6 +551,8 @@ class _ActRow extends StatelessWidget {
                                 const SizedBox(height: 3),
                                 Text(
                                   act.artist,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                   style: bc(
                                     21,
                                     height: 0.95,
