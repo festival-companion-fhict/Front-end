@@ -270,7 +270,7 @@ class _MapScreenState extends State<MapScreen> {
                   onTap: () =>
                       setState(() => _filter = _filter == soort ? '' : soort),
                   child: Container(
-                    height: 30,
+                    height: 40,
                     padding: const EdgeInsets.symmetric(horizontal: 9),
                     decoration: BoxDecoration(
                       color: _filter == soort ? DQ.paper : Colors.transparent,

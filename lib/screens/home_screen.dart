@@ -182,7 +182,7 @@ class _LiveCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 375,
+      height: 300,
       child: Stack(
         fit: StackFit.expand,
         children: [
@@ -229,25 +229,40 @@ class _LiveCard extends StatelessWidget {
             left: 16,
             right: 16,
             bottom: 48,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text('RED STAGE · 18:00—19:10', style: inter(8, color: DQ.acid, spacing: 1.3)),
-                const SizedBox(height: 5),
-                Text(
-                  'POWER\nHOUR',
-                  style: bc(
-                    58,
-                    height: 0.8,
-                    spacing: -2,
-                    shadows: const [Shadow(color: DQ.impact, offset: Offset(3, 3))],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('RED STAGE · 18:00—19:10', style: inter(8, color: DQ.acid, spacing: 1.3)),
+                      const SizedBox(height: 5),
+                      Text(
+                        'POWER\nHOUR',
+                        style: bc(
+                          58,
+                          height: 0.8,
+                          spacing: -2,
+                          shadows: const [Shadow(color: DQ.impact, offset: Offset(3, 3))],
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Container(
+                        color: DQ.orange,
+                        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 5),
+                        child: Text('10 MIN VERTRAAGD', style: inter(7, spacing: 1, color: Colors.white)),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 8),
-                Container(
-                  color: DQ.orange,
-                  padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 5),
-                  child: Text('10 MIN VERTRAAGD', style: inter(7, spacing: 1, color: Colors.white)),
+                // Groot aftelcijfer
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text('28', style: bc(76, height: 0.9, color: DQ.acid)),
+                    Text('MIN LEFT', style: inter(9, color: DQ.acid, spacing: 1)),
+                  ],
                 ),
               ],
             ),
@@ -269,7 +284,6 @@ class _LiveCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('42 MIN', style: inter(7, color: const Color(0xFFAAAAAA))),
-                    Text('28 MIN LEFT', style: inter(7, color: const Color(0xFFAAAAAA))),
                   ],
                 ),
               ],
@@ -310,7 +324,7 @@ class _Metric extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     height: 126,
     padding: const EdgeInsets.all(12),
-    decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(16)),
+    decoration: BoxDecoration(color: color, borderRadius: BorderRadius.zero),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -343,11 +357,11 @@ class _UpNext extends StatelessWidget {
   Widget build(BuildContext context) => Tap(
     onTap: onTap,
     child: Container(
-      height: 91,
+      height: 108,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: const Color(0xFF17131F),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: const Color(0xFF3A3544)),
       ),
       child: Row(
@@ -405,30 +419,36 @@ class _Nearby extends StatelessWidget {
   final String sub;
   final VoidCallback onTap;
 
+ /// Zone-bordje, zoals de bordjes op het festivalterrein.
   @override
   Widget build(BuildContext context) => Tap(
     onTap: onTap,
     child: Container(
-      height: 88,
+      height: 112,
       padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(14)),
+      color: color,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          DqIcon(icon, size: 20, color: const Color(0xFF14111A)),
-          const Spacer(),
-          Text(title, style: bc(17, color: const Color(0xFF14111A), height: 1)),
-          Text(
-            sub,
-            style: inter(6, color: const Color(0xFF14111A), weight: FontWeight.w800),
+          Row(
+            children: [
+              DqIcon(icon, size: 22, color: const Color(0xFF14111A)),
+              const Spacer(),
+              // Schuine pijl (45 graden gedraaid)
+              Transform.rotate(
+                angle: -0.785,
+                child: const DqIcon('Pijl_rechts', size: 22, color: Color(0xFF14111A)),
+              ),
+            ],
           ),
+          const Spacer(),
+          Text(title, style: bc(26, color: const Color(0xFF14111A), height: 1)),
+          Text(sub.toUpperCase(), style: inter(6, color: const Color(0xFF14111A), weight: FontWeight.w800)),
         ],
       ),
     ),
   );
-}
-
-class _StageAlert extends StatelessWidget {
+}class _StageAlert extends StatelessWidget {
   const _StageAlert();
 
   @override
@@ -437,7 +457,7 @@ class _StageAlert extends StatelessWidget {
     padding: const EdgeInsets.all(11),
     decoration: BoxDecoration(
       color: const Color(0xFF211623),
-      borderRadius: BorderRadius.circular(15),
+      borderRadius: BorderRadius.zero,
       border: Border.all(color: const Color(0xFF45354A)),
     ),
     child: Row(

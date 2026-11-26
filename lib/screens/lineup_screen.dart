@@ -89,7 +89,7 @@ class _LineupScreenState extends State<LineupScreen> {
                             onTap: () => setState(() => _stage = stage),
                             child: Container(
                               constraints: const BoxConstraints(minWidth: 51),
-                              height: 30,
+                              height: 44,
                               padding: const EdgeInsets.symmetric(horizontal: 8),
                               alignment: Alignment.center,
                               decoration: BoxDecoration(

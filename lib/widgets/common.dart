@@ -173,18 +173,8 @@ class GreyImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const r = 0.2126, g = 0.7152, b = 0.0722;
-    final c = contrast;
-    final o = 128 * (1 - c);
-    return ColorFiltered(
-      colorFilter: ColorFilter.matrix([
-        r * c, g * c, b * c, 0, o, //
-        r * c, g * c, b * c, 0, o, //
-        r * c, g * c, b * c, 0, o, //
-        0, 0, 0, 1, 0,
-      ]),
-      child: Image.asset(asset, fit: BoxFit.cover, width: double.infinity, height: double.infinity),
-    );
+        // Foto in kleur, zodat je alles goed ziet.
+    return Image.asset(asset, fit: BoxFit.cover, width: double.infinity, height: double.infinity);
   }
 }
 
@@ -315,8 +305,8 @@ class Picto extends StatelessWidget {
         heightFactor: 1,
         child: Image.asset(
           'assets/pictograms/$name.png',
-          width: size,
-          height: size,
+          width: size * 1.2,
+          height: size * 1.2,
           color: color,
         ),
       );
@@ -335,6 +325,6 @@ class DqIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     final icon = this.icon;
     if (icon is String) return Picto(icon, size: size, color: color);
-    return Icon(icon as IconData, size: size, color: color);
+    return Icon(icon as IconData, size: size * 1.2, color: color);
   }
 }

@@ -9,7 +9,13 @@ import 'common.dart';
 
 /// Het DEFQON.1-logo als tekst.
 class Brand extends StatelessWidget {
-  const Brand({super.key, this.color = Colors.white, this.showSub = false, this.onTap, this.center = true});
+  const Brand({
+    super.key,
+    this.color = Colors.white,
+    this.showSub = false,
+    this.onTap,
+    this.center = true,
+  });
 
   final Color color;
   final bool showSub;
@@ -25,14 +31,24 @@ class Brand extends StatelessWidget {
         alignment: Alignment.center,
         child: Row(
           mainAxisSize: center ? MainAxisSize.max : MainAxisSize.min,
-          mainAxisAlignment: center ? MainAxisAlignment.center : MainAxisAlignment.start,
+          mainAxisAlignment: center
+              ? MainAxisAlignment.center
+              : MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.baseline,
           textBaseline: TextBaseline.alphabetic,
           children: [
-            Text('DEFQON', style: bc(27, color: color, spacing: -1.4, height: 0.9)),
+            Text(
+              'DEFQON',
+              style: bc(27, color: color, spacing: -1.4, height: 0.9),
+            ),
             Text(
               '.1',
-              style: bc(27, color: DQ.red, weight: FontWeight.w700, height: 0.9),
+              style: bc(
+                27,
+                color: DQ.red,
+                weight: FontWeight.w700,
+                height: 0.9,
+              ),
             ),
             if (showSub) ...[
               const SizedBox(width: 8),
@@ -43,7 +59,9 @@ class Brand extends StatelessWidget {
                     7,
                     weight: FontWeight.w700,
                     spacing: 1.2,
-                    color: color == Colors.white ? const Color(0xFFAAAAAA) : color,
+                    color: color == Colors.white
+                        ? const Color(0xFFAAAAAA)
+                        : color,
                   ),
                 ),
               ),
@@ -57,7 +75,12 @@ class Brand extends StatelessWidget {
 
 /// Bovenbalk: LIVE-knop, logo en profielknop.
 class DqHeader extends StatelessWidget {
-  const DqHeader({super.key, required this.go, required this.openProfile, required this.openStart});
+  const DqHeader({
+    super.key,
+    required this.go,
+    required this.openProfile,
+    required this.openStart,
+  });
 
   final Go go;
   final VoidCallback openProfile;
@@ -100,7 +123,10 @@ class DqHeader extends StatelessWidget {
               children: [
                 const PulseDot(),
                 const SizedBox(height: 3),
-                Text('LIVE', style: inter(7, spacing: 0.5, color: Colors.white)),
+                Text(
+                  'LIVE',
+                  style: inter(7, spacing: 0.5, color: Colors.white),
+                ),
               ],
             ),
           ),
@@ -142,9 +168,12 @@ class PulseDot extends StatefulWidget {
   State<PulseDot> createState() => _PulseDotState();
 }
 
-class _PulseDotState extends State<PulseDot> with SingleTickerProviderStateMixin {
-  late final AnimationController _c = AnimationController(vsync: this, duration: const Duration(milliseconds: 1800))
-    ..repeat();
+class _PulseDotState extends State<PulseDot>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _c = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 1800),
+  )..repeat();
 
   @override
   void dispose() {
@@ -191,7 +220,10 @@ class _LiveStripState extends State<LiveStrip> {
   @override
   void initState() {
     super.initState();
-    _timer = Timer.periodic(const Duration(seconds: 30), (_) => setState(() => _now = DateTime.now()));
+    _timer = Timer.periodic(
+      const Duration(seconds: 30),
+      (_) => setState(() => _now = DateTime.now()),
+    );
   }
 
   @override
@@ -203,7 +235,8 @@ class _LiveStripState extends State<LiveStrip> {
   @override
   Widget build(BuildContext context) {
     String two(int n) => n.toString().padLeft(2, '0');
-    Widget divider() => Container(width: 1, height: 12, color: const Color(0xFFAAAAAA));
+    Widget divider() =>
+        Container(width: 1, height: 12, color: const Color(0xFFAAAAAA));
     return Container(
       height: 32,
       padding: const EdgeInsets.symmetric(horizontal: 13),
@@ -216,12 +249,18 @@ class _LiveStripState extends State<LiveStrip> {
           Container(
             width: 6,
             height: 6,
-            decoration: const BoxDecoration(color: DQ.red, shape: BoxShape.circle),
+            decoration: const BoxDecoration(
+              color: DQ.red,
+              shape: BoxShape.circle,
+            ),
           ),
           const SizedBox(width: 6),
           Text('LIVE UPDATE', style: inter(7, color: DQ.red, spacing: 1)),
           const SizedBox(width: 10),
-          Text('${two(_now.hour)}:${two(_now.minute)}', style: bc(14, color: DQ.dark)),
+          Text(
+            '${two(_now.hour)}:${two(_now.minute)}',
+            style: bc(14, color: DQ.dark),
+          ),
           const SizedBox(width: 10),
           divider(),
           const SizedBox(width: 10),
@@ -273,17 +312,39 @@ class DqNav extends StatelessWidget {
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
-                    if (active == page) Positioned(top: -1, child: Container(width: 35, height: 4, color: DQ.red)),
+                    if (active == page)
+                      Positioned(
+                        top: -1,
+                        child: Container(width: 35, height: 4, color: DQ.red),
+                      ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         page == DqPage.home
-                            ? DqIcon(LucideIcons.house, size: 20, color: active == page ? DQ.red : const Color(0xFF5D5D5D))
-                            : Picto(icon, size: 20, color: active == page ? DQ.red : const Color(0xFF5D5D5D)),
+                            ? DqIcon(
+                                LucideIcons.house,
+                                size: 20,
+                                color: active == page
+                                    ? DQ.red
+                                    : const Color(0xFF5D5D5D),
+                              )
+                            : Picto(
+                                icon,
+                                size: 20,
+                                color: active == page
+                                    ? DQ.red
+                                    : const Color(0xFF5D5D5D),
+                              ),
                         const SizedBox(height: 4),
                         Text(
                           label,
-                          style: inter(7, spacing: 0.5, color: active == page ? Colors.white : const Color(0xFF5D5D5D)),
+                          style: inter(
+                            7,
+                            spacing: 0.5,
+                            color: active == page
+                                ? Colors.white
+                                : const Color(0xFF5D5D5D),
+                          ),
                         ),
                       ],
                     ),
@@ -307,18 +368,24 @@ class SosButton extends StatelessWidget {
   Widget build(BuildContext context) => Tap(
     onTap: onTap,
     child: Container(
-      height: 43,
-      padding: const EdgeInsets.symmetric(horizontal: 13),
-      decoration: const BoxDecoration(
+      height: 52,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
         color: DQ.red,
-        boxShadow: [BoxShadow(color: Color(0xFF641019), offset: Offset(6, 6))],
+        border: Border.all(
+          color: Colors.white,
+          width: 2,
+        ), // witte rand: valt altijd op
+        boxShadow: const [
+          BoxShadow(color: Color(0xAA000000), offset: Offset(5, 5)),
+        ],
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const DqIcon('Alert', size: 18, color: Colors.white),
-          const SizedBox(width: 6),
-          Text('SOS', style: inter(9, color: Colors.white)),
+          const DqIcon('Alert', size: 20, color: Colors.white),
+          const SizedBox(width: 8),
+          Text('SOS', style: bc(24, color: Colors.white)),
         ],
       ),
     ),
