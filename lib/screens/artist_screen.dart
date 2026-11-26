@@ -21,7 +21,6 @@ class ArtistScreen extends StatefulWidget {
 }
 
 class _ArtistScreenState extends State<ArtistScreen> {
-  bool _reminder = true;
   String _tab = 'INFO';
 
   @override
@@ -29,6 +28,7 @@ class _ArtistScreenState extends State<ArtistScreen> {
     final width = MediaQuery.sizeOf(context).width;
     final nameSize = width <= 390 ? 56.0 : (width * 0.18).clamp(59.0, 84.0);
     final act = gekozenAct; // de artiest waar je op tikte
+    final herinnering = Instellingen.herinneringen.contains(act.sleutel);
     final dagActs = lineup.where((a) => a.dag == act.dag).toList();
     final nummer = (dagActs.indexOf(act) + 1).toString().padLeft(2, '0');
 
@@ -176,11 +176,11 @@ class _ArtistScreenState extends State<ArtistScreen> {
                       children: [
                         Expanded(
                           child: _MetaCell(
-                            'WHEN',
+                            'WANNEER',
                             '${act.dag.substring(0, 3)} · ${act.time}',
                           ),
                         ),
-                        Expanded(child: _MetaCell('WHERE', act.kaartNaam)),
+                        Expanded(child: _MetaCell('WAAR', act.kaartNaam)),
                         Tap(
                           // Staat de stage niet op de kaart? Dan geen route.
                           onTap: opKaart(act.kaartNaam)
@@ -258,27 +258,30 @@ class _ArtistScreenState extends State<ArtistScreen> {
                 },
                 const SizedBox(height: 20),
                 Tap(
-                  onTap: () => setState(() => _reminder = !_reminder),
+                  onTap: () async {
+                    await Instellingen.wisselHerinnering(act.sleutel);
+                    setState(() {});
+                  },
                   child: Container(
                     height: 52,
-                    color: _reminder ? DQ.lime : const Color(0xFF1A1A1A),
+                    color: herinnering ? DQ.lime : const Color(0xFF1A1A1A),
                     padding: const EdgeInsets.symmetric(horizontal: 14),
                     child: Row(
                       children: [
                         DqIcon(
                           LucideIcons.bell,
-                          color: _reminder ? DQ.dark : Colors.white,
+                          color: herinnering ? DQ.dark : Colors.white,
                         ),
                         const SizedBox(width: 10),
                         Text(
-                          'REMIND ME 15 MIN BEFORE',
+                          'HERINNER ME 15 MIN VAN TEVOREN',
                           style: inter(
                             10,
-                            color: _reminder ? DQ.dark : Colors.white,
+                            color: herinnering ? DQ.dark : Colors.white,
                           ),
                         ),
                         const Spacer(),
-                        if (_reminder)
+                        if (herinnering)
                           const DqIcon(LucideIcons.check, color: DQ.dark),
                       ],
                     ),

@@ -97,7 +97,7 @@ class CrewScreen extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 17),
                           alignment: Alignment.center,
                           child: Text(
-                            'SHARE',
+                            'DELEN',
                             style: inter(9, color: Colors.white),
                           ),
                         ),
@@ -131,14 +131,14 @@ class CrewScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'NEXT MEET-UP',
+                        'VOLGENDE AFSPRAAK',
                         style: inter(7, spacing: 1.2, color: DQ.red),
                       ),
                       const SizedBox(height: 2),
                       Text('18:45 · RED STAGE', style: bc(20)),
                       const SizedBox(height: 2),
                       Text(
-                        'POWER HOUR · 4 WARRIORS GOING',
+                        'POWER HOUR · 4 WARRIORS GAAN',
                         style: inter(
                           8,
                           weight: FontWeight.w800,
@@ -151,7 +151,7 @@ class CrewScreen extends StatelessWidget {
               ],
             ),
           ),
-          const SectionTitle(kicker: 'LIVE LOCATIONS', title: 'WARRIORS'),
+          const SectionTitle(kicker: 'LIVE LOCATIES', title: 'WARRIORS'),
           Container(height: 1, color: DQ.line),
           for (final m in crew)
             Tap(
@@ -205,7 +205,7 @@ class CrewScreen extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'NOW',
+                      'NU',
                       style: inter(7, weight: FontWeight.w800, color: DQ.lime),
                     ),
                     const SizedBox(width: 11),

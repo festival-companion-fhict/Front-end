@@ -166,7 +166,7 @@ class StartScreen extends StatelessWidget {
                     child: Row(
                       children: [
                         Text(
-                          'ENTER THE FESTIVAL',
+                          'NAAR HET FESTIVAL',
                           style: inter(10, color: Colors.white),
                         ),
                         const Spacer(),

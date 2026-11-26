@@ -295,7 +295,7 @@ class _LiveCard extends StatelessWidget {
                       const PulseRing(),
                       const SizedBox(width: 7),
                       Text(
-                        'LIVE NOW',
+                        'LIVE NU',
                         style: inter(8, spacing: 1, color: Colors.white),
                       ),
                     ],
@@ -354,7 +354,7 @@ class _LiveCard extends StatelessWidget {
                   children: [
                     Text('28', style: bc(76, height: 0.9, color: DQ.acid)),
                     Text(
-                      'MIN LEFT',
+                      'MIN NOG',
                       style: inter(9, color: DQ.acid, spacing: 1),
                     ),
                   ],
@@ -482,7 +482,7 @@ class _UpNext extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'UP NEXT · 19:10',
+                    'HIERNA · 19:10',
                     style: inter(7, color: DQ.acid, spacing: 1.1),
                   ),
                   const SizedBox(height: 5),

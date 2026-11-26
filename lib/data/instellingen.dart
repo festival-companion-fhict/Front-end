@@ -28,6 +28,7 @@ class Instellingen {
       waarden[naam] = prefs.getBool('inst-$naam') ?? waarden[naam]!;
     }
     bewaard.addAll(prefs.getStringList('bewaard') ?? []);
+    herinneringen.addAll(prefs.getStringList('herinneringen') ?? []);
   }
 
   /// Acts die je met het hartje hebt bewaard (MIJN SCHEMA).
@@ -39,6 +40,16 @@ class Instellingen {
     if (!bewaard.remove(sleutel)) bewaard.add(sleutel);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setStringList('bewaard', bewaard.toList());
+  }
+
+  /// Optredens waarvoor je een herinnering hebt aangezet (zelfde sleutel als het hartje).
+  static final Set<String> herinneringen = {};
+
+  /// Herinnering aan of uit zetten en bewaren.
+  static Future<void> wisselHerinnering(String sleutel) async {
+    if (!herinneringen.remove(sleutel)) herinneringen.add(sleutel);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList('herinneringen', herinneringen.toList());
   }
 
   /// Is deze instelling aan?

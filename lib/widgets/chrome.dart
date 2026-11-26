@@ -269,7 +269,7 @@ class DqNav extends StatelessWidget {
 
   static const _items = [
     (DqPage.home, 'HOME', ''),
-    (DqPage.map, 'MAP', 'Kaart'),
+    (DqPage.map, 'KAART', 'Kaart'),
     (DqPage.lineup, 'SCHEMA', 'calendar'),
     (DqPage.report, 'MELDEN', 'Melden'),
     (DqPage.news, 'NIEUWS', 'Info'),
