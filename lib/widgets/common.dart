@@ -326,15 +326,19 @@ class _DashPainter extends CustomPainter {
     }
 
     final h = strokeWidth / 2;
-    if (sides.contains(AxisDirection.up))
+    if (sides.contains(AxisDirection.up)) {
       line(Offset(0, h), Offset(size.width, h));
-    if (sides.contains(AxisDirection.down))
+    }
+    if (sides.contains(AxisDirection.down)) {
       line(Offset(0, size.height - h), Offset(size.width, size.height - h));
-    if (sides.contains(AxisDirection.left))
+    }
+    if (sides.contains(AxisDirection.left)) {
       line(Offset(h, 0), Offset(h, size.height));
-    if (sides.contains(AxisDirection.right))
+    }
+    if (sides.contains(AxisDirection.right)) {
       line(Offset(size.width - h, 0), Offset(size.width - h, size.height));
     }
+  }
 
   @override
   bool shouldRepaint(covariant _DashPainter old) => old.color != color;
@@ -389,4 +393,29 @@ class DqIcon extends StatelessWidget {
     if (icon is String) return Picto(icon, size: size, color: color);
     return Icon(icon as IconData, size: size * 1.2, color: color);
   }
+}
+
+/// Aan/uit-schakelaar in DEFQON-stijl (hoekig, lime als hij aan staat).
+class Schakelaar extends StatelessWidget {
+  const Schakelaar({super.key, required this.aan, required this.onChanged});
+
+  final bool aan;
+  final ValueChanged<bool> onChanged;
+
+  @override
+  Widget build(BuildContext context) => Tap(
+    onTap: () => onChanged(!aan),
+    child: AnimatedContainer(
+      duration: const Duration(milliseconds: 150),
+      width: 50,
+      height: 28,
+      padding: const EdgeInsets.all(3),
+      alignment: aan ? Alignment.centerRight : Alignment.centerLeft,
+      decoration: BoxDecoration(
+        color: aan ? DQ.lime : const Color(0xFF222222),
+        border: Border.all(color: aan ? DQ.lime : DQ.line2),
+      ),
+      child: Container(width: 20, height: 20, color: aan ? DQ.dark : DQ.muted),
+    ),
+  );
 }
