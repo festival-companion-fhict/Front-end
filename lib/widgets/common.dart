@@ -334,7 +334,7 @@ class _DashPainter extends CustomPainter {
       line(Offset(h, 0), Offset(h, size.height));
     if (sides.contains(AxisDirection.right))
       line(Offset(size.width - h, 0), Offset(size.width - h, size.height));
-  }
+    }
 
   @override
   bool shouldRepaint(covariant _DashPainter old) => old.color != color;
