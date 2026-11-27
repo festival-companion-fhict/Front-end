@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../app_shell.dart';
+import '../data/taal.dart';
 import '../theme/dq_theme.dart';
 import 'common.dart';
 
@@ -236,7 +237,7 @@ class _LiveStripState extends State<LiveStrip> {
           ),
           const SizedBox(width: 6),
           Text(
-            'LIVE UPDATE',
+            t('LIVE UPDATE'),
             style: inter(7, color: const Color(0xFFD0001A), spacing: 1),
           ),
           const SizedBox(width: 10),
@@ -247,7 +248,7 @@ class _LiveStripState extends State<LiveStrip> {
           const SizedBox(width: 10),
           divider(),
           const SizedBox(width: 10),
-          Text('RED: ZEER DRUK', style: inter(7, color: DQ.dark)),
+          Text(t('RED: ZEER DRUK'), style: inter(7, color: DQ.dark)),
           const Spacer(),
           divider(),
           const SizedBox(width: 10),
@@ -320,7 +321,7 @@ class DqNav extends StatelessWidget {
                               ),
                         const SizedBox(height: 4),
                         Text(
-                          label,
+                          t(label),
                           style: inter(
                             7,
                             spacing: 0.5,

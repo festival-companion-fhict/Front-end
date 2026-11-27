@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../data/taal.dart';
 import '../theme/dq_theme.dart';
 
 /// Een klikbaar vlak. Als je erop drukt, wordt hij even iets lichter.
@@ -103,7 +104,7 @@ class PageHeading extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  kicker,
+                  t(kicker),
                   style: inter(
                     9,
                     color: DQ.red,
@@ -112,7 +113,7 @@ class PageHeading extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 7),
-                Text(title, style: bc(size, height: 0.85, spacing: -2.2)),
+                Text(t(title), style: bc(size, height: 0.85, spacing: -2.2)),
               ],
             ),
           ),
@@ -143,7 +144,7 @@ class SectionTitle extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                kicker,
+                t(kicker),
                 style: inter(
                   9,
                   color: DQ.red,
@@ -152,7 +153,7 @@ class SectionTitle extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 2),
-              Text(title, style: bc(29, height: 0.95, spacing: -0.8)),
+              Text(t(title), style: bc(29, height: 0.95, spacing: -0.8)),
             ],
           ),
         ],

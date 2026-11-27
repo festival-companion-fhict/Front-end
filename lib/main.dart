@@ -3,11 +3,13 @@ import 'package:flutter/services.dart';
 
 import 'app_shell.dart';
 import 'data/instellingen.dart';
+import 'data/taal.dart';
 import 'theme/dq_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Instellingen.laad(); // bewaarde aan/uit-keuzes ophalen  
+  await Instellingen.laad(); // bewaarde aan/uit-keuzes ophalen
+  await Taal.laad(); // NL of EN
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(const DefqonApp());
@@ -18,11 +20,16 @@ class DefqonApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'DEFQON.1 Companion',
-      debugShowCheckedModeBanner: false,
-      theme: buildTheme(),
-      home: const AppShell(),
+    // Kies je een andere taal? Dan bouwt de app zich helemaal opnieuw op.
+    return ValueListenableBuilder<String>(
+      valueListenable: Taal.huidig,
+      builder: (context, taal, _) => MaterialApp(
+        key: ValueKey(taal),
+        title: 'DEFQON.1 Companion',
+        debugShowCheckedModeBanner: false,
+        theme: buildTheme(),
+        home: const AppShell(),
+      ),
     );
   }
 }

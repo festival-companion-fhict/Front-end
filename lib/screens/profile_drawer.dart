@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../app_shell.dart';
+import '../data/taal.dart';
 import '../theme/dq_theme.dart';
 import '../data/instellingen.dart';
 import '../widgets/common.dart';
@@ -108,7 +109,7 @@ class ProfileDrawer extends StatelessWidget {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'TOEGANG',
+                                          t('TOEGANG'),
                                           style: inter(
                                             7,
                                             weight: FontWeight.w500,
@@ -116,7 +117,7 @@ class ProfileDrawer extends StatelessWidget {
                                           ),
                                         ),
                                         Text(
-                                          'OPEN MIJN TICKET',
+                                          t('OPEN MIJN TICKET'),
                                           style: bc(18, color: Colors.white),
                                         ),
                                       ],
@@ -183,7 +184,7 @@ class _InstellingenState extends State<_Instellingen> {
       children: [
         Expanded(
           child: Text(
-            tekst,
+            t(tekst),
             style: inter(10, weight: FontWeight.w500, color: Colors.white),
           ),
         ),
@@ -192,11 +193,40 @@ class _InstellingenState extends State<_Instellingen> {
     ),
   );
 
+  /// Twee knopjes naast elkaar: NL | EN.
+  Widget _taalKnoppen() => Row(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      for (final (code, naam) in const [('nl', 'NL'), ('en', 'EN')])
+        Tap(
+          onTap: () => Taal.zet(code),
+          child: Container(
+            width: 44,
+            height: 32,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Taal.huidig.value == code ? DQ.lime : Colors.transparent,
+              border: Border.all(
+                color: Taal.huidig.value == code ? DQ.lime : DQ.line2,
+              ),
+            ),
+            child: Text(
+              naam,
+              style: inter(
+                9,
+                color: Taal.huidig.value == code ? DQ.dark : DQ.muted,
+              ),
+            ),
+          ),
+        ),
+    ],
+  );
+
   @override
   Widget build(BuildContext context) => Column(
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
-      _regel('Taal', Text('NEDERLANDS', style: bc(15, color: DQ.muted))),
+      _regel('Taal', _taalKnoppen()),
       for (final naam in _schakelaars)
         _regel(
           naam,
