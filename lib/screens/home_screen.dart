@@ -3,6 +3,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../app_shell.dart';
 import '../data/festival_data.dart';
+import '../data/festivaltijd.dart';
 import '../data/taal.dart';
 import '../theme/dq_theme.dart';
 import '../widgets/common.dart';
@@ -19,14 +20,11 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void openArtiest(String naam, {String stage = ''}) {
-      final act = zoekAct(naam, stage: stage);
+    void openAct(Act? act) {
       if (act == null) {
-        final melding =
-            lineupStatus == LineupStatus.loading ||
-                lineupStatus == LineupStatus.notLoaded
-            ? 'De line-up wordt nog geladen.'
-            : 'Deze artiest staat niet in de line-up.';
+        final melding = lineupStatus == LineupStatus.loaded
+            ? 'Geen optreden gevonden.'
+            : 'De line-up wordt nog geladen.';
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text(t(melding))));
@@ -44,7 +42,7 @@ class HomeScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Tap(
-              onTap: () => openArtiest('POWER HOUR'),
+              onTap: () => openAct(FestivalTijd.nuLive()),
               child: const _LiveCard(),
             ),
             _Presence(go: go),
@@ -86,9 +84,7 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  _UpNext(
-                    onTap: () => openArtiest('SUB ZERO PROJECT', stage: 'RED'),
-                  ),
+                  _UpNext(onTap: () => openAct(FestivalTijd.hierna())),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(2, 25, 2, 10),
                     child: Row(
@@ -274,6 +270,13 @@ class _LiveCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return ValueListenableBuilder<int>(
+      valueListenable: FestivalTijd.tik,
+      builder: (context, _, _) => _bouw(FestivalTijd.nuLive()),
+    );
+  }
+
+  Widget _bouw(Act? act) {
     return SizedBox(
       height: 300,
       child: Stack(
@@ -339,12 +342,16 @@ class _LiveCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'RED STAGE · 18:00—19:10',
+                        act == null
+                            ? t('NU GEEN LIVE ACT')
+                            : '${act.kaartNaam} · ${act.time}—${act.end}',
                         style: inter(8, color: DQ.acid, spacing: 1.3),
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        'POWER\nHOUR',
+                        act?.artist ?? 'DEFQON.1',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: bc(
                           58,
                           height: 0.8,
@@ -354,18 +361,6 @@ class _LiveCard extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      Container(
-                        color: DQ.orange,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 7,
-                          vertical: 5,
-                        ),
-                        child: Text(
-                          t('10 MIN VERTRAAGD'),
-                          style: inter(7, spacing: 1, color: Colors.white),
-                        ),
-                      ),
                     ],
                   ),
                 ),
@@ -373,7 +368,10 @@ class _LiveCard extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text('28', style: bc(76, height: 0.9, color: DQ.acid)),
+                    Text(
+                      act == null ? '–' : '${FestivalTijd.minutenNog(act)}',
+                      style: bc(76, height: 0.9, color: DQ.acid),
+                    ),
                     Text(
                       t('MIN NOG'),
                       style: inter(9, color: DQ.acid, spacing: 1),
@@ -394,7 +392,7 @@ class _LiveCard extends StatelessWidget {
                   color: const Color(0x30FFFFFF),
                   alignment: Alignment.centerLeft,
                   child: FractionallySizedBox(
-                    widthFactor: 0.61,
+                    widthFactor: act == null ? 0 : FestivalTijd.voortgang(act),
                     child: Container(color: DQ.acid),
                   ),
                 ),
@@ -403,7 +401,9 @@ class _LiveCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '42 MIN',
+                      act == null
+                          ? ''
+                          : '${FestivalTijd.nu - FestivalTijd.begin(act)} MIN',
                       style: inter(7, color: const Color(0xFFAAAAAA)),
                     ),
                   ],
@@ -482,7 +482,12 @@ class _UpNext extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) => Tap(
+  Widget build(BuildContext context) => ValueListenableBuilder<int>(
+    valueListenable: FestivalTijd.tik,
+    builder: (context, _, _) => _bouw(FestivalTijd.hierna()),
+  );
+
+  Widget _bouw(Act? act) => Tap(
     onTap: onTap,
     child: Container(
       height: 108,
@@ -503,14 +508,25 @@ class _UpNext extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    t('HIERNA · 19:10'),
+                    act == null
+                        ? t('HIERNA')
+                        : '${t('HIERNA')} · ${act.kaartNaam} · ${act.time}',
                     style: inter(7, color: DQ.acid, spacing: 1.1),
                   ),
                   const SizedBox(height: 5),
-                  Text('SUB ZERO PROJECT', style: bc(21, color: Colors.white)),
+                  Text(
+                    act?.artist ?? '–',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: bc(21, color: Colors.white),
+                  ),
                   const SizedBox(height: 2),
                   Text(
-                    t('Begint over 28 minuten'),
+                    act == null
+                        ? ''
+                        : FestivalTijd.minutenTot(act) < 60
+                        ? '${t('Begint over')} ${FestivalTijd.minutenTot(act)} ${t('minuten')}'
+                        : '${t('Begint om')} ${act.time}',
                     style: inter(
                       7,
                       weight: FontWeight.w500,
@@ -531,7 +547,10 @@ class _UpNext extends StatelessWidget {
               child: Transform(
                 transform: skew(5),
                 alignment: Alignment.center,
-                child: Text('SZP', style: bc(25, color: Colors.white)),
+                child: Text(
+                  act == null ? '' : _letters(act.artist),
+                  style: bc(25, color: Colors.white),
+                ),
               ),
             ),
           ),
@@ -544,6 +563,10 @@ class _UpNext extends StatelessWidget {
     ),
   );
 }
+
+/// 'SUB ZERO PROJECT' -> 'SZP' (hoogstens 3 letters).
+String _letters(String naam) =>
+    naam.split(' ').where((w) => w.isNotEmpty).take(3).map((w) => w[0]).join();
 
 class _Nearby extends StatelessWidget {
   const _Nearby(this.color, this.icon, this.title, this.sub, this.onTap);

@@ -243,4 +243,11 @@ const _engels = <String, String>{
   'Kans op regen': 'Chance of rain',
   'Droog de komende uren': 'Dry for the next hours',
   'Weer laden...': 'Loading weather...',
+    // Line-up en tijd
+  'HIERNA': 'UP NEXT',
+  'Begint over': 'Starts in',
+  'minuten': 'minutes',
+  'Begint om': 'Starts at',
+  'NU GEEN LIVE ACT': 'NO LIVE ACT RIGHT NOW',
+  'Geen optreden gevonden.': 'No show found.',
 };

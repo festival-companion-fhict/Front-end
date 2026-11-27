@@ -3,6 +3,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../app_shell.dart';
 import '../data/festival_data.dart';
+import '../data/festivaltijd.dart';
 import '../data/instellingen.dart';
 import '../data/taal.dart';
 import '../theme/dq_theme.dart';
@@ -26,15 +27,24 @@ class _LineupScreenState extends State<LineupScreen> {
   bool _mijnSchema = false; // false = hele schema, true = alleen ♡
   bool _zoekOpen = false; // is de zoekbalk open?
   final _zoek = TextEditingController();
+  final _nuKey = GlobalKey(); // de act waar de lijst naartoe springt
+  String? _gesprongenOp; // op welke dag we al naar "nu" zijn gesprongen
 
   @override
   void initState() {
-    super.initState();
+        super.initState();
+    if (FestivalTijd.vandaag.isNotEmpty) _day = FestivalTijd.vandaag;
+    FestivalTijd.tik.addListener(_ververs);
     _loadLineup();
+  }
+
+  void _ververs() {
+    if (mounted) setState(() {});
   }
 
   @override
   void dispose() {
+    FestivalTijd.tik.removeListener(_ververs);
     _zoek.dispose();
     super.dispose();
   }
@@ -71,8 +81,23 @@ class _LineupScreenState extends State<LineupScreen> {
         )
         .toList();
 
-    // Genre-tegels alleen tonen als je nog niets gekozen of gezocht hebt
-    final toonTegels = !_mijnSchema && _genre == 'ALLE GENRES' && zoek.isEmpty;
+    // De eerste act die nu bezig is of nog moet komen (alleen vandaag).
+    // Daar springt de lijst naartoe. Naar boven scrollen = eerder op de dag.
+    final nuIndex = !_mijnSchema && _day == FestivalTijd.vandaag
+        ? acts.indexWhere((a) => FestivalTijd.status(a) != ActStatus.geweest)
+        : -1;
+    if (nuIndex > 0 && _gesprongenOp != _day) {
+      _gesprongenOp = _day;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final plek = _nuKey.currentContext;
+        if (plek != null) {
+          Scrollable.ensureVisible(
+            plek,
+            duration: const Duration(milliseconds: 400),
+          );
+        }
+      });
+    }
 
     return SingleChildScrollView(
       padding: const EdgeInsets.only(bottom: 80),
@@ -133,31 +158,28 @@ class _LineupScreenState extends State<LineupScreen> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: _keuzeVak('GENRE', _genre, () async {
-                        final keuze = await _kiesUitLijst('KIES JE SOUND', [
-                          'ALLE GENRES',
-                          ...alleGenres,
-                        ], _genre);
+                        final keuze = await _kiesUitLijst(
+                          'KIES JE SOUND',
+                          ['ALLE GENRES', ...alleGenres],
+                          _genre,
+                          aantallen: {
+                            'ALLE GENRES': basis.length,
+                            for (final g in alleGenres)
+                              g: basis.where((a) => a.genre == g).length,
+                          },
+                        );
                         if (keuze != null) setState(() => _genre = keuze);
                       }),
                     ),
                   ],
                 ),
-                // Genre-tegels
-                if (toonTegels) ...[
-                  const SizedBox(height: 18),
-                  Text(
-                    t('KIES JE SOUND'),
-                    style: inter(8, spacing: 1.5, color: DQ.muted),
-                  ),
-                  const SizedBox(height: 8),
-                  _genreTegels(basis.toList()),
-                ],
               ],
             ),
           ),
           Container(height: 1, color: DQ.line),
           for (final (i, act) in acts.indexed)
             _ActRow(
+              key: i == nuIndex ? _nuKey : null,
               act: act,
               number: i + 1,
               toonDag: _mijnSchema,
@@ -390,8 +412,9 @@ class _LineupScreenState extends State<LineupScreen> {
   Future<String?> _kiesUitLijst(
     String titel,
     List<String> opties,
-    String huidig,
-  ) {
+    String huidig, {
+    Map<String, int> aantallen = const {},
+  }) {
     return showModalBottomSheet<String>(
       context: context,
       backgroundColor: DQ.dark,
@@ -447,6 +470,13 @@ class _LineupScreenState extends State<LineupScreen> {
                                   ),
                                 ),
                               ),
+                              if (aantallen[optie] != null) ...[
+                                Text(
+                                  '${aantallen[optie]} ACTS',
+                                  style: inter(8, color: DQ.muted),
+                                ),
+                                const SizedBox(width: 10),
+                              ],
                               if (optie == huidig)
                                 const DqIcon(
                                   LucideIcons.check,
@@ -466,48 +496,11 @@ class _LineupScreenState extends State<LineupScreen> {
       ),
     );
   }
-
-  /// Gekleurde vakken per genre, met hoeveel acts er die dag zijn.
-  Widget _genreTegels(List<Act> vanDeDag) {
-    // Twee tegels naast elkaar: (schermbreedte - randen - tussenruimte) / 2
-    final breedte = (MediaQuery.sizeOf(context).width - 32 - 6) / 2;
-    return Wrap(
-      spacing: 6,
-      runSpacing: 6,
-      children: [
-        for (final g in alleGenres)
-          Tap(
-            onTap: () => setState(() => _genre = g),
-            child: Container(
-              width: breedte,
-              height: 64,
-              padding: const EdgeInsets.all(10),
-              color: genreKleur(g),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    t(g),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: bc(19, height: 1, color: DQ.dark),
-                  ),
-                  Text(
-                    '${vanDeDag.where((a) => a.genre == g).length} ACTS',
-                    style: inter(8, color: DQ.dark),
-                  ),
-                ],
-              ),
-            ),
-          ),
-      ],
-    );
-  }
 }
 
 class _ActRow extends StatelessWidget {
   const _ActRow({
+    super.key,
     required this.act,
     required this.number,
     required this.saved,
@@ -525,14 +518,15 @@ class _ActRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final live = act.isLive;
-    final bg = live ? const Color(0xFF211B0B) : DQ.dark;
-    return Container(
+    final status = FestivalTijd.status(act);
+    final live = status == ActStatus.live;
+    const bg = DQ.dark;
+    return Opacity(
+      opacity: status == ActStatus.geweest ? 0.4 : 1,
+      child: Container(
       height: 76,
       decoration: BoxDecoration(
-        border: live
-            ? Border.all(color: DQ.yellow)
-            : const Border(bottom: BorderSide(color: DQ.line)),
+        border: const Border(bottom: BorderSide(color: DQ.line)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -546,6 +540,22 @@ class _ActRow extends StatelessWidget {
                 child: Stack(
                   clipBehavior: Clip.hardEdge,
                   children: [
+                    // Voortgangsbalk onderin: hoe ver de set al is
+                    if (live)
+                      Positioned(
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        height: 3,
+                        child: Container(
+                          color: const Color(0x30FFFFFF),
+                          alignment: Alignment.centerLeft,
+                          child: FractionallySizedBox(
+                            widthFactor: FestivalTijd.voortgang(act),
+                            child: Container(color: DQ.acid),
+                          ),
+                        ),
+                      ),
                     Positioned(
                       right: 6,
                       bottom: -18,
@@ -594,7 +604,7 @@ class _ActRow extends StatelessWidget {
                               children: [
                                 Text(
                                   live
-                                      ? t('LIVE NU · 10 MIN VERTRAAGD')
+                                      ? '${t('LIVE NU')} · ${FestivalTijd.minutenNog(act)} ${t('MIN NOG')}'
                                       : '${toonDag ? '${act.dag} · ' : ''}${act.kaartNaam} · ${t(act.genre)}',
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
@@ -602,7 +612,7 @@ class _ActRow extends StatelessWidget {
                                     8,
                                     weight: FontWeight.w800,
                                     spacing: 1,
-                                    color: live ? DQ.yellow : DQ.muted,
+                                    color: live ? Colors.white : DQ.muted,
                                   ),
                                 ),
                                 const SizedBox(height: 3),
@@ -643,6 +653,7 @@ class _ActRow extends StatelessWidget {
             ),
           ),
         ],
+      ),
       ),
     );
   }

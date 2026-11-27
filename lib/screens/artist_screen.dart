@@ -3,6 +3,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../app_shell.dart';
 import '../data/festival_data.dart';
+import '../data/festivaltijd.dart';
 import '../data/instellingen.dart';
 import '../data/taal.dart';
 import '../theme/dq_theme.dart';
@@ -128,7 +129,7 @@ class _ArtistScreenState extends State<ArtistScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        act.isLive ? t('LIVE NU') : 'LIVE ACT',
+                        FestivalTijd.isLive(act) ? t('LIVE NU') : 'LIVE ACT',
                         style: inter(
                           9,
                           color: DQ.lime,
