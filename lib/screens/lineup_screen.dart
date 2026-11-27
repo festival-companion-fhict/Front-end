@@ -27,13 +27,29 @@ class _LineupScreenState extends State<LineupScreen> {
   final _zoek = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    _loadLineup();
+  }
+
+  @override
   void dispose() {
     _zoek.dispose();
     super.dispose();
   }
 
+  void _loadLineup() {
+    laadLineup().then((_) {
+      if (mounted) setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (lineupStatus != LineupStatus.loaded || lineup.isEmpty) {
+      return _lineupStatusView();
+    }
+
     final dagen = festivalDagen;
     if (!dagen.contains(_day)) _day = dagen.first;
     final zoek = _zoek.text.trim().toUpperCase();
@@ -165,6 +181,42 @@ class _LineupScreenState extends State<LineupScreen> {
               ),
             ),
         ],
+      ),
+    );
+  }
+
+  Widget _lineupStatusView() {
+    final fout = lineupStatus == LineupStatus.error;
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (!fout && lineupStatus != LineupStatus.loaded)
+              const CircularProgressIndicator(color: DQ.lime),
+            const SizedBox(height: 14),
+            Text(
+              fout
+                  ? 'Line-up laden mislukt: $lineupError'
+                  : lineup.isEmpty
+                  ? 'Er staan geen optredens in de database.'
+                  : 'Line-up laden...',
+              textAlign: TextAlign.center,
+              style: inter(11, weight: FontWeight.w600, color: DQ.muted),
+            ),
+            if (fout) ...[
+              const SizedBox(height: 14),
+              Tap(
+                onTap: _loadLineup,
+                child: Text(
+                  'OPNIEUW PROBEREN',
+                  style: inter(10, weight: FontWeight.w800, color: DQ.lime),
+                ),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }

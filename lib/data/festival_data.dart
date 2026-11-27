@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import '../theme/dq_theme.dart';
+
+const _apiBaseUrl = 'https://func-festival-api.azurewebsites.net/api';
 
 /// Eén optreden in de line-up.
 class Act {
@@ -31,41 +36,117 @@ class Act {
   bool get isLive => artist == 'POWER HOUR' && dag == 'SAT 28';
 }
 
-/// Voorbeelddata. De backend koppelt hier later de database aan.
-const voorbeeldLineup = <Act>[
-  Act('THU 26', '18:00', '19:00', 'ANGERFIST', 'BLACK', genre: 'HARDCORE'),
-  Act('THU 26', '19:00', '20:00', 'WILDSTYLEZ', 'RED', genre: 'HARDSTYLE'),
-  Act('FRI 27', '17:00', '18:00', 'ZATOX', 'RED', genre: 'UPTEMPO'),
-  Act('FRI 27', '18:00', '19:00', 'D-STURB', 'BLUE', genre: 'RAWSTYLE'),
-  Act('SAT 28', '18:00', '18:45', 'JAY REEVE', 'UV', genre: 'HARDSTYLE'),
-  Act('SAT 28', '18:00', '19:00', 'THE DARKRAVER', 'GOLD', genre: 'CLASSICS'),
-  Act('SAT 28', '18:00', '19:00', 'MANJI', 'GREEN', genre: 'HARD TECHNO'),
-  Act('SAT 28', '18:00', '19:00', 'FURYAN', 'SILVER', genre: 'FRENCHCORE'),
-  Act('SAT 28', '18:15', '18:45', 'ADJUZT', 'RED', genre: 'HARDSTYLE'),
-  Act('SAT 28', '18:45', '19:30', 'KELTEK', 'UV', genre: 'HARDSTYLE'),
-  Act('SAT 28', '19:00', '20:00', 'POWER HOUR', 'RED'),
-  Act(
-    'SAT 28',
-    '19:00',
-    '19:45',
-    'THE DOPE DOCTOR',
-    'YELLOW',
-    genre: 'UPTEMPO',
-  ),
-  Act(
-    'SAT 28',
-    '20:45',
-    '21:45',
-    'SUB ZERO PROJECT',
-    'RED',
-    genre: 'HARDSTYLE',
-  ),
-  Act('SUN 29', '18:00', '19:00', 'SEFA', 'BLACK', genre: 'HARDCORE'),
-  Act('SUN 29', '19:00', '20:00', 'BRENNAN HEART', 'RED', genre: 'HARDSTYLE'),
-];
+enum LineupStatus { notLoaded, loading, loaded, error }
 
-/// De line-up die de app laat zien (nu nog de voorbeelddata).
-List<Act> lineup = voorbeeldLineup;
+List<Act> lineup = const [];
+LineupStatus lineupStatus = LineupStatus.notLoaded;
+String? lineupError;
+Future<void>? _lineupRequest;
+
+/// Haalt optredens en artiestgegevens op en combineert ze tot de line-up.
+Future<void> laadLineup() {
+  if (lineupStatus == LineupStatus.loading) return _lineupRequest!;
+  if (lineupStatus == LineupStatus.loaded) return Future.value();
+
+  lineupStatus = LineupStatus.loading;
+  lineupError = null;
+  final request = _haalLineupOp();
+  _lineupRequest = request;
+  return request;
+}
+
+Future<void> _haalLineupOp() async {
+  try {
+    final responses = await Future.wait([
+      http.get(Uri.parse('$_apiBaseUrl/optredens')),
+      http.get(Uri.parse('$_apiBaseUrl/artiesten')),
+    ]).timeout(const Duration(seconds: 15));
+
+    for (final response in responses) {
+      if (response.statusCode != 200) {
+        throw Exception('API returned status ${response.statusCode}');
+      }
+    }
+
+    final optredens = _decodeList(responses[0].body, 'optredens');
+    final artiesten = _decodeList(responses[1].body, 'artiesten');
+    lineup = parseLineupData(optredens, artiesten);
+    if (gekozenAct == null && lineup.isNotEmpty) gekozenAct = lineup.first;
+    lineupStatus = LineupStatus.loaded;
+  } catch (error) {
+    lineupError = error.toString();
+    lineupStatus = LineupStatus.error;
+  }
+}
+
+List<Map<String, dynamic>> _decodeList(String body, String naam) {
+  final decoded = jsonDecode(body);
+  if (decoded is! List) {
+    throw FormatException('API returned an unexpected $naam format');
+  }
+  return decoded.map((item) {
+    if (item is! Map<String, dynamic>) {
+      throw FormatException('API returned an invalid $naam record');
+    }
+    return item;
+  }).toList();
+}
+
+/// Zet de responses van de optredens- en artiesten-endpoints om naar acts.
+List<Act> parseLineupData(
+  List<Map<String, dynamic>> optredens,
+  List<Map<String, dynamic>> artiesten,
+) {
+  final artiestenOpId = <int, Map<String, dynamic>>{
+    for (final artiest in artiesten) (artiest['id'] as num).toInt(): artiest,
+  };
+  final gesorteerd = [...optredens]
+    ..sort((a, b) {
+      final startVergelijking = DateTime.parse(
+        a['starttijd'] as String,
+      ).compareTo(DateTime.parse(b['starttijd'] as String));
+      if (startVergelijking != 0) return startVergelijking;
+      final stageVergelijking = (a['podium_naam'] as String).compareTo(
+        b['podium_naam'] as String,
+      );
+      if (stageVergelijking != 0) return stageVergelijking;
+      return (a['artiest_naam'] as String).compareTo(
+        b['artiest_naam'] as String,
+      );
+    });
+
+  final gezien = <String>{};
+  final acts = <Act>[];
+  for (final optreden in gesorteerd) {
+    final sleutel =
+        '${optreden['artiest_id']}|${optreden['starttijd']}|'
+        '${optreden['eindtijd']}|${optreden['podium_id']}';
+    if (!gezien.add(sleutel)) continue;
+
+    final artiest = artiestenOpId[(optreden['artiest_id'] as num).toInt()];
+    final start = DateTime.parse(optreden['starttijd'] as String).toUtc();
+    final eind = DateTime.parse(optreden['eindtijd'] as String).toUtc();
+    const weekdagen = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+    final genre = (artiest?['genre'] as String?)?.trim().toUpperCase();
+
+    acts.add(
+      Act(
+        '${weekdagen[start.weekday - 1]} ${start.day}',
+        _formatTijd(start),
+        _formatTijd(eind),
+        (optreden['artiest_naam'] as String).toUpperCase(),
+        (optreden['podium_naam'] as String).toUpperCase(),
+        genre: genre == null || genre.isEmpty ? 'OVERIG' : genre,
+        info: (artiest?['omschrijving'] as String?) ?? '',
+      ),
+    );
+  }
+  return acts;
+}
+
+String _formatTijd(DateTime tijd) =>
+    '${tijd.hour.toString().padLeft(2, '0')}:'
+    '${tijd.minute.toString().padLeft(2, '0')}';
 
 /// Alle festivaldagen, in volgorde (bijv. THU 26, FRI 27, ...).
 List<String> get festivalDagen {
@@ -97,15 +178,20 @@ Color genreKleur(String genre) => switch (genre) {
 };
 
 /// Zoek een act op naam (en eventueel stage), bijv. zoekAct('KELTEK').
-/// Niet gevonden? Dan krijg je de eerste act van de lijst.
-Act zoekAct(String naam, {String stage = ''}) => lineup.firstWhere(
-  (a) => a.artist == naam.toUpperCase() && (stage == '' || a.stage == stage),
-  orElse: () => lineup.first,
-);
+/// Niet gevonden? Dan krijg je null.
+Act? zoekAct(String naam, {String stage = ''}) {
+  for (final act in lineup) {
+    if (act.artist == naam.toUpperCase() &&
+        (stage == '' || act.stage == stage)) {
+      return act;
+    }
+  }
+  return null;
+}
 
 /// Welke artiest er op de artiestpagina staat.
 /// Zet dit vóór je naar DqPage.artist gaat.
-Act gekozenAct = zoekAct('KELTEK');
+Act? gekozenAct;
 
 class CrewMember {
   const CrewMember(

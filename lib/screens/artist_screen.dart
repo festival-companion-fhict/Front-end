@@ -25,9 +25,18 @@ class _ArtistScreenState extends State<ArtistScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final act = gekozenAct;
+    if (act == null) {
+      return Center(
+        child: Text(
+          'Selecteer eerst een artiest uit de line-up.',
+          style: inter(11, weight: FontWeight.w600, color: DQ.muted),
+        ),
+      );
+    }
+
     final width = MediaQuery.sizeOf(context).width;
     final nameSize = width <= 390 ? 56.0 : (width * 0.18).clamp(59.0, 84.0);
-    final act = gekozenAct; // de artiest waar je op tikte
     final herinnering = Instellingen.herinneringen.contains(act.sleutel);
     final dagActs = lineup.where((a) => a.dag == act.dag).toList();
     final nummer = (dagActs.indexOf(act) + 1).toString().padLeft(2, '0');

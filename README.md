@@ -22,7 +22,7 @@ Gemaakt van Emi's Figma-ontwerp "defcon festival".
 | `lib/main.dart` | Start van de app |
 | `lib/app_shell.dart` | Header, menubalk, SOS-knop en wisselen tussen schermen |
 | `lib/theme/dq_theme.dart` | **Alle kleuren en lettertypes**: hier pas je de stijl aan |
-| `lib/data/festival_data.dart` | Line-up, crew en nieuws (voorbeelddata) |
+| `lib/data/festival_data.dart` | Line-up uit de API; crew en nieuws (voorbeelddata) |
 | `lib/screens/` | Eén bestand per scherm |
 | `lib/widgets/` | Herbruikbare onderdelen (knoppen, logo, menubalk...) |
 | `assets/` | Foto's en lettertypes (Barlow Condensed + Inter) |

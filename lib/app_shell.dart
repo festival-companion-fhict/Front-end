@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'data/festival_data.dart';
 import 'screens/artist_screen.dart';
 import 'screens/crew_screen.dart';
 import 'screens/emergency_sheet.dart';
@@ -43,6 +46,7 @@ class _AppShellState extends State<AppShell> {
   @override
   void initState() {
     super.initState();
+    unawaited(laadLineup());
     SharedPreferences.getInstance().then((prefs) {
       if (mounted) {
         setState(() => _started = prefs.getBool(_startedKey) ?? false);

@@ -17,6 +17,23 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void openArtiest(String naam, {String stage = ''}) {
+      final act = zoekAct(naam, stage: stage);
+      if (act == null) {
+        final melding =
+            lineupStatus == LineupStatus.loading ||
+                lineupStatus == LineupStatus.notLoaded
+            ? 'De line-up wordt nog geladen.'
+            : 'Deze artiest staat niet in de line-up.';
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(melding)));
+        return;
+      }
+      gekozenAct = act;
+      go(DqPage.artist);
+    }
+
     return ColoredBox(
       color: const Color(0xFF0D0B12),
       child: SingleChildScrollView(
@@ -25,10 +42,7 @@ class HomeScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Tap(
-              onTap: () {
-                gekozenAct = zoekAct('POWER HOUR');
-                go(DqPage.artist);
-              },
+              onTap: () => openArtiest('POWER HOUR'),
               child: const _LiveCard(),
             ),
             _Presence(go: go),
@@ -71,10 +85,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   _UpNext(
-                    onTap: () {
-                      gekozenAct = zoekAct('SUB ZERO PROJECT', stage: 'RED');
-                      go(DqPage.artist);
-                    },
+                    onTap: () => openArtiest('SUB ZERO PROJECT', stage: 'RED'),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(2, 25, 2, 10),
