@@ -3,6 +3,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../app_shell.dart';
 import '../data/festival_data.dart';
+import '../data/taal.dart';
 import '../theme/dq_theme.dart';
 import '../data/instellingen.dart';
 import '../widgets/common.dart';
@@ -70,7 +71,7 @@ class _NewsScreenState extends State<NewsScreen> {
                           const DqIcon('Alert', size: 18, color: Colors.white),
                           const SizedBox(width: 7),
                           Text(
-                            'BELANGRIJK · 18:47',
+                            '${t('BELANGRIJK')} · 18:47',
                             style: inter(7, spacing: 1.2, color: Colors.white),
                           ),
                         ],
@@ -79,7 +80,7 @@ class _NewsScreenState extends State<NewsScreen> {
                       ConstrainedBox(
                         constraints: const BoxConstraints(maxWidth: 280),
                         child: Text(
-                          'EXTRA WATERPUNTEN OPEN',
+                          t('EXTRA WATERPUNTEN OPEN'),
                           style: bc(29, height: 0.95, color: Colors.white),
                         ),
                       ),
@@ -87,7 +88,7 @@ class _NewsScreenState extends State<NewsScreen> {
                       ConstrainedBox(
                         constraints: const BoxConstraints(maxWidth: 340),
                         child: Text(
-                          'Door de warmte zijn extra tappunten geopend naast RED en BLUE. Drink voldoende.',
+                          t('Door de warmte zijn extra tappunten geopend naast RED en BLUE. Drink voldoende.'),
                           style: inter(
                             10,
                             weight: FontWeight.w500,
@@ -113,7 +114,7 @@ class _NewsScreenState extends State<NewsScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                'TOON OP KAART',
+                                t('TOON OP KAART'),
                                 style: inter(8, color: Colors.white),
                               ),
                               const SizedBox(width: 24),
@@ -169,7 +170,7 @@ class _NewsScreenState extends State<NewsScreen> {
                         ),
                       ),
                       const SizedBox(height: 3),
-                      Text('POWER HOUR IS 10 MIN VERTRAAGD', style: bc(15)),
+                      Text(t('POWER HOUR IS 10 MIN VERTRAAGD'), style: bc(15)),
                     ],
                   ),
                 ),
@@ -212,7 +213,7 @@ class _NewsScreenState extends State<NewsScreen> {
                               const SizedBox(width: 7),
                             ],
                             Text(
-                              f,
+                              t(f),
                               style: inter(
                                 9,
                                 weight: FontWeight.w800,
@@ -248,7 +249,7 @@ class _NewsScreenState extends State<NewsScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            item.category,
+                            t(item.category),
                             style: inter(
                               7,
                               spacing: 1,
@@ -310,17 +311,17 @@ void _toonMeldingen(BuildContext context) {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      'PUSHBERICHTEN',
+                      t('PUSHBERICHTEN'),
                       style: inter(9, color: DQ.red, spacing: 2),
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      'MELDINGEN',
+                      t('MELDINGEN'),
                       style: bc(40, height: 0.9, color: Colors.white),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Kies over welk nieuws je een melding op je telefoon wilt krijgen.',
+                      t('Kies over welk nieuws je een melding op je telefoon wilt krijgen.'),
                       style: inter(
                         11,
                         weight: FontWeight.w500,
@@ -349,7 +350,7 @@ void _toonMeldingen(BuildContext context) {
                             const SizedBox(width: 12),
                             Expanded(
                               child: Text(
-                                soort,
+                                t(soort),
                                 style: bc(18, color: Colors.white),
                               ),
                             ),
@@ -370,7 +371,7 @@ void _toonMeldingen(BuildContext context) {
                         height: 50,
                         color: DQ.paper,
                         alignment: Alignment.center,
-                        child: Text('KLAAR', style: inter(10, color: DQ.dark)),
+                        child: Text(t('KLAAR'), style: inter(10, color: DQ.dark)),
                       ),
                     ),
                   ],

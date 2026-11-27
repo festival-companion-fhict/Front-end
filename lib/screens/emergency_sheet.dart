@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import '../data/taal.dart';
 import '../theme/dq_theme.dart';
 import '../widgets/common.dart';
 
@@ -121,12 +122,13 @@ class _EmergencySheetState extends State<EmergencySheet> {
                 TextSpan(
                   children: [
                     TextSpan(
-                      text: 'Levensgevaarlijk? ',
+                      text: t('Levensgevaarlijk? '),
                       style: inter(12, color: DQ.yellow),
                     ),
-                    const TextSpan(
-                      text:
-                          'Bel eerst zelf 112. Gebruik daarna SOS, zodat het team op het terrein weet waar je bent.',
+                    TextSpan(
+                      text: t(
+                        'Bel eerst zelf 112. Gebruik daarna SOS, zodat het team op het terrein weet waar je bent.',
+                      ),
                     ),
                   ],
                 ),
@@ -142,10 +144,10 @@ class _EmergencySheetState extends State<EmergencySheet> {
         ),
       ),
       const SizedBox(height: 20),
-      Text('NOODSIGNAAL', style: inter(8, spacing: 2, color: Colors.white)),
+      Text(t('NOODSIGNAAL'), style: inter(8, spacing: 2, color: Colors.white)),
       const SizedBox(height: 8),
       Text(
-        'WAAR HEB JE\nHULP BIJ?',
+        t('WAAR HEB JE\nHULP BIJ?'),
         style: bc(
           58,
           italic: true,
@@ -158,7 +160,7 @@ class _EmergencySheetState extends State<EmergencySheet> {
       ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 300),
         child: Text(
-          'Je locatie wordt direct naar het hulpteam gestuurd.',
+          t('Je locatie wordt direct naar het hulpteam gestuurd.'),
           style: inter(
             11,
             weight: FontWeight.w500,
@@ -192,12 +194,12 @@ class _EmergencySheetState extends State<EmergencySheet> {
       Align(alignment: Alignment.centerLeft, child: _symbol(LucideIcons.check)),
       const SizedBox(height: 18),
       Text(
-        'SIGNAAL ONTVANGEN',
+        t('SIGNAAL ONTVANGEN'),
         style: inter(8, spacing: 2, color: Colors.white),
       ),
       const SizedBox(height: 8),
       Text(
-        'HULP IS\nONDERWEG',
+        t('HULP IS\nONDERWEG'),
         style: bc(
           58,
           italic: true,
@@ -208,7 +210,7 @@ class _EmergencySheetState extends State<EmergencySheet> {
       ),
       const SizedBox(height: 14),
       Text(
-        'Blijf waar je bent als dat veilig is. Je live locatie is gedeeld.',
+        t('Blijf waar je bent als dat veilig is. Je live locatie is gedeeld.'),
         style: inter(
           11,
           weight: FontWeight.w500,
@@ -224,7 +226,7 @@ class _EmergencySheetState extends State<EmergencySheet> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'VERWACHTE AANKOMST',
+              t('VERWACHTE AANKOMST'),
               style: inter(
                 7,
                 weight: FontWeight.w500,
@@ -243,7 +245,7 @@ class _EmergencySheetState extends State<EmergencySheet> {
           height: 50,
           color: DQ.paper,
           alignment: Alignment.center,
-          child: Text('BEGREPEN', style: inter(10, color: DQ.dark)),
+          child: Text(t('BEGREPEN'), style: inter(10, color: DQ.dark)),
         ),
       ),
     ],
@@ -286,9 +288,9 @@ class _Option extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(title, style: bc(22, color: fg)),
+                  Text(t(title), style: bc(22, color: fg)),
                   Text(
-                    sub,
+                    t(sub),
                     style: inter(
                       7,
                       weight: FontWeight.w500,

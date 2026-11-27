@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../data/festival_data.dart';
+import '../data/taal.dart';
 import '../theme/dq_theme.dart';
 import '../widgets/common.dart';
 
@@ -64,7 +65,7 @@ class NewsDetailScreen extends StatelessWidget {
                   ),
                   Expanded(
                     child: Center(
-                      child: Text('LIVE NIEUWS', style: bc(18, spacing: 1)),
+                      child: Text(t('LIVE NIEUWS'), style: bc(18, spacing: 1)),
                     ),
                   ),
                   const SizedBox(width: 44),
@@ -88,7 +89,7 @@ class NewsDetailScreen extends StatelessWidget {
                             vertical: 5,
                           ),
                           child: Text(
-                            item.category,
+                            t(item.category),
                             style: inter(
                               8,
                               spacing: 1.2,
@@ -100,7 +101,7 @@ class NewsDetailScreen extends StatelessWidget {
                         ),
                         const SizedBox(width: 10),
                         Text(
-                          'VANDAAG · ${item.time}',
+                          '${t('VANDAAG')} · ${item.time}',
                           style: inter(8, spacing: 1.2, color: DQ.muted),
                         ),
                       ],
@@ -157,7 +158,7 @@ class NewsDetailScreen extends StatelessWidget {
                             ),
                             const SizedBox(width: 10),
                             Text(
-                              'TERUG NAAR NIEUWS',
+                              t('TERUG NAAR NIEUWS'),
                               style: inter(10, color: DQ.dark),
                             ),
                           ],

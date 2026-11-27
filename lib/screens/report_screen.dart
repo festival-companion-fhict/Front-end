@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import '../data/taal.dart';
 import '../theme/dq_theme.dart';
 import '../widgets/common.dart';
 
@@ -72,7 +73,7 @@ class _ReportScreenState extends State<ReportScreen> {
           child: Text('$nummer', style: inter(10, color: DQ.dark)),
         ),
         const SizedBox(width: 10),
-        Text(text, style: inter(9, spacing: 1.3, color: DQ.muted)),
+        Text(t(text), style: inter(9, spacing: 1.3, color: DQ.muted)),
       ],
     ),
   );
@@ -101,7 +102,7 @@ class _ReportScreenState extends State<ReportScreen> {
               children: [
                 const DqIcon(LucideIcons.plus, size: 12, color: DQ.lime),
                 const SizedBox(width: 6),
-                Text(zin, style: inter(10, color: Colors.white)),
+                Text(t(zin), style: inter(10, color: Colors.white)),
               ],
             ),
           ),
@@ -132,7 +133,7 @@ class _ReportScreenState extends State<ReportScreen> {
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(
-                    'Voor direct gevaar gebruik je altijd de rode SOS-knop. Deze melding gaat naar het terreinteam.',
+                    t('Voor direct gevaar gebruik je altijd de rode SOS-knop. Deze melding gaat naar het terreinteam.'),
                     style: inter(
                       10,
                       weight: FontWeight.w500,
@@ -178,7 +179,7 @@ class _ReportScreenState extends State<ReportScreen> {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              naam,
+                              t(naam),
                               style: inter(
                                 7,
                                 color: _category == naam ? DQ.dark : DQ.muted,
@@ -208,7 +209,7 @@ class _ReportScreenState extends State<ReportScreen> {
               decoration: InputDecoration(
                 filled: true,
                 fillColor: const Color(0xFF151515),
-                hintText: 'Bijvoorbeeld: de watertap naast RED Stage lekt...',
+                hintText: t('Bijvoorbeeld: de watertap naast RED Stage lekt...'),
                 hintStyle: inter(
                   12,
                   weight: FontWeight.w500,
@@ -246,7 +247,7 @@ class _ReportScreenState extends State<ReportScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'LIVE LOCATIE TOEVOEGEN',
+                          t('LIVE LOCATIE TOEVOEGEN'),
                           style: inter(
                             9,
                             weight: FontWeight.w700,
@@ -255,7 +256,7 @@ class _ReportScreenState extends State<ReportScreen> {
                         ),
                         const SizedBox(height: 3),
                         Text(
-                          'Bij RED Stage · nauwkeurig tot 8 meter',
+                          t('Bij RED Stage · nauwkeurig tot 8 meter'),
                           style: inter(
                             7,
                             weight: FontWeight.w500,
@@ -301,7 +302,7 @@ class _ReportScreenState extends State<ReportScreen> {
                   const DqIcon(LucideIcons.send, size: 18, color: Colors.white),
                   const SizedBox(width: 9),
                   Text(
-                    'VERSTUUR ANONIEM',
+                    t('VERSTUUR ANONIEM'),
                     style: inter(9, color: Colors.white),
                   ),
                   const Spacer(),
@@ -330,10 +331,10 @@ class _ReportScreenState extends State<ReportScreen> {
               children: [
                 const DqIcon(LucideIcons.camera, size: 18, color: DQ.lime),
                 const SizedBox(width: 10),
-                Text('FOTO TOEVOEGEN', style: inter(9, color: Colors.white)),
+                Text(t('FOTO TOEVOEGEN'), style: inter(9, color: Colors.white)),
                 const SizedBox(width: 6),
                 Text(
-                  '(optioneel)',
+                  t('(optioneel)'),
                   style: inter(9, weight: FontWeight.w500, color: DQ.muted),
                 ),
               ],
@@ -350,7 +351,7 @@ class _ReportScreenState extends State<ReportScreen> {
           Image.memory(foto, width: 64, height: 64, fit: BoxFit.cover),
           const SizedBox(width: 12),
           Expanded(
-            child: Text('FOTO TOEGEVOEGD', style: inter(9, color: DQ.lime)),
+            child: Text(t('FOTO TOEGEVOEGD'), style: inter(9, color: DQ.lime)),
           ),
           OutlineSquare(
             icon: LucideIcons.x,
@@ -389,13 +390,13 @@ class _ReportScreenState extends State<ReportScreen> {
             ),
           ),
           const SizedBox(height: 25),
-          Text('MELDING #DQ-1408', style: inter(8, color: DQ.lime, spacing: 2)),
+          Text('${t('MELDING')} #DQ-1408', style: inter(8, color: DQ.lime, spacing: 2)),
           const SizedBox(height: 7),
           Text('THANKS,\nWARRIOR', style: bc(62, italic: true, height: 0.85)),
           const SizedBox(height: 14),
           Text(
-            '$_category${_location ? ' · je locatie is anoniem meegestuurd' : ''}. '
-            'Het terreinteam pakt het op.',
+            '${t(_category)}${_location ? t(' · je locatie is anoniem meegestuurd') : ''}. '
+            '${t('Het terreinteam pakt het op.')}',
             style: inter(
               11,
               weight: FontWeight.w500,
@@ -424,7 +425,7 @@ class _ReportScreenState extends State<ReportScreen> {
               height: 52,
               color: DQ.paper,
               alignment: Alignment.center,
-              child: Text('NIEUWE MELDING', style: inter(9, color: DQ.dark)),
+              child: Text(t('NIEUWE MELDING'), style: inter(9, color: DQ.dark)),
             ),
           ),
         ],
@@ -475,9 +476,9 @@ class _ReportScreenState extends State<ReportScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(titel, style: bc(22, height: 1.1, color: kleur)),
+              Text(t(titel), style: bc(22, height: 1.1, color: kleur)),
               Text(
-                tekst,
+                t(tekst),
                 style: inter(10, weight: FontWeight.w500, color: DQ.muted),
               ),
             ],

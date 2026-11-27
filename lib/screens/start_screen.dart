@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../data/taal.dart';
 import '../theme/dq_theme.dart';
 import '../widgets/chrome.dart';
 import '../widgets/common.dart';
@@ -75,7 +76,9 @@ class StartScreen extends StatelessWidget {
                 ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 390),
                   child: Text(
-                    'Alles wat je vandaag nodig hebt. Live schema, drukte, routes, waarschuwingen en je crew.',
+                    t(
+                      'Alles wat je vandaag nodig hebt. Live schema, drukte, routes, waarschuwingen en je crew.',
+                    ),
                     style: inter(
                       11,
                       weight: FontWeight.w500,
@@ -140,7 +143,7 @@ class StartScreen extends StatelessWidget {
                         const DqIcon('Stages', color: DQ.red),
                         const SizedBox(width: 10),
                         Text(
-                          'BEKIJK STAGES',
+                          t('BEKIJK STAGES'),
                           style: inter(10, color: Colors.white),
                         ),
                         const Spacer(),
@@ -166,7 +169,7 @@ class StartScreen extends StatelessWidget {
                     child: Row(
                       children: [
                         Text(
-                          'NAAR HET FESTIVAL',
+                          t('NAAR HET FESTIVAL'),
                           style: inter(10, color: Colors.white),
                         ),
                         const Spacer(),
@@ -208,9 +211,9 @@ class _StatusCell extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: bc(15)),
+              Text(t(title), style: bc(15)),
               Text(
-                sub,
+                t(sub),
                 style: inter(7, weight: FontWeight.w500, color: DQ.muted),
               ),
             ],

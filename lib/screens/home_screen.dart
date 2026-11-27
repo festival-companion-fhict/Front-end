@@ -3,6 +3,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../app_shell.dart';
 import '../data/festival_data.dart';
+import '../data/taal.dart';
 import '../theme/dq_theme.dart';
 import '../widgets/common.dart';
 import 'map_screen.dart';
@@ -27,7 +28,7 @@ class HomeScreen extends StatelessWidget {
             : 'Deze artiest staat niet in de line-up.';
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text(melding)));
+        ).showSnackBar(SnackBar(content: Text(t(melding))));
         return;
       }
       gekozenAct = act;
@@ -91,13 +92,16 @@ class HomeScreen extends StatelessWidget {
                     padding: const EdgeInsets.fromLTRB(2, 25, 2, 10),
                     child: Row(
                       children: [
-                        Text('VLAKBIJ JOU', style: bc(21)),
+                        Text(t('VLAKBIJ JOU'), style: bc(21)),
                         const Spacer(),
                         Tap(
                           onTap: () => go(DqPage.map),
                           child: Row(
                             children: [
-                              Text('OP KAART', style: inter(7, color: DQ.acid)),
+                              Text(
+                                t('OP KAART'),
+                                style: inter(7, color: DQ.acid),
+                              ),
                               const SizedBox(width: 4),
                               const DqIcon(
                                 'Pijl_rechts',
@@ -178,7 +182,7 @@ class _Presence extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'JE BENT NU BIJ',
+                  t('JE BENT NU BIJ'),
                   style: inter(7, color: _ink2, spacing: 1.2),
                 ),
                 Text('RED STAGE', style: bc(24, color: _ink2, height: 1)),
@@ -191,7 +195,7 @@ class _Presence extends StatelessWidget {
             color: _ink2,
             child: Row(
               children: [
-                Text('WIJZIG', style: inter(8, color: Colors.white)),
+                Text(t('WIJZIG'), style: inter(8, color: Colors.white)),
                 const SizedBox(width: 6),
                 const DqIcon('Kaart', size: 15, color: DQ.acid),
               ],
@@ -221,18 +225,20 @@ void _toonOordoppen(BuildContext context) {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  'GELUID · 102 DB',
+                  t('GELUID · 102 DB'),
                   style: inter(9, color: DQ.fuchsia, spacing: 2),
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'BESCHERM JE OREN',
+                  t('BESCHERM JE OREN'),
                   style: bc(40, height: 0.9, color: Colors.white),
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  'Boven 100 dB kan je gehoor al na korte tijd beschadigen. '
-                  'Gratis oordoppen haal je bij elke EHBO-post en bij de bars.',
+                  t('Boven 100 dB kan je gehoor al na korte tijd beschadigen. ') +
+                      t(
+                        'Gratis oordoppen haal je bij elke EHBO-post en bij de bars.',
+                      ),
                   style: inter(
                     11,
                     weight: FontWeight.w500,
@@ -247,7 +253,10 @@ void _toonOordoppen(BuildContext context) {
                     height: 50,
                     color: DQ.fuchsia,
                     alignment: Alignment.center,
-                    child: Text('OKÉ', style: inter(10, color: Colors.white)),
+                    child: Text(
+                      t('OKÉ'),
+                      style: inter(10, color: Colors.white),
+                    ),
                   ),
                 ),
               ],
@@ -306,7 +315,7 @@ class _LiveCard extends StatelessWidget {
                       const PulseRing(),
                       const SizedBox(width: 7),
                       Text(
-                        'LIVE NU',
+                        t('LIVE NU'),
                         style: inter(8, spacing: 1, color: Colors.white),
                       ),
                     ],
@@ -352,7 +361,7 @@ class _LiveCard extends StatelessWidget {
                           vertical: 5,
                         ),
                         child: Text(
-                          '10 MIN VERTRAAGD',
+                          t('10 MIN VERTRAAGD'),
                           style: inter(7, spacing: 1, color: Colors.white),
                         ),
                       ),
@@ -365,7 +374,7 @@ class _LiveCard extends StatelessWidget {
                   children: [
                     Text('28', style: bc(76, height: 0.9, color: DQ.acid)),
                     Text(
-                      'MIN NOG',
+                      t('MIN NOG'),
                       style: inter(9, color: DQ.acid, spacing: 1),
                     ),
                   ],
@@ -451,14 +460,14 @@ class _Metric extends StatelessWidget {
           children: [
             DqIcon(icon, size: 22, color: _ink2),
             const Spacer(),
-            Text(label, style: inter(7, color: _ink2, spacing: 1.2)),
+            Text(t(label), style: inter(7, color: _ink2, spacing: 1.2)),
           ],
         ),
         const Spacer(),
-        Text(value, style: bc(25, color: _ink2, height: 0.9)),
+        Text(t(value), style: bc(25, color: _ink2, height: 0.9)),
         const SizedBox(height: 4),
         Text(
-          sub,
+          t(sub),
           style: inter(7, color: _ink2, weight: FontWeight.w500),
         ),
       ],
@@ -493,14 +502,14 @@ class _UpNext extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'HIERNA · 19:10',
+                    t('HIERNA · 19:10'),
                     style: inter(7, color: DQ.acid, spacing: 1.1),
                   ),
                   const SizedBox(height: 5),
                   Text('SUB ZERO PROJECT', style: bc(21, color: Colors.white)),
                   const SizedBox(height: 2),
                   Text(
-                    'Begint over 28 minuten',
+                    t('Begint over 28 minuten'),
                     style: inter(
                       7,
                       weight: FontWeight.w500,
@@ -571,9 +580,12 @@ class _Nearby extends StatelessWidget {
             ],
           ),
           const Spacer(),
-          Text(title, style: bc(26, color: const Color(0xFF14111A), height: 1)),
           Text(
-            sub.toUpperCase(),
+            t(title),
+            style: bc(26, color: const Color(0xFF14111A), height: 1),
+          ),
+          Text(
+            t(sub).toUpperCase(),
             style: inter(
               6,
               color: const Color(0xFF14111A),
@@ -615,10 +627,12 @@ class _StageAlert extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 6),
-              Text('UITGANG LINKS TIJDELIJK DRUK', style: bc(16)),
+              Text(t('UITGANG LINKS TIJDELIJK DRUK'), style: bc(16)),
               const SizedBox(height: 2),
               Text(
-                'Gebruik na de show bij voorkeur de uitgang aan de rechterkant.',
+                t(
+                  'Gebruik na de show bij voorkeur de uitgang aan de rechterkant.',
+                ),
                 style: inter(
                   7,
                   weight: FontWeight.w500,

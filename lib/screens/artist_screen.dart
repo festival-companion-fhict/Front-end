@@ -4,6 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../app_shell.dart';
 import '../data/festival_data.dart';
 import '../data/instellingen.dart';
+import '../data/taal.dart';
 import '../theme/dq_theme.dart';
 import '../widgets/common.dart';
 import '../widgets/festival_kaart.dart';
@@ -29,7 +30,7 @@ class _ArtistScreenState extends State<ArtistScreen> {
     if (act == null) {
       return Center(
         child: Text(
-          'Selecteer eerst een artiest uit de line-up.',
+          t('Selecteer eerst een artiest uit de line-up.'),
           style: inter(11, weight: FontWeight.w600, color: DQ.muted),
         ),
       );
@@ -127,7 +128,7 @@ class _ArtistScreenState extends State<ArtistScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        act.isLive ? 'LIVE NU' : 'LIVE ACT',
+                        act.isLive ? t('LIVE NU') : 'LIVE ACT',
                         style: inter(
                           9,
                           color: DQ.lime,
@@ -160,7 +161,7 @@ class _ArtistScreenState extends State<ArtistScreen> {
               color: genreKleur(act.genre),
               alignment: Alignment.centerLeft,
               child: Text(
-                '${act.genre} · ' * 8,
+                '${t(act.genre)} · ' * 8,
                 maxLines: 1,
                 softWrap: false,
                 overflow: TextOverflow.clip,
@@ -214,7 +215,7 @@ class _ArtistScreenState extends State<ArtistScreen> {
                                 ),
                                 const SizedBox(height: 3),
                                 Text(
-                                  'ROUTE',
+                                  t('ROUTE'),
                                   style: inter(9, color: Colors.white),
                                 ),
                               ],
@@ -246,7 +247,7 @@ class _ArtistScreenState extends State<ArtistScreen> {
                               ),
                             ),
                             child: Text(
-                              tab,
+                              t(tab),
                               style: bc(
                                 17,
                                 color: _tab == tab
@@ -283,7 +284,7 @@ class _ArtistScreenState extends State<ArtistScreen> {
                         ),
                         const SizedBox(width: 10),
                         Text(
-                          'HERINNER ME 15 MIN VAN TEVOREN',
+                          t('HERINNER ME 15 MIN VAN TEVOREN'),
                           style: inter(
                             10,
                             color: herinnering ? DQ.dark : Colors.white,
@@ -308,6 +309,9 @@ class _ArtistScreenState extends State<ArtistScreen> {
   Widget _info(Act act) => Text(
     act.info.isNotEmpty
         ? act.info
+        : Taal.engels
+        ? '${act.artist} plays ${t(act.genre).toLowerCase()} at ${act.kaartNaam}, '
+              'from ${act.time} to ${act.end}. More info about this act coming soon.'
         : '${act.artist} speelt ${act.genre.toLowerCase()} op ${act.kaartNaam}, '
               'van ${act.time} tot ${act.end}. Meer info over deze act volgt binnenkort.',
     style: inter(
@@ -323,7 +327,7 @@ class _ArtistScreenState extends State<ArtistScreen> {
     final berichten = news.where((n) => n.artiest == act.artist).toList();
     if (berichten.isEmpty) {
       return Text(
-        'Nog geen nieuws over ${act.artist}.',
+        '${t('Nog geen nieuws over')} ${act.artist}.',
         style: inter(12, weight: FontWeight.w500, color: DQ.muted),
       );
     }
@@ -341,7 +345,7 @@ class _ArtistScreenState extends State<ArtistScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${n.category} · ${n.time}',
+                    '${t(n.category)} · ${n.time}',
                     style: inter(8, spacing: 1, color: nieuwsKleur(n.category)),
                   ),
                   const SizedBox(height: 4),
@@ -400,7 +404,7 @@ class _MetaCell extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          label,
+          t(label),
           style: inter(
             7,
             weight: FontWeight.w500,

@@ -4,6 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../app_shell.dart';
 import '../data/festival_data.dart';
+import '../data/taal.dart';
 import '../theme/dq_theme.dart';
 import '../widgets/common.dart';
 import 'map_screen.dart';
@@ -53,7 +54,7 @@ class CrewScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'SQUAD CODE',
+                              t('SQUAD CODE'),
                               style: inter(
                                 7,
                                 weight: FontWeight.w800,
@@ -86,7 +87,7 @@ class CrewScreen extends StatelessWidget {
                             SnackBar(
                               backgroundColor: DQ.dark,
                               content: Text(
-                                'Squad-code gekopieerd!',
+                                t('Squad-code gekopieerd!'),
                                 style: inter(11, color: Colors.white),
                               ),
                             ),
@@ -97,7 +98,7 @@ class CrewScreen extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 17),
                           alignment: Alignment.center,
                           child: Text(
-                            'DELEN',
+                            t('DELEN'),
                             style: inter(9, color: Colors.white),
                           ),
                         ),
@@ -131,14 +132,14 @@ class CrewScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'VOLGENDE AFSPRAAK',
+                        t('VOLGENDE AFSPRAAK'),
                         style: inter(7, spacing: 1.2, color: DQ.red),
                       ),
                       const SizedBox(height: 2),
                       Text('18:45 · RED STAGE', style: bc(20)),
                       const SizedBox(height: 2),
                       Text(
-                        'POWER HOUR · 4 WARRIORS GAAN',
+                        t('POWER HOUR · 4 WARRIORS GAAN'),
                         style: inter(
                           8,
                           weight: FontWeight.w800,
@@ -205,7 +206,7 @@ class CrewScreen extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'NU',
+                      t('NU'),
                       style: inter(7, weight: FontWeight.w800, color: DQ.lime),
                     ),
                     const SizedBox(width: 11),
@@ -245,17 +246,17 @@ class CrewScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      'NIEUWE WARRIOR',
+                      t('NIEUWE WARRIOR'),
                       style: inter(9, color: DQ.lime, spacing: 2),
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      'VRIEND TOEVOEGEN',
+                      t('VRIEND TOEVOEGEN'),
                       style: bc(40, height: 0.9, color: Colors.white),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Vraag je vriend om zijn of haar squad-code (staat in MY SQUAD) en typ hem hieronder.',
+                      t('Vraag je vriend om zijn of haar squad-code (staat in MY SQUAD) en typ hem hieronder.'),
                       style: inter(
                         11,
                         weight: FontWeight.w500,
@@ -271,7 +272,7 @@ class CrewScreen extends StatelessWidget {
                       style: bc(26, color: Colors.white, spacing: 2),
                       cursorColor: DQ.lime,
                       decoration: InputDecoration(
-                        hintText: 'BIJV. B7U-114',
+                        hintText: t('BIJV. B7U-114'),
                         hintStyle: bc(
                           26,
                           color: const Color(0xFF444444),
@@ -299,7 +300,7 @@ class CrewScreen extends StatelessWidget {
                           SnackBar(
                             backgroundColor: DQ.dark,
                             content: Text(
-                              'Uitnodiging verstuurd naar $tekst',
+                              '${t('Uitnodiging verstuurd naar')} $tekst',
                               style: inter(11, color: Colors.white),
                             ),
                           ),
@@ -310,7 +311,7 @@ class CrewScreen extends StatelessWidget {
                         color: DQ.lime,
                         alignment: Alignment.center,
                         child: Text(
-                          'TOEVOEGEN',
+                          t('TOEVOEGEN'),
                           style: inter(10, color: DQ.dark),
                         ),
                       ),
@@ -393,12 +394,12 @@ class CrewScreen extends StatelessWidget {
                         const DqIcon('Duo_kaart', size: 16, color: DQ.muted),
                         const SizedBox(width: 10),
                         Text(
-                          'LOCATIE',
+                          t('LOCATIE'),
                           style: inter(8, spacing: 1, color: DQ.muted),
                         ),
                         const Spacer(),
                         Text(
-                          verborgen ? 'VERBORGEN' : m.location,
+                          verborgen ? t('VERBORGEN') : m.location,
                           style: bc(16, color: Colors.white),
                         ),
                       ],
@@ -414,12 +415,12 @@ class CrewScreen extends StatelessWidget {
                         const DqIcon('Info', size: 16, color: DQ.muted),
                         const SizedBox(width: 10),
                         Text(
-                          'LAATST GEZIEN',
+                          t('LAATST GEZIEN'),
                           style: inter(8, spacing: 1, color: DQ.muted),
                         ),
                         const Spacer(),
                         Text(
-                          verborgen ? '—' : 'NU',
+                          verborgen ? '—' : t('NU'),
                           style: bc(16, color: DQ.lime),
                         ),
                       ],
@@ -436,7 +437,7 @@ class CrewScreen extends StatelessWidget {
                               SnackBar(
                                 backgroundColor: DQ.dark,
                                 content: Text(
-                                  'Ping verstuurd naar ${m.name}!',
+                                  '${t('Ping verstuurd naar')} ${m.name}!',
                                   style: inter(11, color: Colors.white),
                                 ),
                               ),
@@ -455,7 +456,7 @@ class CrewScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(width: 8),
                                 Text(
-                                  'STUUR PING',
+                                  t('STUUR PING'),
                                   style: inter(9, color: DQ.dark),
                                 ),
                               ],
@@ -486,7 +487,7 @@ class CrewScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(width: 8),
                                 Text(
-                                  'TOON OP KAART',
+                                  t('TOON OP KAART'),
                                   style: inter(
                                     9,
                                     color: verborgen ? DQ.muted : Colors.white,

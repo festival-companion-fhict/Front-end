@@ -4,6 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../app_shell.dart';
 import '../data/festival_data.dart';
 import '../data/instellingen.dart';
+import '../data/taal.dart';
 import '../theme/dq_theme.dart';
 import '../widgets/common.dart';
 import '../widgets/festival_kaart.dart';
@@ -104,7 +105,7 @@ class _LineupScreenState extends State<LineupScreen> {
                     }),
                     const SizedBox(width: 7),
                     _modusKnop(
-                      'MIJN SCHEMA · ${Instellingen.bewaard.length}',
+                      '${t('MIJN SCHEMA')} · ${Instellingen.bewaard.length}',
                       _mijnSchema,
                       () => setState(() => _mijnSchema = true),
                       hartje: true,
@@ -145,7 +146,7 @@ class _LineupScreenState extends State<LineupScreen> {
                 if (toonTegels) ...[
                   const SizedBox(height: 18),
                   Text(
-                    'KIES JE SOUND',
+                    t('KIES JE SOUND'),
                     style: inter(8, spacing: 1.5, color: DQ.muted),
                   ),
                   const SizedBox(height: 8),
@@ -175,8 +176,12 @@ class _LineupScreenState extends State<LineupScreen> {
               padding: const EdgeInsets.all(24),
               child: Text(
                 _mijnSchema && Instellingen.bewaard.isEmpty
-                    ? 'Nog niets bewaard. Tik op het hartje bij een act om hem aan MIJN SCHEMA toe te voegen.'
-                    : 'Geen acts gevonden. Kies een andere dag, stage of genre.',
+                    ? t(
+                        'Nog niets bewaard. Tik op het hartje bij een act om hem aan MIJN SCHEMA toe te voegen.',
+                      )
+                    : t(
+                        'Geen acts gevonden. Kies een andere dag, stage of genre.',
+                      ),
                 style: inter(11, weight: FontWeight.w500, color: DQ.muted),
               ),
             ),
@@ -198,10 +203,10 @@ class _LineupScreenState extends State<LineupScreen> {
             const SizedBox(height: 14),
             Text(
               fout
-                  ? 'Line-up laden mislukt: $lineupError'
+                  ? '${t('Line-up laden mislukt:')} $lineupError'
                   : lineup.isEmpty
-                  ? 'Er staan geen optredens in de database.'
-                  : 'Line-up laden...',
+                  ? t('Er staan geen optredens in de database.')
+                  : t('Line-up laden...'),
               textAlign: TextAlign.center,
               style: inter(11, weight: FontWeight.w600, color: DQ.muted),
             ),
@@ -210,7 +215,7 @@ class _LineupScreenState extends State<LineupScreen> {
               Tap(
                 onTap: _loadLineup,
                 child: Text(
-                  'OPNIEUW PROBEREN',
+                  t('OPNIEUW PROBEREN'),
                   style: inter(10, weight: FontWeight.w800, color: DQ.lime),
                 ),
               ),
@@ -253,7 +258,7 @@ class _LineupScreenState extends State<LineupScreen> {
               decoration: InputDecoration(
                 isDense: true,
                 border: InputBorder.none,
-                hintText: 'Zoek artiest, stage of genre…',
+                hintText: t('Zoek artiest, stage of genre…'),
                 hintStyle: inter(
                   11,
                   weight: FontWeight.w500,
@@ -291,7 +296,7 @@ class _LineupScreenState extends State<LineupScreen> {
                 DqIcon('Vol_hart', size: 14, color: gekozen ? kleur : DQ.red),
                 const SizedBox(width: 6),
               ],
-              Text(tekst, style: inter(9, color: kleur)),
+              Text(t(tekst), style: inter(9, color: kleur)),
             ],
           ),
         ),
@@ -323,7 +328,7 @@ class _LineupScreenState extends State<LineupScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'JUNI',
+                        t('JUNI'),
                         style: inter(
                           7,
                           weight: FontWeight.w500,
@@ -363,10 +368,10 @@ class _LineupScreenState extends State<LineupScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(kop, style: inter(7, spacing: 1.2, color: DQ.muted)),
+                  Text(t(kop), style: inter(7, spacing: 1.2, color: DQ.muted)),
                   const SizedBox(height: 2),
                   Text(
-                    waarde,
+                    t(waarde),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: bc(17, color: Colors.white),
@@ -404,7 +409,7 @@ class _LineupScreenState extends State<LineupScreen> {
               Container(height: 6, color: DQ.lime),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-                child: Text(titel, style: bc(32, color: Colors.white)),
+                child: Text(t(titel), style: bc(32, color: Colors.white)),
               ),
               Flexible(
                 child: ListView(
@@ -433,7 +438,7 @@ class _LineupScreenState extends State<LineupScreen> {
                               const SizedBox(width: 12),
                               Expanded(
                                 child: Text(
-                                  optie,
+                                  t(optie),
                                   style: bc(
                                     19,
                                     color: optie == huidig
@@ -483,7 +488,7 @@ class _LineupScreenState extends State<LineupScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    g,
+                    t(g),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: bc(19, height: 1, color: DQ.dark),
@@ -589,8 +594,8 @@ class _ActRow extends StatelessWidget {
                               children: [
                                 Text(
                                   live
-                                      ? 'LIVE NU · 10 MIN VERTRAAGD'
-                                      : '${toonDag ? '${act.dag} · ' : ''}${act.kaartNaam} · ${act.genre}',
+                                      ? t('LIVE NU · 10 MIN VERTRAAGD')
+                                      : '${toonDag ? '${act.dag} · ' : ''}${act.kaartNaam} · ${t(act.genre)}',
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: inter(
