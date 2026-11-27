@@ -6,6 +6,7 @@ import '../data/festival_data.dart';
 import '../data/taal.dart';
 import '../theme/dq_theme.dart';
 import '../widgets/common.dart';
+import '../widgets/live.dart';
 import 'map_screen.dart';
 
 const _ink2 = Color(0xFF15111A);
@@ -322,7 +323,7 @@ class _LiveCard extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
-                Text('18:42', style: bc(20)),
+                Klok(style: bc(20)),
               ],
             ),
           ),

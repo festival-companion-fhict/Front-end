@@ -238,4 +238,9 @@ const _engels = <String, String>{
   'Ping verstuurd naar': 'Ping sent to',
   'Nog geen nieuws over': 'No news yet about',
   'MELDING': 'REPORT',
+  // Weer
+  'Droog tot': 'Dry until',
+  'Kans op regen': 'Chance of rain',
+  'Droog de komende uren': 'Dry for the next hours',
+  'Weer laden...': 'Loading weather...',
 };

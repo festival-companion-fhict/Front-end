@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import '../data/taal.dart';
+import '../data/weer.dart';
 import '../theme/dq_theme.dart';
 import '../widgets/chrome.dart';
 import '../widgets/common.dart';
+import '../widgets/live.dart';
 
 class StartScreen extends StatelessWidget {
   const StartScreen({
@@ -112,15 +114,17 @@ class StartScreen extends StatelessWidget {
                           ),
                         ),
                         Container(width: 1, color: const Color(0xFF555555)),
-                        const Expanded(
-                          child: _StatusCell(
-                            leading: DqIcon(
-                              'Bewolkt',
-                              size: 18,
-                              color: DQ.yellow,
+                        Expanded(
+                          child: ValueListenableBuilder<Weer?>(
+                            valueListenable: Weer.huidig,
+                            builder: (_, weer, _) => _StatusCell(
+                              leading: const WeerIcoon(
+                                size: 18,
+                                color: DQ.yellow,
+                              ),
+                              title: weer?.temperatuur ?? '–°C',
+                              sub: weer?.verwachting ?? t('Weer laden...'),
                             ),
-                            title: '24°C',
-                            sub: 'Droog tot 23:00',
                           ),
                         ),
                       ],

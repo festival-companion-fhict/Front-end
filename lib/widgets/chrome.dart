@@ -7,6 +7,7 @@ import '../app_shell.dart';
 import '../data/taal.dart';
 import '../theme/dq_theme.dart';
 import 'common.dart';
+import 'live.dart';
 
 /// Het DEFQON.1-logo als tekst.
 class Brand extends StatelessWidget {
@@ -252,9 +253,9 @@ class _LiveStripState extends State<LiveStrip> {
           const Spacer(),
           divider(),
           const SizedBox(width: 10),
-          const DqIcon('Bewolkt', size: 13, color: DQ.dark),
+          const WeerIcoon(size: 13, color: DQ.dark),
           const SizedBox(width: 3),
-          Text('24°C', style: inter(7, color: DQ.dark)),
+          WeerTemperatuur(style: inter(7, color: DQ.dark)),
         ],
       ),
     );
